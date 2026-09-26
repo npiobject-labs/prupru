@@ -4,7 +4,7 @@ use std::sync::OnceLock;
 use std::time::{Instant, SystemTime, UNIX_EPOCH};
 
 // Nombre del proyecto: init-plantilla.yml lo sustituye por el del repositorio.
-const NOMBRE: &str = "DesdeMovil";
+const NOMBRE: &str = "prupru";
 
 // Momento de arranque del proceso, para /hola ("despierta desde hace...").
 static ARRANQUE: OnceLock<Instant> = OnceLock::new();
