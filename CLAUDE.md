@@ -8,8 +8,8 @@ Flujo "PC arranca, móvil continúa": el desarrollo, la revisión y las pruebas 
 |---|---|
 | Proyecto | `prupru` |
 | Owner de GitHub | `npiobject-labs` |
-| App de Fly.io | `derivada` |
-| Carpeta de Drive (id) |  |
+| App de Fly.io | `prupru-npiobject-labs` |
+| Carpeta de Drive (id) | `1ihja8c_9FgSV-I6xsA_edBROLPLG71t_` |
 
 Esta tabla la rellena sola `.github/workflows/init-plantilla.yml` en el primer push de un repo creado desde la plantilla; no hay nada que tocar a mano salvo el id de Drive. Si la app se montó con el instalador de Peripatéticos, él anota también la app de Fly y, si se le dio, la carpeta de Drive.
 
