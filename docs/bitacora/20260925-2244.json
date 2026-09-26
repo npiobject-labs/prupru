@@ -1,0 +1,58 @@
+{
+  "fecha": "2026-09-25T22:44:00+02:00",
+  "titulo": "Peripatéticos: Google Drive en el recorrido, Claude comprueba la carpeta y copia de seguridad en el PC",
+  "objetivo": "Meter Google Drive en el recorrido del instalador, con una comprobación real de que Claude llega a la carpeta, dejar una copia de seguridad de la app en el PC y contarlo todo en la portada.",
+  "prompts": [
+    {
+      "texto": "No me has pedido nada de Google Drive que es porque es esto porque no lo vas a utilizar porque lo vas a utilizar más tarde qué ocurre con Google Drive. Se debe crear una carpeta con el nombre de la aplicación eso podría hacerse a mano y tú pedirías la dirección de esa carpeta para descargar allí las sesiones y una serie de cómic documentación"
+    },
+    {
+      "texto": "Recuerda que tienes que comprobar que Claude tiene acceso a Google Drive"
+    },
+    {
+      "texto": "Y que me dices de la carpeta en el PC para hacer eh poder hacer un respaldo de de la aplicación de gith al PC y copiar todo él el reto creo que se llama así como el cloud de medee que hace la aplicación y no sé alguna cosita más"
+    },
+    {
+      "texto": "Tienes que modificar la landing Page ya que no haces referencia a Google Drive https://npiobject-labs.github.io/DesdeMovil/#como"
+    }
+  ],
+  "cambios": [
+    "docs/index.html: paso 6, carpeta de Google Drive (opcional, con «Sin Drive»; rechaza enlaces a archivos y textos que no son un id); paso 8, Claude comprueba que llega a la carpeta y la página vigila docs/drive.json; portada con «Dónde queda todo» y Drive en «Tres pasos», «Qué necesitas» y «Qué cuesta».",
+    "docs/instalador/peripateticos.ps1: anota la carpeta de Drive en CLAUDE.md del hijo; paso 7/7, copia de seguridad en Documentos\\Peripateticos\\<app> con repo\\ (zip de main, sin git), ficha, LEEME.txt, accesos directos, Actualizar copia.cmd y acceso en el escritorio; ids de Drive de al menos 25 caracteres.",
+    "docs/pc.html: pasa la carpeta al .cmd (PERI_DRIVE) y cuenta la copia en el PC.",
+    "CLAUDE.md: sección «Comprobación de Drive» (listar la carpeta, subir la ficha, docs/drive.json) y la copia en el PC.",
+    "docs/semilla/index.html: la portada de cada app dice si sus copias van a Drive.",
+    "docs/recorrido.html: 19 pantallas, con la carpeta de Drive, la carpeta del PC y la comprobación de Claude.",
+    "docs/planificacion/peripateticos-analisis.md: sección 12."
+  ],
+  "sha": "12bac53",
+  "sha_completo": "12bac5352b2330bef8cb9c3bbc0ef1896b18d017",
+  "run": "36187525275",
+  "mock": "mocks/002-peripateticos-simulado.html",
+  "build": "DM-B3-20260925-007",
+  "pagina": "index.html",
+  "fly": "https://desdemovil-npiobject-labs.fly.dev/salud",
+  "pendiente": [
+    "Primera ejecución real en Windows con cuentas de prueba, incluida una carpeta de Drive y el paso 8 con una sesión real de Claude en el repositorio hijo.",
+    "Confirmar que el conector de Drive escribe en una carpeta creada a mano y que MyDocuments resuelve bien con OneDrive (sección 12 del análisis)."
+  ],
+  "enlaces": [
+    {
+      "texto": "PR #22 · Drive y copia en el PC",
+      "url": "https://github.com/npiobject-labs/DesdeMovil/pull/22"
+    },
+    {
+      "texto": "Portada: dónde queda todo",
+      "url": "https://npiobject-labs.github.io/DesdeMovil/#como"
+    },
+    {
+      "texto": "Recorrido de 19 pantallas",
+      "url": "https://npiobject-labs.github.io/DesdeMovil/recorrido.html"
+    },
+    {
+      "texto": "Run de Pages",
+      "url": "https://github.com/npiobject-labs/DesdeMovil/actions/runs/36187525275"
+    }
+  ],
+  "notas": "Continuación de la sesión 20260925-2015, con los mensajes que el usuario envió después del cierre. Los prompts son transcripción fiel (dictados por voz). Las pruebas destaparon y arreglaron dos fallos del instalador antes de publicar: ids de Drive falsos aceptados y un aviso que no salía por el ámbito de variables de PowerShell."
+}

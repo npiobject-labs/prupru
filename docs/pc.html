@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="build" content="DM-B3-20260926-001">
+<meta name="description" content="Peripatéticos en el PC: descarga un archivo, ábrelo y tu app queda montada en tus cuentas.">
+<title>Peripatéticos en el PC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#F6F2EA; --bg2:#FFFFFF; --ink:#1E2528; --ink2:#4E585C; --mute:#7C868A; --line:#DED7C9;
+  --acc:#9A4A2C; --acc2:#9A4A2C14; --acc-ink:#FFFFFF; --warn:#8F6400; --warn2:#8F640016; --ok:#2E7D4F;
+  --code:#EFEBE2; --shadow:0 1px 2px rgba(30,37,40,.05),0 8px 24px -14px rgba(30,37,40,.3);
+  --serif:"Fraunces",Georgia,serif; --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#15191B; --bg2:#1E2427; --ink:#E9E6DE; --ink2:#B4BBBE; --mute:#838C90; --line:#2E3639;
+    --acc:#E0906D; --acc2:#E0906D1F; --acc-ink:#1A1210; --warn:#E2B94A; --warn2:#E2B94A1F; --ok:#6CC493; --code:#101416; --shadow:none;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#15191B; --bg2:#1E2427; --ink:#E9E6DE; --ink2:#B4BBBE; --mute:#838C90; --line:#2E3639;
+  --acc:#E0906D; --acc2:#E0906D1F; --acc-ink:#1A1210; --warn:#E2B94A; --warn2:#E2B94A1F; --ok:#6CC493; --code:#101416; --shadow:none;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 var(--sans);overflow-x:hidden}
+[hidden]{display:none!important}
+a{color:var(--acc);text-underline-offset:2px}
+a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+h1,h2,h3{font-family:var(--serif);font-weight:700;line-height:1.12;margin:0;text-wrap:balance}
+h1{font-size:clamp(1.9rem,6vw,2.6rem);word-break:break-word}
+h3{font-size:1.1rem}
+code{font-family:var(--mono);font-size:.88em;background:var(--code);padding:.08em .35em;border-radius:4px;word-break:break-word}
+pre{font:.78rem/1.5 var(--mono);background:var(--code);border:1px solid var(--line);border-radius:8px;padding:.8rem .9rem;margin:.5rem 0;white-space:pre-wrap;word-break:break-all}
+.wrap{max-width:44rem;margin:0 auto;padding:0 16px 4rem}
+.top{display:flex;align-items:center;gap:.6rem;padding:.7rem 0;border-bottom:1px solid var(--line)}
+.top a.b{font-family:var(--serif);font-weight:700;font-size:1.1rem;flex:1;color:var(--ink);text-decoration:none}
+.hero{padding:2rem 0 .5rem}
+.kicker{font:600 .76rem var(--sans);letter-spacing:.09em;text-transform:uppercase;color:var(--acc);margin:0 0 .6rem}
+.lede{font-size:1.06rem;color:var(--ink2)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;font:600 1.02rem var(--sans);padding:.85rem 1.3rem;border-radius:10px;border:1px solid var(--line);background:var(--bg2);color:var(--ink);cursor:pointer;text-decoration:none;min-height:3rem}
+.btn.primario{background:var(--acc);border-color:var(--acc);color:var(--acc-ink)}
+.btn.grande{font-size:1.1rem;padding:1rem 1.5rem}
+.pasos{list-style:none;padding:0;margin:1.4rem 0;display:grid;gap:.8rem}
+.pasos > li{display:grid;grid-template-columns:2.2rem 1fr;gap:.8rem;background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:1rem;box-shadow:var(--shadow)}
+.pasos .n{display:grid;place-items:center;width:2.2rem;height:2.2rem;border-radius:50%;background:var(--acc);color:var(--acc-ink);font:700 1rem var(--sans)}
+.pasos h3{margin:.25rem 0 .3rem}
+.pasos p{margin:.3rem 0;color:var(--ink2);overflow-wrap:anywhere}
+.nota{font-size:.88rem;color:var(--mute)}
+.smart{max-width:24rem;margin:.6rem 0 .2rem;border-radius:8px;overflow:hidden;border:1px solid #0067C0;font:13px/1.45 "Segoe UI",system-ui,sans-serif}
+.smart .c{background:#0067C0;color:#fff;padding:.7rem .9rem}
+.smart .c b{display:block;font-size:15px;margin-bottom:.2rem}
+.smart .d{background:#fff;color:#1b1b1b;padding:.6rem .9rem}
+.smart .d a{color:#0067C0;font-weight:600;text-decoration:underline}
+.gris{max-width:24rem;margin:.6rem 0 .2rem;border-radius:8px;border:1px solid #C9C9C9;background:#F0F0F0;color:#1b1b1b;padding:.7rem .9rem;font:13px/1.45 "Segoe UI",system-ui,sans-serif}
+.gris b{display:block;font-size:14px;margin-bottom:.35rem}
+.gris .f{font-size:12px;color:#444}
+.smart .bots,.gris .bots{text-align:right;margin-top:.5rem}
+.smart .bots span,.gris .bots span{display:inline-block;padding:.3rem .7rem;border:1px solid #bbb;border-radius:4px;margin-left:.3rem;font-weight:600;font-size:12px}
+.smart .bots span.az,.gris .bots span.az{background:#0067C0;border-color:#0067C0;color:#fff;outline:3px solid #F9C74F}
+.aviso{padding:.7rem .9rem;border-left:3px solid var(--warn);background:var(--warn2);border-radius:0 8px 8px 0;margin:1rem 0;font-size:.95rem}
+details.por{margin:.7rem 0;border:1px dashed var(--line);border-radius:10px}
+details.por summary{cursor:pointer;padding:.65rem .9rem;font-weight:600;color:var(--ink2);list-style:none}
+details.por summary::-webkit-details-marker{display:none}
+details.por summary::before{content:"+ ";color:var(--acc);font-weight:700}
+details.por[open] summary::before{content:"– "}
+details.por > div{padding:0 .9rem .8rem;font-size:.93rem;color:var(--ink2)}
+.bloque{position:relative}
+.bloque pre{padding-right:5.2rem}
+.bloque button{position:absolute;top:.5rem;right:.5rem;font:600 .76rem var(--sans);color:var(--acc);background:var(--bg2);border:1px solid var(--line);border-radius:6px;padding:.3rem .6rem;cursor:pointer}
+.form{display:grid;gap:.6rem;background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:1rem;margin:1rem 0}
+.form label{font-weight:600;font-size:.9rem}
+.form input{width:100%;font:1rem var(--sans);padding:.65rem .75rem;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)}
+.movil{background:var(--acc2);border:1px solid var(--acc);border-radius:12px;padding:.9rem 1rem;margin:1rem 0}
+footer{margin-top:2.5rem;padding-top:1rem;border-top:1px solid var(--line);font-size:.8rem;color:var(--mute)}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="top"><a class="b" href="./">Peripatéticos</a><span class="nota">en el PC</span></div>
+
+  <div class="movil" id="aviso-movil" hidden>
+    <b>Estás en un móvil.</b> Esta página es para el PC con Windows. Mándatela y ábrela allí:
+    <p style="margin:.6rem 0 0"><button class="btn primario" type="button" id="mandar">Enviármela al PC</button></p>
+  </div>
+
+  <section id="sin-datos" hidden>
+    <div class="hero">
+      <p class="kicker">En el PC</p>
+      <h1>Falta saber qué app montar</h1>
+      <p class="lede">Lo normal es llegar aquí con el enlace del móvil, que ya lo trae todo. Si no lo tienes a mano, escríbelo:</p>
+    </div>
+    <form class="form" id="form">
+      <label for="f-app">Nombre de tu app</label><input id="f-app" placeholder="recetas" autocomplete="off" spellcheck="false" required>
+      <label for="f-org">Tu organización de GitHub</label><input id="f-org" placeholder="apps-de-maria" autocomplete="off" spellcheck="false" required>
+      <button class="btn primario" type="submit">Seguir</button>
+    </form>
+  </section>
+
+  <section id="con-datos" hidden>
+    <div class="hero">
+      <p class="kicker">En el PC · una sola vez</p>
+      <h1>Montar «<span class="A"></span>» en este PC</h1>
+      <p class="lede">Tu app se creará en tu organización <b class="O"></b>. Tardará unos 8 minutos y al terminar podrás apagar el PC: no vuelve a hacer falta.</p>
+      <p class="nota" id="con-drive" hidden>Los resúmenes de cada sesión irán a tu carpeta de Google Drive.</p>
+    </div>
+
+    <ol class="pasos">
+      <li><span class="n">1</span><div>
+        <h3>Descarga el archivo</h3>
+        <p><button class="btn primario grande" type="button" id="descargar"><span>⬇ Descargar montar-<span class="A"></span>.cmd</span></button></p>
+        <p class="nota">Se guarda en tu carpeta Descargas. Pesa unos 2 KB: solo contiene tu nombre de app y la orden de empezar. <a href="#dentro">Ver qué hay dentro</a>.</p>
+      </div></li>
+      <li><span class="n">2</span><div>
+        <h3>Ábrelo con doble clic</h3>
+        <p>Desde la barra de descargas del navegador («Abrir archivo») o desde la carpeta Descargas.</p>
+      </div></li>
+      <li><span class="n">3</span><div>
+        <h3>Si Windows te avisa, dale permiso</h3>
+        <p>Según el navegador, sale una de estas dos pantallas.</p>
+        <p><b>Gris, «Advertencia de seguridad»</b>: pulsa <b>Ejecutar</b>.</p>
+        <div class="gris" aria-hidden="true"><b>No se pudo comprobar el editor. ¿Está seguro de que desea ejecutar este software?</b>
+          <div class="f">Nombre: montar-<span class="A"></span>.cmd · Editor: Publicador desconocido</div>
+          <div class="bots"><span class="az">Ejecutar</span><span>Cancelar</span></div></div>
+        <p><b>Azul, «Windows protegió tu PC»</b>: pulsa <b>Más información</b> (texto pequeño) y después <b>Ejecutar de todas formas</b>.</p>
+        <div class="smart" aria-hidden="true"><div class="c"><b>Windows protegió tu PC</b>SmartScreen impidió que se iniciara una aplicación desconocida…</div>
+          <div class="d"><a>Más información</a><div class="bots"><span class="az">Ejecutar de todas formas</span><span>No ejecutar</span></div></div></div>
+        <p class="nota">Es normal: Windows lo hace con cualquier archivo bajado de internet que no firme una gran empresa. Solo avisa la primera vez: si vuelves a abrir el archivo, ya no pregunta.</p>
+      </div></li>
+      <li><span class="n">4</span><div>
+        <h3>Entra dos veces en el navegador</h3>
+        <p>Primero en <b>GitHub</b>: la ventana negra te enseña un código de ocho letras (ya copiado), lo escribes o lo pegas y pulsas <b>Authorize</b>. Después en <b>Fly.io</b>: pulsas <b>Authorize</b>.</p>
+        <p class="nota">Es lo único que tienes que hacer. No hay que escribir nada en la ventana negra.</p>
+      </div></li>
+      <li><span class="n">5</span><div>
+        <h3>Espera y apaga</h3>
+        <p>La ventana va diciendo lo que hace. Cuando ponga <b>«Ya puedes apagar el PC»</b>, vuelve al móvil: el paso 7 se marca solo en cuanto tu app responde.</p>
+        <p>Al terminar, te deja en <b>Documentos\Peripateticos\<span class="A"></span></b> una copia de seguridad de tu app —con su ficha, accesos directos y «Actualizar copia» para ponerla al día con doble clic— y un acceso a esa carpeta en el escritorio.</p>
+        <p class="nota">Si algo falla, la ventana te dice qué pasa. Volver a abrir el mismo archivo sigue donde lo dejó.</p>
+      </div></li>
+    </ol>
+
+    <div class="aviso"><b>¿Tienes un Mac o Linux?</b> De momento solo Windows 10 u 11. <a href="./#ayuda">Ayuda</a></div>
+
+    <details class="por"><summary>Si Windows no te deja abrir el archivo</summary><div>
+      <p>Hay otra forma que no da ese aviso. Pulsa las teclas <b>Windows + X</b>, elige <b>Terminal</b> (o <b>Windows PowerShell</b>), pega esta línea con el botón derecho del ratón y pulsa Intro:</p>
+      <div class="bloque"><pre id="linea-ps"></pre><button type="button" id="copiar-ps">Copiar</button></div>
+      <p>Hace exactamente lo mismo que el archivo.</p>
+    </div></details>
+
+    <details class="por" id="dentro"><summary>Qué hay dentro del archivo</summary><div>
+      <p>Esto es todo lo que contiene. Fija el nombre de tu app y tu organización, descarga el instalador de esta misma web y lo ejecuta:</p>
+      <pre id="contenido-cmd"></pre>
+      <p>El instalador está aquí, para quien quiera leerlo: <a id="enlace-ps1" href="instalador/peripateticos.ps1">peripateticos.ps1</a>.</p>
+    </div></details>
+  </section>
+
+  <footer>Build <code>DM-B3-20260926-001</code> · <a href="./">Peripatéticos</a> · <a href="recorrido.html">Recorrido</a></footer>
+</main>
+<script>
+(function(){
+  function slug(v){
+    var s = String(v||'').trim().toLowerCase().replace(/[\s_.]+/g,'-').replace(/[^a-z0-9-]/g,'').replace(/-{2,}/g,'-').replace(/^-+|-+$/g,'');
+    if (s.length > 15) { s = s.slice(0,15); if (s.indexOf('-') > 0) s = s.replace(/-[^-]*$/,'') }
+    return s.replace(/-+$/,'');
+  }
+  function cuenta(v){ return String(v||'').trim().replace(/^@/,'').replace(/[^A-Za-z0-9-]/g,'') }
+  var p = new URLSearchParams(location.search);
+  var app = slug(p.get('app')), org = cuenta(p.get('org')), usuario = cuenta(p.get('u'));
+  var drive = String(p.get('drive')||'').replace(/[^A-Za-z0-9_-]/g,'');   // id de la carpeta de Drive, opcional
+
+  // La plantilla de la que nace la app: la de esta misma web (owner.github.io/repo).
+  var h = location.hostname.match(/^([^.]+)\.github\.io$/i), trozo = location.pathname.split('/').filter(Boolean)[0];
+  var plantilla = (h && trozo) ? h[1] + '/' + trozo : 'npiobject-labs/DesdeMovil';
+  var urlPs1 = /^https?:$/.test(location.protocol)
+    ? new URL('instalador/peripateticos.ps1', location.href).href
+    : 'https://raw.githubusercontent.com/npiobject-labs/DesdeMovil/main/docs/instalador/peripateticos.ps1';
+
+  // El .cmd: solo ASCII. Los valores ya vienen saneados a [A-Za-z0-9-]; en la
+  // URL, "%" se dobla porque cmd lo leeria como variable.
+  function cmd(){
+    var u = urlPs1.replace(/%/g, '%%');
+    return [
+      '@echo off',
+      'rem Peripateticos: monta la app "' + app + '" en tus cuentas de GitHub y Fly.io.',
+      'rem Lo genero ' + location.origin + location.pathname,
+      'setlocal',
+      'title Peripateticos - montar ' + app,
+      'set "PERI_APP=' + app + '"',
+      'set "PERI_ORG=' + org + '"',
+      'set "PERI_USUARIO=' + usuario + '"',
+      'set "PERI_DRIVE=' + drive + '"',
+      'set "PERI_PLANTILLA=' + plantilla + '"',
+      'set "PERI_URL=' + u + '"',
+      'set "PERI_CMD=%~f0"',
+      'powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "try { Unblock-File -LiteralPath $env:PERI_CMD -ErrorAction SilentlyContinue } catch {}; try { [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12; $w = New-Object Net.WebClient; $w.Encoding = [Text.Encoding]::UTF8; $s = $w.DownloadString($env:PERI_URL); & ([scriptblock]::Create($s)) } catch { Write-Host (\'No se pudo descargar el instalador: \' + $_.Exception.Message) -ForegroundColor Red }"',
+      'echo.',
+      'echo Pulsa una tecla para cerrar esta ventana.',
+      'pause >nul'
+    ].join('\r\n') + '\r\n';
+  }
+  function lineaPs(){
+    return "[Net.ServicePointManager]::SecurityProtocol = 'Tls12'; $env:PERI_APP='" + app + "'; $env:PERI_ORG='" + org + "'; $env:PERI_USUARIO='" + usuario + "'; $env:PERI_DRIVE='" + drive + "'; $env:PERI_PLANTILLA='" + plantilla + "'; irm " + urlPs1 + " | iex";
+  }
+
+  function pinta(){
+    var hay = !!(app && org);
+    document.getElementById('sin-datos').hidden = hay;
+    document.getElementById('con-datos').hidden = !hay;
+    if (!hay) return;
+    [].forEach.call(document.querySelectorAll('.A'), function(e){ e.textContent = app });
+    [].forEach.call(document.querySelectorAll('.O'), function(e){ e.textContent = org });
+    document.title = 'Montar ' + app + ' · Peripatéticos';
+    document.getElementById('con-drive').hidden = !drive;
+    document.getElementById('contenido-cmd').textContent = cmd();
+    document.getElementById('linea-ps').textContent = lineaPs();
+    document.getElementById('enlace-ps1').href = urlPs1;
+  }
+
+  document.getElementById('descargar').addEventListener('click', function(){
+    var blob = new Blob([cmd()], {type: 'application/octet-stream'});
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = 'montar-' + app + '.cmd';
+    document.body.appendChild(a); a.click();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove() }, 1000);
+  });
+  document.getElementById('copiar-ps').addEventListener('click', function(){
+    var b = this; function ok(){ b.textContent = 'Copiado'; setTimeout(function(){ b.textContent = 'Copiar' }, 1500) }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(lineaPs()).then(ok, ok); else ok();
+  });
+  document.getElementById('form').addEventListener('submit', function(e){
+    e.preventDefault();
+    app = slug(document.getElementById('f-app').value); org = cuenta(document.getElementById('f-org').value);
+    if (!app || !org) return;
+    try { history.replaceState(null, '', '?app=' + encodeURIComponent(app) + '&org=' + encodeURIComponent(org)) } catch(err){}
+    pinta();
+  });
+
+  // En un móvil: esta página no sirve aquí; ofrecer mandarla al PC.
+  var esMovil = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+  if (esMovil) {
+    document.getElementById('aviso-movil').hidden = false;
+    document.getElementById('mandar').addEventListener('click', function(){
+      if (navigator.share) navigator.share({ title: document.title, url: location.href }).catch(function(){});
+      else location.href = 'mailto:?subject=' + encodeURIComponent(document.title) + '&body=' + encodeURIComponent(location.href);
+    });
+  }
+  pinta();
+})();
+</script>
+</body>
+</html>

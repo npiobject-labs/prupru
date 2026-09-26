@@ -1,0 +1,46 @@
+{
+  "fecha": "2026-09-25T23:13:00+02:00",
+  "titulo": "Peripatéticos: cuentas guardadas para montar varias apps",
+  "objetivo": "Analizar qué pasos del instalador se repiten en cada app y, si se pueden reutilizar, que la guía los guarde para montar la segunda, la tercera y las siguientes.",
+  "prompts": [
+    {
+      "texto": "Una anotación los puntos dos tres cuatro y cinco investiga analiza el que se pueden repetir para varias aplicaciones analiza si es así y si es así este enlace está esta guía debería tener una opción de guardar estos valores para cuando quieras montar una segunda o una tercera etc aplicación. ¿ te parece correcto?"
+    },
+    {
+      "texto": "Cuando termines con la modificación anterior cierra sesión y hasta mañana"
+    }
+  ],
+  "cambios": [
+    "docs/index.html: perfil guardado en el navegador (usuario, organización y verificaciones; nunca llaves), «Tus apps» en la portada, «Montar otra app» con los pasos 2 a 5 guardados y revalidados, nombre comprobado libre en la organización en el paso 1, enlace con las cuentas para otro navegador y «Olvidar mis datos». Build DM-B3-20260925-010.",
+    "docs/instalador/peripateticos.ps1: si la app de GitHub de Claude tiene permiso solo en los repositorios elegidos, añade el nuevo o avisa con el enlace a «Repository access».",
+    "docs/recorrido.html: pantalla 20, «Otra app». Build DM-B3-20260925-011.",
+    "docs/planificacion/peripateticos-analisis.md: sección 13, qué pasos se reutilizan y por qué."
+  ],
+  "sha": "bf79885",
+  "sha_completo": "bf7988510d03befb46939de0e9f76aa6acf8b186",
+  "run": "36190271459",
+  "mock": "mocks/002-peripateticos-simulado.html",
+  "build": "DM-B3-20260925-010",
+  "pagina": "index.html",
+  "fly": "https://desdemovil-npiobject-labs.fly.dev/salud",
+  "pendiente": [
+    "Primera ejecución real en Windows con cuentas de prueba, y después una segunda app en la misma organización.",
+    "Confirmar que el token de gh basta para añadir el repositorio a la instalación de Claude (plan B ya hecho: aviso con enlace).",
+    "Valorar la segunda app sin PC (sección 13 del análisis)."
+  ],
+  "enlaces": [
+    {
+      "texto": "PR #24 · cuentas guardadas para varias apps",
+      "url": "https://github.com/npiobject-labs/DesdeMovil/pull/24"
+    },
+    {
+      "texto": "Recorrido: pantalla «Otra app»",
+      "url": "https://npiobject-labs.github.io/DesdeMovil/recorrido.html#20"
+    },
+    {
+      "texto": "Run de Pages",
+      "url": "https://github.com/npiobject-labs/DesdeMovil/actions/runs/36190271459"
+    }
+  ],
+  "notas": "Continuación de la sesión del 25-sep (entradas 20260925-2015 y 20260925-2244). Prompts dictados por voz, transcritos tal cual."
+}

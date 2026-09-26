@@ -1,0 +1,85 @@
+{
+  "fecha": "2026-09-25T20:15:00+02:00",
+  "titulo": "Peripatéticos: de la idea al instalador que monta una app desde el móvil y el PC",
+  "objetivo": "Analizar la idea de una app para que cualquier persona sin conocimientos técnicos monte en su PC con Windows una app que luego desarrolla desde el móvil, hacer el mock y, con el visto bueno, desarrollarla y probarla de extremo a extremo.",
+  "prompts": [
+    {
+      "texto": "A continuación te voy a pasar un un prompt para desarrollar una app que quiero que sea mi aplicación estrella y no quiero que desarrolles nada solamente eh quiero que la analices que la analices en profundidad que la estudies que preguntes lo que no está claro y que generes eh como resultado de la siguiente el siguiente prompt que te voy a dar que generes un mock un mock de cómo lo harías de cómo monterías tú esta aplicación entonces eh espera como ya te digo espera al siguiente prompt que te voy a pasar la idea ¿de acuerdo?"
+    },
+    {
+      "texto": "Documento del brainstorm «Desarrollo de apps desde el móvil para usuarios no técnicos» (ideas de partida para la app «Peripatéticos»): resumen, puntos clave, tareas y transcripción de la idea. Instalar en un PC con Windows a partir de un enlace o fichero; regla de oro «no mandes a hacer nada que puedas hacer tú»; cada petición con desplegable de explicación, botón de hecho y comprobación; guardarraíles: cuenta de GitHub con organización y cuenta en Fly.io, Drive opcional; meta: «hola, soy <nombre de la app> y estoy respondiendo desde Fly.io» con fecha y hora; puntos críticos: las API keys; guía con portada sobre trabajar paseando, como los peripatéticos; basado en las charlas de Boris Cherny (qué quieres, cuál es el guardarraíl y cuándo has llegado al final).",
+      "nota": "Resumido: el original era un documento largo con resumen y transcripción completa del brainstorm."
+    },
+    {
+      "texto": "Eh no sigas a ciencia cierta ciencia cierta todo lo que dice la la documentación de cómo se desarrolla actualmente la la app como se despliega tienes que ser creativo y atender al a las indicaciones que te he dado al comienzo en el plomo inicial"
+    },
+    {
+      "texto": "Puedes generar un fichero html con todas las hojas del MOOC y con un menú o una transición de para pasar de una a otra o como cómo funciona eso quiero ver lo que vería el usuario a la hora de enfrentarse al problema este de desplegar la aplicación en su PC"
+    },
+    {
+      "texto": "Tiene muy buena pinta muy buen aspecto me gusta la explicación de inicial el landing Page espero ahora tu guía en HTML y pasamos una vez verificado pasamos al desarrollo"
+    },
+    {
+      "texto": "Cuáles son las ocho preguntas del análisis"
+    },
+    {
+      "texto": "En otra app lo hemos montado así como la imagen adjunta, no sé si y es necesario en esta fase que lo hagamos así o se puede pasar de esta opción",
+      "nota": "Acompañado de una captura de la pantalla de ajustes de otra app (backend y token de acceso enmascarado); la captura no se reproduce aquí."
+    },
+    {
+      "texto": "Adelante con el desarrollo no me preguntes nada sigue hasta el final lo que quiero al final es esa hoja HTML con todo el proceso de instalación y ese fichero mmm que sería el el instalador si es necesario o si no lo coges tú de de gith de npobjet no lo sé y lo iremos viendo a medida que esté montado pues nada adelante con el desarrollo HMN me desconecto y espero el final. Por supuesto haz las pruebas necesarias en el chromium para ver qué funciona todo de extremo a extremo antes de darme un una solución de instalación"
+    }
+  ],
+  "cambios": [
+    "docs/planificacion/peripateticos-analisis.md: análisis (las cinco cosas irreducibles del usuario, entrega como enlace, claves absorbidas por el PC, meta /hola, riesgos, ocho preguntas cerradas, TOKEN_API fuera de la v1) y sección de desarrollo con pruebas y supuestos pendientes.",
+    "docs/index.html: portada e instalador con comprobaciones reales contra la API pública de GitHub (usuario, organización, nombre libre) y vigilancia automática del paso del PC (repositorio, inicialización, web, /hola, nacimiento.json). Demo en vivo contra el backend de la plantilla, ficha con Saluda, primera petición con las tres cosas y ayuda.",
+    "docs/pc.html: página que se abre en el PC; genera montar-<app>.cmd con los datos dentro, enseña su contenido y ofrece una línea de PowerShell como plan B; avisa si se abre en un móvil.",
+    "docs/instalador/peripateticos.ps1: instalador reanudable para Windows PowerShell 5.1, solo ASCII. Ayudantes sin admin, entrada en GitHub con código de dispositivo capturado y en Fly.io, token de organización de Fly guardado como secreto de la organización de GitHub sin mostrarse, nombre reservado en Fly antes de crear nada, repositorio desde la plantilla, Pages, espera a init-plantilla, despliegue, verificación HTTP, docs/nacimiento.json y ficha en el escritorio.",
+    "docs/semilla/index.html: portada con la que nace cada app hija («Hola, soy <app>», Saluda, dónde vive, cómo pedirle cosas).",
+    "docs/recorrido.html: las dieciséis pantallas del recorrido (móvil y PC) con menú, anterior/siguiente y deslizar, sincronizadas con la salida real del instalador.",
+    "app/src/main.rs: GET /hola con app, mensaje, fecha ISO, región, máquina, versión y segundos despierta, con CORS; test de fechas.",
+    ".github/workflows: FLY_ORG por variable en deploy.yml y vigilancia-fly.yml; deploy.yml verifica /hola y no despliega un hijo sin inicializar; init-plantilla.yml da al hijo su portada, borra lo que solo es de la plantilla y lanza el despliegue al terminar.",
+    "CLAUDE.md y README.md: /hola, FLY_ORG y los ficheros del instalador.",
+    "docs/mocks/001-mock0.html y docs/mocks/002-peripateticos-simulado.html: mocks anteriores archivados."
+  ],
+  "sha": "aba13ba",
+  "sha_completo": "aba13ba567313f5928fd46ed64f9e56a77ce7a07",
+  "run": "36172151499",
+  "mock": "mocks/002-peripateticos-simulado.html",
+  "build": "DM-B3-20260925-005",
+  "pagina": "index.html",
+  "fly": "https://desdemovil-npiobject-labs.fly.dev/salud",
+  "pendiente": [
+    "Primera ejecución real en Windows con una organización de GitHub y una cuenta de Fly.io de prueba.",
+    "Confirmar ahí los supuestos de la sección 11 del análisis (gh sin Intro con la salida redirigida, token de organización de Fly para desplegar, formato de flyctl orgs list).",
+    "Decidir si se firma el .cmd o se prioriza el plan B de PowerShell según cómo se viva el aviso de SmartScreen.",
+    "Marketing y difusión."
+  ],
+  "enlaces": [
+    {
+      "texto": "PR #20 · análisis, mocks y desarrollo",
+      "url": "https://github.com/npiobject-labs/DesdeMovil/pull/20"
+    },
+    {
+      "texto": "Recorrido de las 16 pantallas",
+      "url": "https://npiobject-labs.github.io/DesdeMovil/recorrido.html"
+    },
+    {
+      "texto": "Página del PC (ejemplo)",
+      "url": "https://npiobject-labs.github.io/DesdeMovil/pc.html?app=prueba&org=mi-organizacion"
+    },
+    {
+      "texto": "Portada con la que nace una app",
+      "url": "https://npiobject-labs.github.io/DesdeMovil/semilla/"
+    },
+    {
+      "texto": "Saludo del backend en Fly",
+      "url": "https://desdemovil-npiobject-labs.fly.dev/hola"
+    },
+    {
+      "texto": "Run de Fly con /hola verificado",
+      "url": "https://github.com/npiobject-labs/DesdeMovil/actions/runs/36172151523"
+    }
+  ],
+  "notas": "Sesión larga. Los prompts son transcripción fiel (dictados por voz, con sus repeticiones) salvo dos, marcados con nota: el documento del brainstorm, resumido por su extensión, y el mensaje que acompañaba a una captura de otra app, que no se reproduce. El instalador no se ha podido ejecutar en Windows: se probó con PowerShell 7 en el sandbox contra un GitHub y un Fly.io simulados y con los backends Rust reales, y en Chromium de extremo a extremo (41 comprobaciones), incluida la orden de PowerShell del propio .cmd descargado."
+}

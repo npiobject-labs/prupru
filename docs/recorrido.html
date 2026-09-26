@@ -1,0 +1,749 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="build" content="DM-B3-20260926-003">
+<meta name="description" content="Guion gráfico de Peripatéticos: las veinte pantallas que ve el usuario, en el móvil y en el PC, desde la portada hasta la primera petición.">
+<title>Peripatéticos · recorrido</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#F6F2EA; --bg2:#FFFFFF; --ink:#1E2528; --ink2:#4E585C; --mute:#8A9397; --line:#DED7C9;
+  --acc:#9A4A2C; --acc2:#9A4A2C14; --acc-ink:#FFFFFF;
+  --ok:#2E7D4F; --ok2:#2E7D4F16; --warn:#8F6400; --warn2:#8F640016; --err:#B3261E; --err2:#B3261E14;
+  --code:#EFEBE2; --shadow:0 1px 2px rgba(30,37,40,.05),0 10px 30px -16px rgba(30,37,40,.35);
+  --serif:"Fraunces",Georgia,serif; --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  /* el PC se dibuja siempre claro: es Windows, no nuestra web */
+  --w-bg:#F3F3F3; --w-win:#FFFFFF; --w-ink:#1B1B1B; --w-ink2:#5F6368; --w-line:#DADCE0; --w-blue:#0067C0; --w-title:#EAEAEA;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#15191B; --bg2:#1E2427; --ink:#E9E6DE; --ink2:#B4BBBE; --mute:#7F888C; --line:#2E3639;
+    --acc:#E0906D; --acc2:#E0906D1F; --acc-ink:#1A1210; --ok:#6CC493; --ok2:#6CC4931F; --warn:#E2B94A; --warn2:#E2B94A1F; --err:#F28B82; --err2:#F28B821F; --code:#101416; --shadow:none;
+  }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--sans);overflow-x:hidden}
+[hidden]{display:none!important}
+a{color:var(--acc)}
+code{font-family:var(--mono);font-size:.88em;background:var(--code);padding:.05em .3em;border-radius:3px;word-break:break-word}
+h1,h2,h3{font-family:var(--serif);font-weight:700;line-height:1.15;margin:0}
+
+/* ---------- menú superior */
+.top{position:sticky;top:0;z-index:30;background:var(--bg);border-bottom:1px solid var(--line)}
+.top .fila{max-width:52rem;margin:0 auto;padding:.5rem 16px;display:flex;align-items:center;gap:.6rem}
+.brand{font-family:var(--serif);font-weight:700;font-size:1.1rem;white-space:nowrap}
+.brand small{font-family:var(--sans);font-weight:500;color:var(--mute);margin-left:.4rem}
+.top .fila .esp{flex:1}
+.tog{font:500 .78rem var(--sans);border:1px solid var(--line);background:var(--bg2);color:var(--ink2);border-radius:99px;padding:.3rem .7rem;cursor:pointer;white-space:nowrap}
+.tog[aria-pressed="true"]{background:var(--acc2);color:var(--acc);border-color:var(--acc)}
+@media (max-width:480px){.brand small{display:none}.tog{font-size:.72rem;padding:.25rem .5rem}}
+.menu{max-width:52rem;margin:0 auto;padding:0 16px .5rem;display:flex;gap:.35rem;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.menu::-webkit-scrollbar{display:none}
+.menu .grp{font:600 .68rem var(--sans);text-transform:uppercase;letter-spacing:.06em;color:var(--mute);align-self:center;white-space:nowrap;padding:0 .35rem 0 .5rem;border-left:1px solid var(--line)}
+.menu .grp:first-child{border-left:0;padding-left:0}
+.menu button{flex:none;width:2rem;height:2rem;border-radius:50%;border:1px solid var(--line);background:var(--bg2);color:var(--ink2);font:600 .8rem var(--sans);cursor:pointer}
+.menu button.pc{border-style:dashed}
+.menu button[aria-current="true"]{background:var(--acc);border-color:var(--acc);color:var(--acc-ink)}
+
+/* ---------- escenario */
+.esc{max-width:52rem;margin:0 auto;padding:1rem 16px 6.5rem}
+.marco{display:none;animation:entra .28s ease-out}
+.marco.act{display:block}
+body.todas .marco{display:block;padding-bottom:2rem;margin-bottom:2rem;border-bottom:1px dashed var(--line)}
+@keyframes entra{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:none}}
+.marco.atras{animation-name:entraAtras}
+@keyframes entraAtras{from{opacity:0;transform:translateX(-18px)}to{opacity:1;transform:none}}
+.cab{display:flex;align-items:baseline;gap:.6rem;flex-wrap:wrap;margin-bottom:.7rem}
+.cab .n{font:700 .8rem var(--sans);color:var(--acc);letter-spacing:.06em}
+.cab h2{font-size:1.35rem;flex:1 1 100%}
+.donde{font:600 .72rem var(--sans);text-transform:uppercase;letter-spacing:.06em;padding:.2rem .6rem;border-radius:99px;background:var(--acc2);color:var(--acc)}
+.donde.pc{background:#0067C01A;color:#0067C0}
+.donde.web{background:#2E7D4F1A;color:var(--ok)}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .donde.pc{color:#7FB8FF;background:#7FB8FF22} }
+.hace{margin:.5rem 0 .9rem;font-size:1.02rem}
+.hace b{color:var(--acc)}
+details.bajo{margin:.9rem 0 0;border:1px dashed var(--line);border-radius:10px}
+details.bajo summary{cursor:pointer;padding:.55rem .85rem;font-weight:600;font-size:.88rem;color:var(--ink2);list-style:none}
+details.bajo summary::-webkit-details-marker{display:none}
+details.bajo summary::before{content:"+ ";color:var(--acc)}
+details.bajo[open] summary::before{content:"– "}
+details.bajo > div{padding:0 .9rem .8rem;font-size:.9rem;color:var(--ink2)}
+.dos{display:grid;gap:1rem}
+.dos > *{min-width:0}
+@media (min-width:760px){.dos{grid-template-columns:1fr 1fr;align-items:start}.dos.pcgrande{grid-template-columns:3fr 2fr}}
+
+/* ---------- barra inferior */
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--bg);border-top:1px solid var(--line)}
+.nav .fila{max-width:52rem;margin:0 auto;padding:.55rem 16px;display:flex;align-items:center;gap:.6rem}
+.nav button{font:600 .95rem var(--sans);padding:.65rem 1rem;border-radius:10px;border:1px solid var(--line);background:var(--bg2);color:var(--ink);cursor:pointer;min-width:6.5rem}
+.nav button.sig{background:var(--acc);border-color:var(--acc);color:var(--acc-ink);margin-left:auto}
+.nav button:disabled{opacity:.4}
+.nav .pos{font-size:.82rem;color:var(--ink2);text-align:center;flex:1;line-height:1.25}
+.nav .pos b{display:block;font-size:.72rem;color:var(--mute);font-weight:500}
+body.todas .nav{display:none}
+
+/* ---------- móvil dibujado */
+.tel{width:min(100%,340px);margin:0 auto;border:9px solid #1C1F22;border-radius:36px;background:var(--bg);overflow:hidden;box-shadow:var(--shadow);font-size:13.5px;line-height:1.45}
+.tel .st{display:flex;justify-content:space-between;padding:6px 16px 0;font:600 11px var(--sans);color:var(--ink2)}
+.tel .app{display:flex;align-items:center;gap:.4rem;padding:8px 12px;border-bottom:1px solid var(--line)}
+.tel .app .b{font-family:var(--serif);font-weight:700;flex:1}
+.tel .pill{font:600 .68rem var(--sans);padding:.15rem .5rem;border-radius:99px;background:var(--acc2);color:var(--acc)}
+.tel .pant{padding:10px 12px 14px;min-height:430px;position:relative}
+.tel h1{font-size:1.6rem}
+.tel .kick{font:600 .62rem var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--acc);margin:.6rem 0 .3rem}
+.tel p{margin:.35rem 0}
+.tel .lede{color:var(--ink2)}
+.btn{display:flex;align-items:center;justify-content:center;gap:.3rem;font:600 .9rem var(--sans);padding:.55rem .8rem;border-radius:9px;border:1px solid var(--line);background:var(--bg2);color:var(--ink);text-decoration:none;margin:.45rem 0}
+.btn.pri{background:var(--acc);border-color:var(--acc);color:var(--acc-ink)}
+.btn.chico{font-size:.8rem;padding:.4rem .6rem}
+.prog{height:5px;background:var(--line);border-radius:3px;overflow:hidden;margin:.5rem 0 .7rem}.prog i{display:block;height:100%;background:var(--acc)}
+.paso{background:var(--bg2);border:1px solid var(--line);border-radius:11px;margin:.4rem 0;overflow:hidden}
+.paso .h{display:flex;align-items:center;gap:.5rem;padding:.5rem .65rem}
+.paso .num{display:grid;place-items:center;width:1.45rem;height:1.45rem;border-radius:50%;border:2px solid var(--line);font:700 .72rem var(--sans);color:var(--mute);flex:none}
+.paso .h b{flex:1;font-family:var(--serif);font-size:.95rem}
+.paso .bd{font:600 .62rem var(--sans);padding:.12rem .45rem;border-radius:99px}
+.bd.ok{background:var(--ok2);color:var(--ok)}.bd.an{background:var(--warn2);color:var(--warn)}.bd.ac{background:var(--acc2);color:var(--acc)}
+.paso.ok .num{background:var(--ok);border-color:var(--ok);color:#fff}
+.paso.ac{border-color:var(--acc)}.paso.ac .num{border-color:var(--acc);color:var(--acc)}
+.paso.bl{opacity:.5}
+.paso .cu{padding:.1rem .65rem .65rem;border-top:1px solid var(--line)}
+.paso .pide{font-size:.92rem;margin:.5rem 0 .4rem}
+.txt{width:100%;font:.9rem var(--sans);padding:.45rem .55rem;border:1px solid var(--line);border-radius:8px;background:var(--bg2);color:var(--ink);margin:.2rem 0}
+.txt.tarea{min-height:2.6rem}
+.previa{font-size:.78rem;color:var(--ink2)}
+.por{border:1px dashed var(--line);border-radius:8px;padding:.4rem .6rem;font-size:.8rem;color:var(--ink2);margin:.4rem 0}
+.por::before{content:"+ ";color:var(--acc);font-weight:700}
+.verif{margin:.45rem 0 0;padding:.5rem .6rem;border-radius:8px;font-size:.84rem;display:flex;gap:.45rem}
+.verif .ic{flex:none;width:1.1rem;height:1.1rem;border-radius:50%;display:grid;place-items:center;font-size:.68rem;font-weight:700;color:#fff}
+.verif.ok{background:var(--ok2);color:var(--ok)}.verif.ok .ic{background:var(--ok)}
+.verif.an{background:var(--warn2);color:var(--warn)}.verif.an .ic{background:var(--warn)}
+.verif b{display:block}
+.aviso{margin:.4rem 0;padding:.4rem .6rem;border-left:3px solid var(--warn);background:var(--warn2);border-radius:0 6px 6px 0;font-size:.8rem}
+.linea{list-style:none;padding:0;margin:.4rem 0 0}
+.linea li{display:flex;gap:.5rem;align-items:flex-start;padding:.3rem 0;border-top:1px dashed var(--line);font-size:.86rem;color:var(--mute)}
+.linea li:first-child{border-top:0}
+.linea .p{flex:none;width:1.05rem;height:1.05rem;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-size:.6rem;font-weight:700;margin-top:.1rem}
+.linea li.ok{color:var(--ink)}.linea li.ok .p{background:var(--ok);border-color:var(--ok);color:#fff}
+.linea li.act{color:var(--ink)}.linea li.act .p{border-color:var(--acc);border-top-color:transparent;animation:gira .8s linear infinite}
+.linea small{display:block;color:var(--mute);font-size:.76rem}
+@keyframes gira{to{transform:rotate(360deg)}}
+.meta{margin:.5rem 0;padding:.9rem .8rem;border-radius:12px;background:var(--acc);color:var(--acc-ink);text-align:center}
+.meta h2{font-size:1.25rem;margin:.2rem 0}
+.meta .btn{background:var(--bg2);color:var(--ink);border-color:transparent}
+.ficha{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:.8rem .7rem}
+.ficha .nom{font-family:var(--serif);font-size:1.5rem;font-weight:700}
+.ficha dl{margin:.5rem 0 0;display:grid;grid-template-columns:auto 1fr;gap:.25rem .6rem;font-size:.8rem}
+.ficha dt{color:var(--mute)}.ficha dd{margin:0;word-break:break-word}
+.resp{margin-top:.6rem;padding:.6rem .7rem;border-radius:10px;background:var(--ok2);border:1px solid var(--ok)}
+.resp .g{font-family:var(--serif);font-weight:700;color:var(--ok);font-size:1rem;margin:0 0 .3rem}
+.resp dl{display:grid;grid-template-columns:auto 1fr;gap:.15rem .5rem;font-size:.78rem;margin:0}
+.resp dt{color:var(--ink2)}.resp dd{margin:0}
+.chips{display:flex;gap:.3rem;flex-wrap:wrap;margin:.4rem 0}
+.chip{font:500 .72rem var(--sans);padding:.25rem .55rem;border-radius:99px;border:1px solid var(--line);background:var(--bg2);color:var(--ink2)}
+.chip.sel{border-color:var(--acc);color:var(--acc)}
+.lab{display:block;font-weight:600;font-size:.8rem;margin:.5rem 0 .1rem}
+pre.pr{font:.74rem/1.45 var(--mono);background:var(--code);border:1px solid var(--line);border-radius:8px;padding:.6rem .7rem;margin:.4rem 0;white-space:pre-wrap;word-break:break-word}
+/* hoja de compartir */
+.hoja{position:absolute;left:0;right:0;bottom:0;background:var(--bg2);border-radius:18px 18px 0 0;padding:.7rem .9rem 1rem;box-shadow:0 -10px 30px rgba(0,0,0,.25);border-top:1px solid var(--line)}
+.hoja .asa{width:2.4rem;height:4px;border-radius:2px;background:var(--line);margin:0 auto .6rem}
+.hoja .enl{font:.76rem var(--mono);background:var(--code);padding:.4rem .5rem;border-radius:6px;word-break:break-all;color:var(--ink2)}
+.hoja .apps{display:grid;grid-template-columns:repeat(4,1fr);gap:.4rem;margin-top:.7rem;text-align:center;font-size:.68rem;color:var(--ink2)}
+.hoja .apps i{display:block;width:2.4rem;height:2.4rem;border-radius:12px;margin:0 auto .2rem;background:var(--line)}
+.hoja .apps i.c{background:#3B82F6}.hoja .apps i.w{background:#25D366}.hoja .apps i.n{background:#F5C542}.hoja .apps i.k{background:#8A9397}
+.velo{position:absolute;inset:0;background:rgba(0,0,0,.25)}
+
+/* ---------- PC dibujado */
+.pc{background:var(--w-bg);border:1px solid #C9CCD1;border-radius:10px;padding:14px;color:var(--w-ink);font-size:13px;line-height:1.45;box-shadow:var(--shadow);overflow:hidden}
+.pc .barra{display:flex;align-items:center;gap:8px;margin:-14px -14px 12px;padding:6px 12px;background:#1F2A34;color:#D5DBE1;font-size:11px}
+.pc .barra .hora{margin-left:auto;font-variant-numeric:tabular-nums}
+.win{background:var(--w-win);border:1px solid var(--w-line);border-radius:8px;overflow:hidden;box-shadow:0 8px 24px -12px rgba(0,0,0,.35);color:var(--w-ink)}
+.win .tb{display:flex;align-items:center;gap:8px;padding:6px 10px;background:var(--w-title);font-size:12px;color:var(--w-ink2)}
+.win .tb .ctl{margin-left:auto;font-size:11px;letter-spacing:10px;color:#444}
+.win .cu{padding:12px 14px}
+.win .url{display:flex;align-items:center;gap:8px;margin:0 0 10px;padding:6px 10px;border:1px solid var(--w-line);border-radius:18px;font:12px var(--mono);color:var(--w-ink2);background:#FAFAFA}
+.win .url .cand{color:#2E7D4F}
+.con{background:#0C0C0C;color:#CCCCCC;font:12px/1.5 var(--mono);padding:10px 12px;white-space:pre-wrap;word-break:break-word;min-height:200px}
+.con .c{color:#3B9EFF}.con .g{color:#16C60C}.con .y{color:#F9F1A5}.con .d{color:#767676}.con .w{color:#fff;font-weight:600}
+.con .cod{display:inline-block;margin:6px 0;padding:6px 14px;background:#1F1F1F;border:1px solid #444;color:#fff;font-size:18px;letter-spacing:.15em}
+.wbtn{display:inline-block;font:600 12px var(--sans);padding:6px 14px;border-radius:4px;border:1px solid #BBB;background:#FDFDFD;color:var(--w-ink);margin:4px 4px 0 0}
+.wbtn.azul{background:var(--w-blue);border-color:var(--w-blue);color:#fff}
+.wbtn.verde{background:#1F883D;border-color:#1F883D;color:#fff}
+.wbtn.morado{background:#7C3AED;border-color:#7C3AED;color:#fff}
+.burb{position:relative;margin:8px 0 0 auto;width:min(100%,300px);background:#fff;border:1px solid var(--w-line);border-radius:8px;padding:8px 10px;font-size:12px;box-shadow:0 6px 18px -8px rgba(0,0,0,.35)}
+.burb b{display:block}
+.burb .f{color:var(--w-ink2);font-size:11px}
+.smart{background:#fff;border-radius:8px;overflow:hidden;max-width:520px;margin:0 auto;box-shadow:0 12px 30px -12px rgba(0,0,0,.45)}
+.smart .cab2{background:var(--w-blue);color:#fff;padding:26px 24px 18px}
+.smart .cab2 h3{font:600 20px var(--sans);margin:0 0 6px;color:#fff}
+.smart .cab2 p{margin:0;font-size:13px;opacity:.95}
+.smart .cu2{padding:16px 24px 20px;font-size:12.5px;color:var(--w-ink2)}
+.smart .cu2 a{color:var(--w-blue);font-weight:600}
+.smart .bot{text-align:right;padding-top:12px}
+.gris{background:#F0F0F0;border:1px solid #C9CCD1;border-radius:8px;overflow:hidden;max-width:520px;margin:0 auto;box-shadow:0 12px 30px -12px rgba(0,0,0,.45);color:var(--w-ink)}
+.gris .tb{display:flex;justify-content:space-between;padding:8px 14px;font-size:12px;color:var(--w-ink2)}
+.gris .cu2{padding:6px 24px 16px;font-size:12.5px}
+.gris h3{font:600 15px var(--sans);margin:0 0 10px;color:var(--w-ink)}
+.gris .bot{text-align:right;padding-top:10px}
+.gris .pie{margin:10px 0 0;font-size:12px;color:var(--w-ink2)}
+.pc .o{text-align:center;margin:10px 0;font-size:12px;color:var(--w-ink2)}
+.tarj{max-width:400px;margin:0 auto;border:1px solid var(--w-line);border-radius:8px;padding:18px 20px;background:#fff;color:var(--w-ink)}
+.tarj h3{font:600 17px var(--sans);margin:0 0 8px}
+.tarj p{margin:.3rem 0;font-size:12.5px;color:var(--w-ink2)}
+.tarj .campo{font:16px var(--mono);letter-spacing:.12em;text-align:center;padding:10px;border:1px solid var(--w-line);border-radius:6px;margin:10px 0;background:#FAFAFA}
+.tarj ul{margin:.4rem 0;padding-left:1.1rem;font-size:12.5px}
+.tarj .av{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+.tarj .av i{width:34px;height:34px;border-radius:50%;background:#9A4A2C;display:inline-block}
+.tarj .av i.gh{background:#24292F}.tarj .av i.fl{background:#7C3AED}
+.tarj .av span{font-weight:600}
+.nota{font-size:.82rem;color:var(--mute);margin:.5rem 0 0}
+footer{max-width:52rem;margin:0 auto;padding:1rem 16px 7rem;font-size:.8rem;color:var(--mute);border-top:1px solid var(--line)}
+body.todas footer{padding-bottom:2rem}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="fila">
+    <span class="brand">Peripatéticos <small>recorrido</small></span>
+    <span class="esp"></span>
+    <button class="tog" id="todas" type="button" aria-pressed="false">Todas seguidas</button>
+    <a class="tog" href="./" style="text-decoration:none">Instalador</a>
+  </div>
+  <div class="menu" id="menu"></div>
+</div>
+
+<main class="esc" id="esc">
+
+<!-- ================================================== 1 -->
+<section class="marco" data-t="Portada" data-g="Móvil">
+  <div class="cab"><span class="n">1 / 20</span><span class="donde">Móvil</span><h2>Recibe un enlace y lo abre en el móvil</h2></div>
+  <p class="hace">Lee qué es, qué necesita y qué cuesta. Pulsa <b>Empezar</b>. Nada que descargar.</p>
+  <div class="tel"><div class="st"><span>18:05</span><span>●●● ▲ ▮</span></div>
+    <div class="app"><span class="b">Peripatéticos</span><span class="pill">inicio</span></div>
+    <div class="pant">
+      <p class="kick">Para gente que no programa</p>
+      <h1>Tu app nace mientras paseas.</h1>
+      <p class="lede">Enciende el PC una vez, media hora. Después, tu app se desarrolla desde el móvil: le cuentas lo que quieres, lo ves en pantalla y dices «vale» o «cámbialo».</p>
+      <a class="btn pri">Empezar · unos 30 minutos</a>
+      <a class="btn">¿Cómo funciona?</a>
+      <p class="kick">Tres pasos. Solo el segundo necesita el PC.</p>
+      <div class="paso"><div class="h"><span class="num">1</span><b>Tus cuentas (y Drive, si quieres)</b></div></div>
+      <div class="paso"><div class="h"><span class="num">2</span><b>El PC, una sola vez</b></div></div>
+      <div class="paso"><div class="h"><span class="num">3</span><b>Tu móvil, siempre</b></div></div>
+    </div>
+  </div>
+  <details class="bajo"><summary>Por debajo</summary><div>Página estática en GitHub Pages. Es el único punto de entrada: portada e instalador son la misma página, así que el enlace que se comparte nunca caduca ni hay que reenviar nada.</div></details>
+</section>
+
+<!-- ================================================== 2 -->
+<section class="marco" data-t="Nombre" data-g="Móvil">
+  <div class="cab"><span class="n">2 / 20</span><span class="donde">Móvil</span><h2>Lo primero que decide: el nombre</h2></div>
+  <p class="hace">Escribe «Recetas de la abuela». La página le enseña cómo quedará y dónde vivirá. Pulsa <b>Hecho</b>.</p>
+  <div class="tel"><div class="st"><span>18:06</span><span>●●● ▲ ▮</span></div>
+    <div class="app"><span class="b">Peripatéticos</span><span class="pill">Paso 1 de 6</span></div>
+    <div class="pant">
+      <div class="prog"><i style="width:0"></i></div>
+      <div class="paso ac"><div class="h"><span class="num">1</span><b>¿Cómo se va a llamar tu app?</b><span class="bd ac">ahora</span></div>
+        <div class="cu"><p class="pide">Escribe un nombre corto. Minúsculas, sin espacios: lo arreglo yo si hace falta.</p>
+          <input class="txt" value="Recetas de la abuela" readonly>
+          <p class="previa">Se llamará <code>recetas-de-la</code>. Tendrá una web en <code>tuorganizacion.github.io/recetas-de-la</code> y un servidor en <code>recetas-de-la-tuorganizacion.fly.dev</code>.</p>
+          <div class="por">¿Qué es esto y por qué te lo pido?</div>
+          <a class="btn pri">Hecho</a>
+          <div class="verif ok"><span class="ic">✓</span><div><b>«recetas-de-la» vale como nombre</b>Compruebo que está libre en cuanto sepa cuál es tu organización (paso 3).</div></div>
+        </div></div>
+      <div class="paso bl"><div class="h"><span class="num">2</span><b>Tu cuenta de GitHub</b></div></div>
+      <div class="paso bl"><div class="h"><span class="num">3</span><b>Tu espacio en GitHub</b></div></div>
+      <div class="paso bl"><div class="h"><span class="num">4</span><b>Tu cuenta en Fly.io</b></div></div>
+    </div>
+  </div>
+  <details class="bajo"><summary>Por debajo</summary><div>El nombre se sanea en el móvil (minúsculas, guiones, 15 caracteres sin partir palabras), con las mismas reglas que el instalador. En el paso 3, ya con la organización, la página pregunta a la API pública de GitHub si <code>organización/nombre</code> existe. El nombre de Fly lleva la organización de sufijo porque en Fly es único para todo el mundo.</div></details>
+</section>
+
+<!-- ================================================== 3 -->
+<section class="marco" data-t="Cuentas" data-g="Móvil">
+  <div class="cab"><span class="n">3 / 20</span><span class="donde">Móvil</span><h2>Las cuentas, una a una, y el paso del PC a la vista</h2></div>
+  <p class="hace">GitHub y la organización quedan <b>verificadas</b> al instante. Fly.io, Claude y la carpeta de Drive quedan <b>anotadas</b>: la página dice quién y cuándo las comprobará de verdad. Llega al paso 7 y pulsa <b>Enviarme el enlace al PC</b>.</p>
+  <div class="tel"><div class="st"><span>18:21</span><span>●●● ▲ ▮</span></div>
+    <div class="app"><span class="b">Peripatéticos</span><span class="pill">Paso 7 de 8</span></div>
+    <div class="pant">
+      <div class="prog"><i style="width:75%"></i></div>
+      <div class="paso ok"><div class="h"><span class="num">✓</span><b>recetas-de-la</b><span class="bd ok">verificado</span></div></div>
+      <div class="paso ok"><div class="h"><span class="num">✓</span><b>Tu cuenta de GitHub</b><span class="bd ok">verificado</span></div></div>
+      <div class="paso ok"><div class="h"><span class="num">✓</span><b>Tu espacio en GitHub</b><span class="bd ok">verificado</span></div></div>
+      <div class="paso ok"><div class="h"><span class="num">✓</span><b>Tu cuenta en Fly.io</b><span class="bd an">anotado</span></div></div>
+      <div class="paso ok"><div class="h"><span class="num">✓</span><b>Claude en tu móvil</b><span class="bd an">anotado</span></div></div>
+      <div class="paso ok"><div class="h"><span class="num">✓</span><b>Tu carpeta en Drive</b><span class="bd an">anotado</span></div></div>
+      <div class="paso ac"><div class="h"><span class="num">7</span><b>El PC, una sola vez</b><span class="bd ac">ahora</span></div>
+        <div class="cu"><p class="pide">Enciende el PC y ábrete allí este enlace. En esa página descargas un archivo y lo abres con doble clic. Te pedirá entrar en GitHub y en Fly.io desde el navegador. Nada más.</p>
+          <a class="btn pri">Enviarme el enlace al PC</a>
+          <p class="previa">Se abre lo de compartir del móvil: mándatelo por correo o por WhatsApp. El enlace también está a la vista, con un botón para copiarlo.</p>
+          <p class="aviso"><b>Windows te avisará</b> de que es un archivo bajado de internet. Si sale una ventana gris («No se pudo comprobar el editor»), pulsa <i>Ejecutar</i>. Si sale una azul («Windows protegió tu PC»), pulsa <i>Más información</i> y después <i>Ejecutar de todas formas</i>.</p>
+          <div class="por">¿Qué va a hacer el PC exactamente?</div>
+          <a class="btn">Ya lo he abierto en el PC</a>
+        </div></div>
+    </div>
+  </div>
+  <details class="bajo"><summary>Por debajo</summary><div>«Enviarme el enlace» usa la hoja de compartir del móvil (Web Share API) con la dirección <code>…/pc.html?app=recetas-de-la&amp;org=apps-de-maria&amp;u=maria-garcia</code>. Es la forma en que la gente mueve un enlace del móvil al PC sin que nadie se lo explique. Sin hoja de compartir, abre el correo con el enlace ya escrito.</div></details>
+</section>
+
+<!-- ================================================== Drive -->
+<section class="marco" data-t="Drive" data-g="Móvil">
+  <div class="cab"><span class="n">4 / 20</span><span class="donde">Móvil</span><h2>Su carpeta de Google Drive</h2></div>
+  <p class="hace">De cerca, el paso 6, justo antes del PC: en Drive crea una carpeta <b>recetas-de-la</b> en «Mi unidad», copia su dirección y la pega. Si no quiere Drive, pulsa <b>Sin Drive</b> y la app funciona igual.</p>
+  <div class="tel"><div class="st"><span>18:19</span><span>●●● ▲ ▮</span></div>
+    <div class="app"><span class="b">Peripatéticos</span><span class="pill">Paso 6 de 8</span></div>
+    <div class="pant">
+      <div class="prog"><i style="width:62%"></i></div>
+      <div class="paso ok"><div class="h"><span class="num">✓</span><b>Claude en tu móvil</b><span class="bd an">anotado</span></div></div>
+      <div class="paso ac"><div class="h"><span class="num">6</span><b>Tu carpeta en Google Drive</b><span class="bd ac">ahora</span></div>
+        <div class="cu"><p class="pide">En Google Drive, crea una carpeta llamada <b>recetas-de-la</b> dentro de «Mi unidad» y pega aquí su enlace.</p>
+          <a class="btn">Abrir Google Drive ↗</a>
+          <div class="por">¿Qué es esto y por qué te lo pido?</div>
+          <label class="lab">Enlace de la carpeta</label>
+          <div class="txt">https://drive.google.com/drive/folders/1AbC…</div>
+          <div style="display:flex;gap:.4rem"><a class="btn pri" style="flex:1">Hecho</a><a class="btn" style="flex:1">Sin Drive</a></div>
+          <div class="verif an"><span class="ic">…</span><div><b>Carpeta anotada</b>No puedo mirar dentro de tu Drive desde aquí. El PC la dejará apuntada en tu app, y Claude la comprobará en el paso 8.</div></div>
+        </div></div>
+      <div class="paso bl"><div class="h"><span class="num">7</span><b>El PC, una sola vez</b></div></div>
+    </div>
+  </div>
+  <details class="bajo"><summary>Por debajo</summary><div>La página saca el id del enlace (<code>/folders/&lt;id&gt;</code>) y rechaza enlaces a archivos. No puede comprobar la carpeta: haría falta la cuenta de Google del usuario. El id viaja al PC en el enlace (<code>&amp;drive=…</code>) y de ahí al <code>.cmd</code>; el instalador lo escribe en la fila <b>Carpeta de Drive (id)</b> de <code>CLAUDE.md</code>, que es de donde lo leen las sesiones de Claude para subir allí el resumen al cerrar. Drive nunca se toca desde el PC.</div></details>
+</section>
+
+<!-- ================================================== 4 -->
+<section class="marco" data-t="Compartir" data-g="Móvil">
+  <div class="cab"><span class="n">5 / 20</span><span class="donde">Móvil</span><h2>Se manda el enlace a sí mismo</h2></div>
+  <p class="hace">Elige <b>Correo</b> (o WhatsApp) y se lo envía. Deja el móvil y va al PC.</p>
+  <div class="tel"><div class="st"><span>18:21</span><span>●●● ▲ ▮</span></div>
+    <div class="app"><span class="b">Peripatéticos</span><span class="pill">Paso 7 de 8</span></div>
+    <div class="pant">
+      <div class="paso ac"><div class="h"><span class="num">7</span><b>El PC, una sola vez</b><span class="bd ac">ahora</span></div>
+        <div class="cu"><p class="pide">Enciende el PC. Ábrete allí este enlace, descarga el archivo y ábrelo con doble clic.</p><a class="btn pri">Enviarme el enlace al PC</a></div></div>
+      <div class="velo"></div>
+      <div class="hoja"><div class="asa"></div>
+        <b style="font-size:.9rem">Montar recetas-de-la en mi PC</b>
+        <div class="enl">https://npiobject-labs.github.io/DesdeMovil/pc.html?app=recetas-de-la&amp;org=apps-de-maria&amp;u=maria-garcia&amp;drive=1AbC…</div>
+        <div class="apps"><div><i class="c"></i>Correo</div><div><i class="w"></i>WhatsApp</div><div><i class="n"></i>Notas</div><div><i class="k"></i>Copiar</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================== 5 -->
+<section class="marco" data-t="Descarga" data-g="PC">
+  <div class="cab"><span class="n">6 / 20</span><span class="donde pc">PC · navegador</span><h2>En el PC: abre el enlace y descarga un archivo</h2></div>
+  <p class="hace">Abre el correo en el PC, pulsa el enlace, y en la página pulsa <b>Descargar</b>. El navegador guarda <code>montar-recetas-de-la.cmd</code> en Descargas.</p>
+  <div class="pc"><div class="barra"><span>■ Inicio</span><span>Navegador</span><span class="hora">18:24</span></div>
+    <div class="win"><div class="tb"><span>Montar recetas-de-la · Peripatéticos</span><span class="ctl">–▢✕</span></div>
+      <div class="cu"><div class="url"><span class="cand">🔒</span>npiobject-labs.github.io/DesdeMovil/pc.html?app=recetas-de-la&amp;org=apps-de-maria&amp;u=maria-garcia</div>
+        <h3 style="font:700 20px var(--serif);margin:4px 0 6px">Montar «recetas-de-la» en este PC</h3>
+        <p style="margin:.3rem 0;color:var(--w-ink2)">Tu app se creará en <b>apps-de-maria</b>. Descarga el archivo, ábrelo con doble clic y sigue lo que diga. Tardará unos 8 minutos y podrás apagar el PC al terminar.</p>
+        <span class="wbtn azul">⬇ Descargar montar-recetas-de-la.cmd</span>
+        <p style="margin:.6rem 0 0;font-size:12px;color:var(--w-ink2)">Windows te avisará de que viene de internet. Ventana gris: <b>Ejecutar</b>. Ventana azul: <b>Más información → Ejecutar de todas formas</b>.</p>
+        <div class="burb"><b>montar-recetas-de-la.cmd</b><span class="f">1 KB · Descarga completada · <u>Abrir archivo</u></span></div>
+      </div></div>
+  </div>
+  <details class="bajo"><summary>Por debajo</summary><div><code>pc.html</code> genera el <code>.cmd</code> en el propio navegador, con la app, la organización, el usuario y la plantilla escritos dentro (<code>set "PERI_APP=…"</code>). No hace falta ningún servidor intermedio ni teclear nada en el PC. El <code>.cmd</code> solo hace una cosa: descargar <code>instalador/peripateticos.ps1</code> de esta misma web y ejecutarlo con Windows PowerShell, con la política de ejecución relajada solo para esa ventana. La página enseña su contenido entero, y ofrece una línea para pegar en PowerShell si Windows no deja abrir el archivo.</div></details>
+</section>
+
+<!-- ================================================== 6 -->
+<section class="marco" data-t="Aviso" data-g="PC">
+  <div class="cab"><span class="n">7 / 20</span><span class="donde pc">PC · Windows</span><h2>El aviso de Windows: el momento más delicado</h2></div>
+  <p class="hace">Doble clic en el archivo. Según el navegador, Windows enseña una de dos ventanas. La gris («No se pudo comprobar el editor»): pulsa <b>Ejecutar</b>. La azul («Windows protegió tu PC»): pulsa <b>Más información</b> (texto pequeño) y luego <b>Ejecutar de todas formas</b>. La página del móvil ya lo había avisado con esas mismas palabras.</p>
+  <div class="pc"><div class="barra"><span>■ Inicio</span><span>Descargas</span><span class="hora">18:25</span></div>
+    <div class="gris"><div class="tb">Advertencia de seguridad de Abrir archivo<span>✕</span></div>
+      <div class="cu2"><h3>No se pudo comprobar el editor. ¿Está seguro de que desea ejecutar este software?</h3>
+        <p style="margin:0 0 4px">Nombre: <b>montar-recetas-de-la.cmd</b><br>Editor: <b>Publicador desconocido</b><br>Tipo: Script de comandos de Windows</p>
+        <div class="bot"><span class="wbtn azul">Ejecutar</span><span class="wbtn">Cancelar</span></div>
+        <p class="pie">☑ Preguntar siempre antes de abrir este archivo</p></div></div>
+    <p class="o">o bien</p>
+    <div class="smart"><div class="cab2"><h3>Windows protegió tu PC</h3><p>SmartScreen impidió que se iniciara una aplicación desconocida. Si ejecutas esta aplicación, podrías poner en riesgo tu PC.</p></div>
+      <div class="cu2"><p style="margin:0 0 6px"><a>Más información</a></p>
+        <p style="margin:0 0 4px">Aplicación: <b>montar-recetas-de-la.cmd</b><br>Editor: <b>Editor desconocido</b></p>
+        <div class="bot"><span class="wbtn azul">Ejecutar de todas formas</span><span class="wbtn">No ejecutar</span></div></div></div>
+  </div>
+  <details class="bajo"><summary>Por debajo · riesgo</summary><div>Es un aviso genérico para cualquier ejecutable sin firma de una gran empresa. Sale la ventana gris del Administrador de datos adjuntos o la azul de SmartScreen según el navegador y la configuración de Windows; las dos se deben a la marca «descargado de internet» del archivo. El <code>.cmd</code> se la quita a sí mismo al arrancar (<code>Unblock-File</code>), así que reabrirlo para seguir donde lo dejó ya no avisa. Aquí es donde más gente no técnica se echa atrás. Mitigación: avisarlo antes en el móvil con las palabras exactas y repetirlo en <code>pc.html</code>. Plan B: firmar el script con un certificado de código (cuesta dinero al año) o sustituir la descarga por una línea que se pega en PowerShell, que no da este aviso pero es más fea.</div></details>
+</section>
+
+<!-- ================================================== 7 -->
+<section class="marco" data-t="Consola" data-g="PC">
+  <div class="cab"><span class="n">8 / 20</span><span class="donde pc">PC · ventana</span><h2>Se abre una ventana negra que habla en su idioma</h2></div>
+  <p class="hace">No tiene que escribir nada. Solo leer. La ventana dice qué hace ella y qué va a pedirle a él.</p>
+  <div class="pc"><div class="barra"><span>■ Inicio</span><span>montar-recetas-de-la</span><span class="hora">18:25</span></div>
+    <div class="win"><div class="tb"><span>▮ montar-recetas-de-la</span><span class="ctl">–▢✕</span></div>
+<div class="con"><span class="c">  +--------------------------------------------------------+
+  |  Peripateticos  ::  montar la app "recetas-de-la"      |
+  +--------------------------------------------------------+</span>
+<span class="d">  |  Lo hace el PC : GitHub + web + servidor + llaves       |
+  |  Lo pones tu   : dos inicios de sesion en el navegador  |
+  +--------------------------------------------------------+</span>
+
+   <span class="w">No cierres esta ventana. Puedes minimizarla.</span>
+   No tienes que escribir nada aqui.
+
+<span class="c">== 1/7 Ayudantes</span>
+   <span class="g">OK</span>  Ayudante de GitHub instalado (9s)
+   <span class="g">OK</span>  Ayudante de Fly.io instalado (21s)</div></div>
+  </div>
+  <details class="bajo"><summary>Por debajo</summary><div>Windows PowerShell 5.1, el que trae Windows. Descarga <code>gh</code> y <code>flyctl</code> de sus páginas oficiales de versiones en GitHub y los deja en <code>%LOCALAPPDATA%\Peripateticos\bin</code>: sin <code>winget</code>, sin tocar Windows y sin permisos de administrador. Si ya estaban instalados, usa esos. La consola va sin acentos a propósito: así ninguna configuración de Windows la puede desfigurar.</div></details>
+</section>
+
+<!-- ================================================== 8 -->
+<section class="marco" data-t="Código" data-g="PC">
+  <div class="cab"><span class="n">9 / 20</span><span class="donde web">PC · navegador</span><h2>GitHub: teclear un código de ocho letras</h2></div>
+  <p class="hace">La ventana enseña un código y abre el navegador solo. En GitHub, escribe el código y pulsa <b>Continue</b>. Es la única vez que teclea algo, y es un código, no una clave.</p>
+  <div class="dos pcgrande">
+    <div class="pc"><div class="barra"><span>■ Inicio</span><span>Navegador · montar-recetas-de-la</span><span class="hora">18:26</span></div>
+      <div class="win"><div class="tb"><span>Device Activation · GitHub</span><span class="ctl">–▢✕</span></div>
+        <div class="cu"><div class="url"><span class="cand">🔒</span>github.com/login/device</div>
+          <div class="tarj"><div class="av"><i class="gh"></i><span>GitHub</span></div><h3>Device Activation</h3><p>Enter the code displayed on your device.</p>
+            <div class="campo">7F3A-K2QP</div><span class="wbtn verde" style="display:block;text-align:center">Continue</span></div></div></div>
+    </div>
+    <div class="win"><div class="tb"><span>▮ montar-recetas-de-la</span><span class="ctl">–▢✕</span></div>
+<div class="con" style="min-height:0"><span class="c">== 2/7 Entrar en GitHub</span>
+   Se va a abrir tu navegador en GitHub.
+   Cuando te pida un codigo, escribe el que sale aqui abajo
+   (tambien lo tienes copiado: puedes pegarlo).
+
+        <span class="cod">7F3A-K2QP</span>
+
+   <span class="d">..</span>  Esperando a que lo autorices en el navegador
+       (tienes 15 minutos)</div></div>
+  </div>
+  <details class="bajo"><summary>Por debajo</summary><div><code>gh auth login --web</code> con flujo de dispositivo y los permisos <code>repo</code>, <code>workflow</code> y <code>admin:org</code> (este último para guardar el secreto de Fly en la organización). Con la salida redirigida, <code>gh</code> no espera a que se pulse Intro: el instalador lee el código de su salida, lo enseña en grande, lo copia al portapapeles y abre él mismo <code>github.com/login/device</code>. El token queda en el almacén de credenciales de Windows; nunca se imprime. Si ya había sesión con esos permisos, este paso no pide nada.</div></details>
+</section>
+
+<!-- ================================================== 9 -->
+<section class="marco" data-t="Autorizar" data-g="PC">
+  <div class="cab"><span class="n">10 / 20</span><span class="donde web">PC · navegador</span><h2>GitHub: «Autorizar»</h2></div>
+  <p class="hace">GitHub explica qué se va a poder hacer en su nombre. Pulsa <b>Authorize</b>. Vuelve a la ventana negra, que ya le saluda por su nombre.</p>
+  <div class="dos pcgrande">
+    <div class="pc"><div class="barra"><span>■ Inicio</span><span>Navegador · montar-recetas-de-la</span><span class="hora">18:27</span></div>
+      <div class="win"><div class="tb"><span>Authorize GitHub CLI</span><span class="ctl">–▢✕</span></div>
+        <div class="cu"><div class="url"><span class="cand">🔒</span>github.com/login/oauth/authorize</div>
+          <div class="tarj"><div class="av"><i class="gh"></i><span>Authorize GitHub CLI</span></div>
+            <p><b>GitHub CLI</b> wants to access your <b>maria-garcia</b> account.</p>
+            <ul><li><b>Repositories</b> · public and private</li><li><b>Workflows</b> · update GitHub Action workflows</li><li><b>Organizations</b> · <b>apps-de-maria</b> · manage secrets</li></ul>
+            <span class="wbtn verde" style="display:block;text-align:center">Authorize github</span>
+            <p style="text-align:center;margin-top:8px">Authorizing will redirect to <b>github.com</b></p></div></div></div>
+    </div>
+    <div class="win"><div class="tb"><span>▮ montar-recetas-de-la</span><span class="ctl">–▢✕</span></div>
+<div class="con" style="min-height:0"><span class="c">== 2/7 Entrar en GitHub</span>
+   <span class="g">OK</span>  Hola, <span class="w">maria-garcia</span> (1m 04s)
+   <span class="g">OK</span>  Organizacion <span class="w">apps-de-maria</span> encontrada; tienes
+       permiso de administracion (1m 05s)
+   <span class="g">OK</span>  Claude ya tiene permiso en apps-de-maria (1m 05s)</div></div>
+  </div>
+  <details class="bajo"><summary>Por debajo</summary><div>Con el token, el instalador comprueba lo que el móvil no podía: que el usuario administra la organización (<code>user/memberships/orgs/…</code>) y que la app de GitHub de Claude está instalada en ella (<code>orgs/…/installations</code>). Si falta Claude, no para: avisa con el enlace exacto para darle permiso. El resultado va a <code>docs/nacimiento.json</code>, y con él el paso 5 del móvil pasa de «anotado» a «verificado».</div></details>
+</section>
+
+<!-- ================================================== 10 -->
+<section class="marco" data-t="Fly.io" data-g="PC">
+  <div class="cab"><span class="n">11 / 20</span><span class="donde web">PC · navegador</span><h2>Fly.io: la segunda y última autorización</h2></div>
+  <p class="hace">El navegador se abre otra vez, ahora en Fly.io. Entra con su correo si no lo estaba, pulsa <b>Authorize</b>, y vuelve a la ventana. A partir de aquí ya no le piden nada más.</p>
+  <div class="dos pcgrande">
+    <div class="pc"><div class="barra"><span>■ Inicio</span><span>Navegador · montar-recetas-de-la</span><span class="hora">18:28</span></div>
+      <div class="win"><div class="tb"><span>Authorize flyctl · Fly.io</span><span class="ctl">–▢✕</span></div>
+        <div class="cu"><div class="url"><span class="cand">🔒</span>fly.io/app/auth/cli/7c1e…</div>
+          <div class="tarj"><div class="av"><i class="fl"></i><span>Fly.io</span></div><h3>Authorize flyctl on this computer?</h3>
+            <p>flyctl on <b>DESKTOP-MARIA</b> is requesting access to your account <b>maria@ejemplo.es</b>.</p>
+            <span class="wbtn morado" style="display:block;text-align:center">Authorize</span>
+            <p style="text-align:center;margin-top:8px">Not you? <u>Sign out</u></p></div></div></div>
+    </div>
+    <div class="win"><div class="tb"><span>▮ montar-recetas-de-la</span><span class="ctl">–▢✕</span></div>
+<div class="con" style="min-height:0"><span class="c">== 3/7 Entrar en Fly.io</span>
+   Se abre el navegador otra vez, ahora en Fly.io. Pulsa 'Authorize'.
+   <span class="g">OK</span>  Cuenta de Fly.io: maria@ejemplo.es (38s)
+   <span class="d">..</span>  organizacion de Fly.io: personal
+
+<span class="c">== 4/7 Llaves</span>
+   <span class="g">OK</span>  Llave del servidor creada (solo vale para tu
+       organizacion de Fly.io) (2s)
+   <span class="g">OK</span>  Guardada en apps-de-maria como secreto (no se muestra) (3s)
+   <span class="w">Ya no te voy a pedir nada mas. Puedes ir a por un cafe.</span></div></div>
+  </div>
+  <details class="bajo"><summary>Por debajo</summary><div><code>flyctl auth login</code> abre el navegador; después <code>flyctl tokens create org -o personal</code> crea un token limitado a su organización de Fly y <code>gh secret set FLY_API_TOKEN --org apps-de-maria --visibility all</code> lo guarda para todos sus repositorios. El valor pasa de un comando a otro por tubería: no toca el disco ni la pantalla. La organización de Fly queda como variable <code>FLY_ORG</code> de la organización de GitHub, que es de donde la lee <code>deploy.yml</code>. Si Fly pide tarjeta al reservar el servidor, el instalador abre la página de pago, espera a que se pulse Intro y reintenta.</div></details>
+</section>
+
+<!-- ================================================== 11 -->
+<section class="marco" data-t="Montando" data-g="PC">
+  <div class="cab"><span class="n">12 / 20</span><span class="donde pc">PC · ventana</span><h2>El PC monta la app y dice cuánto queda</h2></div>
+  <p class="hace">Nada que hacer. La ventana va marcando cada paso con su tiempo; el del servidor avisa de que la primera vez tarda, para que la espera no parezca fallo.</p>
+  <div class="pc"><div class="barra"><span>■ Inicio</span><span>montar-recetas-de-la</span><span class="hora">18:32</span></div>
+    <div class="win"><div class="tb"><span>▮ montar-recetas-de-la</span><span class="ctl">–▢✕</span></div>
+<div class="con"><span class="c">== 5/7 Tu app</span>
+   <span class="g">OK</span>  Nombre 'recetas-de-la-apps-de-maria' reservado en Fly.io (1s)
+   <span class="g">OK</span>  apps-de-maria/recetas-de-la creada a partir del molde (4s)
+   <span class="g">OK</span>  Web activada (9s)
+   <span class="g">OK</span>  Tu nombre puesto en todo: web, servidor, textos (31s)
+   <span class="g">OK</span>  Ficha del proyecto anotada para Claude (33s)
+   <span class="g">OK</span>  Carpeta de Drive anotada: ahi dejara Claude el resumen de
+       cada sesion (33s)
+   <span class="d">..</span>  Construyendo el servidor. La primera vez tarda entre 2 y 5
+       minutos; no es un fallo.
+   <span class="d">..</span>  Construyendo el servidor: <span class="w">2m 30s</span></div></div>
+  </div>
+  <details class="bajo"><summary>Por debajo</summary><div>Reserva el nombre en Fly <b>antes</b> de crear nada en GitHub, para no dejar restos si está cogido. Después: <code>gh repo create --template</code> (público, para que le llegue el secreto de la organización), variables <code>FLY_APP</code> y <code>FLY_ORG</code>, Pages con origen «GitHub Actions» por API, y espera a que <code>init-plantilla.yml</code> ponga el nombre en todo. Ese workflow lanza al terminar <code>pages.yml</code> y <code>deploy.yml</code>; el instalador espera a los dos y, si alguno falla, lo relanza una vez. Cada paso es idempotente: si el archivo se vuelve a abrir, detecta lo hecho y continúa.</div></details>
+</section>
+
+<!-- ================================================== 12 -->
+<section class="marco" data-t="Vigilando" data-g="Móvil">
+  <div class="cab"><span class="n">13 / 20</span><span class="donde">Móvil · mientras tanto</span><h2>El móvil, a la vez, vigila por su cuenta</h2></div>
+  <p class="hace">Si vuelve al móvil mientras el PC trabaja, la página ya ha visto la app en GitHub y la web encendida, y espera al servidor con el mismo aviso. No depende de lo que diga el PC: lo comprueba ella.</p>
+  <div class="tel"><div class="st"><span>18:33</span><span>●●● ▲ ▮</span></div>
+    <div class="app"><span class="b">Peripatéticos</span><span class="pill">Paso 7 de 8</span></div>
+    <div class="pant">
+      <div class="paso ac"><div class="h"><span class="num">7</span><b>El PC, una sola vez</b><span class="bd ac">vigilando</span></div>
+        <div class="cu">
+          <ol class="linea">
+            <li class="ok"><span class="p">✓</span><span>Buscando tu app en GitHub<small>Encontrada: github.com/apps-de-maria/recetas-de-la</small></span></li>
+            <li class="ok"><span class="p">✓</span><span>Poniéndole tu nombre a todo<small>Todo lleva el nombre «recetas-de-la»</small></span></li>
+            <li class="ok"><span class="p">✓</span><span>Esperando a tu web<small>Responde: apps-de-maria.github.io/recetas-de-la</small></span></li>
+            <li class="act"><span class="p"></span><span>Esperando a tu servidor<small>2 min 40 s · la primera vez tarda entre 2 y 5 minutos. No es un fallo.</small></span></li>
+            <li><span class="p"></span><span>Preguntándole si está viva</span></li>
+          </ol>
+          <a class="btn chico">Ya lo he abierto en el PC</a>
+        </div></div>
+    </div>
+  </div>
+  <details class="bajo"><summary>Por debajo</summary><div>La página del móvil sondea cada 10 s: existencia del repositorio y del marcador <code>.plantilla-pendiente</code> (API pública de GitHub), la web (<code>github.io</code> sirve CORS abierto) y el servidor (<code>/hola</code>, también con CORS). Ninguna necesita credenciales. Si GitHub corta por límite de consultas, le basta con que la web y el servidor respondan. Por eso el móvil y el PC llegan a la misma conclusión por caminos distintos, y el paso 7 se marca solo.</div></details>
+</section>
+
+<!-- ================================================== 13 -->
+<section class="marco" data-t="Fin PC" data-g="PC">
+  <div class="cab"><span class="n">14 / 20</span><span class="donde pc">PC · ventana</span><h2>«Ya puedes apagar el PC»</h2></div>
+  <p class="hace">La ventana termina con el saludo de la app, la copia de seguridad en Documentos, los enlaces y la frase que lo cierra todo. Abre la portada de su app en el navegador. Apaga el PC.</p>
+  <div class="pc"><div class="barra"><span>■ Inicio</span><span>montar-recetas-de-la</span><span class="hora">18:34</span></div>
+    <div class="win"><div class="tb"><span>▮ montar-recetas-de-la</span><span class="ctl">–▢✕</span></div>
+<div class="con">   <span class="g">OK</span>  Servidor construido (…/actions/runs/…) (4m 12s)
+   <span class="g">OK</span>  Web publicada (4m 40s)
+
+<span class="c">== 6/7 Comprobacion</span>
+   <span class="g">OK</span>  Web viva: https://apps-de-maria.github.io/recetas-de-la/
+   <span class="g">OK</span>  <span class="w">"Hola, soy recetas-de-la y respondo desde Fly.io"</span>
+       2026-09-25 16:34:07 UTC - cdg - version 5e1f2a9
+   <span class="g">OK</span>  Nacimiento registrado
+
+<span class="c">== 7/7 Copia en tu PC</span>
+   <span class="g">OK</span>  Copia del repositorio en C:\Users\Maria\Documents\
+       Peripateticos\recetas-de-la\repo (6s)
+   <span class="g">OK</span>  Ficha, accesos directos y 'Actualizar copia.cmd' (6s)
+   <span class="g">OK</span>  Acceso a la carpeta en el escritorio (6s)
+
+<span class="g">================ recetas-de-la lista en 8.7 min ================</span>
+   Web         https://apps-de-maria.github.io/recetas-de-la/
+   Servidor    https://recetas-de-la-apps-de-maria.fly.dev/
+   Saludo      https://recetas-de-la-apps-de-maria.fly.dev/hola
+   Donde vive  https://github.com/apps-de-maria/recetas-de-la
+   Bitacora    https://apps-de-maria.github.io/recetas-de-la/bitacora.html
+   Drive       https://drive.google.com/drive/folders/1AbC…
+   Copia       C:\Users\Maria\Documents\Peripateticos\recetas-de-la
+
+   <span class="w">Ya puedes apagar el PC. Vuelve al movil: el paso 7 se marca
+   solo en cuanto tu app responde.
+   Despues, el paso 8: que Claude compruebe tu carpeta de Drive.</span>
+
+Pulsa una tecla para cerrar esta ventana.</div></div>
+  </div>
+  <details class="bajo"><summary>Por debajo</summary><div>Verificación real por HTTP desde el PC, que sí tiene red: la portada de la web tiene que llevar el nombre y <code>/hola</code> tiene que contestar. Si el servidor no responde, no dice «listo»: dice qué falta y qué hacer. Después sube <code>docs/nacimiento.json</code> (sin correos ni datos personales: <code>docs/</code> es público). En el PC quedan los dos ayudantes y la carpeta de la copia; el repositorio se baja como zip de GitHub, así que no hace falta git.</div></details>
+</section>
+
+<!-- ================================================== Carpeta PC -->
+<section class="marco" data-t="Carpeta" data-g="PC">
+  <div class="cab"><span class="n">15 / 20</span><span class="donde pc">PC · Explorador</span><h2>Su copia de seguridad, en Documentos</h2></div>
+  <p class="hace">En el escritorio aparece un acceso «Peripateticos - recetas-de-la». Dentro está todo: el repositorio entero, la ficha, accesos directos y un archivo para poner la copia al día con doble clic.</p>
+  <div class="pc"><div class="barra"><span>■ Inicio</span><span>Explorador de archivos</span><span class="hora">18:35</span></div>
+    <div class="win"><div class="tb"><span>📁 recetas-de-la</span><span class="ctl">–▢✕</span></div>
+      <div class="cu"><div class="url"><span>📁</span>Documentos › Peripateticos › recetas-de-la</div>
+        <table style="width:100%;border-collapse:collapse;font-size:12.5px;color:var(--w-ink)">
+          <tr style="color:var(--w-ink2);text-align:left"><th style="padding:4px 6px;font-weight:600">Nombre</th><th style="padding:4px 6px;font-weight:600">Qué es</th></tr>
+          <tr><td style="padding:4px 6px">📁 repo</td><td style="padding:4px 6px;color:var(--w-ink2)">todo el repositorio: CLAUDE.md, docs, servidor</td></tr>
+          <tr><td style="padding:4px 6px">🔄 Actualizar copia.cmd</td><td style="padding:4px 6px;color:var(--w-ink2)">doble clic: trae la última versión</td></tr>
+          <tr><td style="padding:4px 6px">📄 LEEME.txt</td><td style="padding:4px 6px;color:var(--w-ink2)">qué es cada cosa; no editar aquí</td></tr>
+          <tr><td style="padding:4px 6px">📄 recetas-de-la.txt</td><td style="padding:4px 6px;color:var(--w-ink2)">la ficha: dónde vive cada cosa</td></tr>
+          <tr><td style="padding:4px 6px">🌐 Web de recetas-de-la</td><td style="padding:4px 6px;color:var(--w-ink2)">acceso directo</td></tr>
+          <tr><td style="padding:4px 6px">🌐 Servidor de recetas-de-la</td><td style="padding:4px 6px;color:var(--w-ink2)">acceso directo al saludo</td></tr>
+          <tr><td style="padding:4px 6px">🌐 Bitacora de recetas-de-la</td><td style="padding:4px 6px;color:var(--w-ink2)">acceso directo</td></tr>
+          <tr><td style="padding:4px 6px">🌐 Codigo en GitHub</td><td style="padding:4px 6px;color:var(--w-ink2)">acceso directo</td></tr>
+          <tr><td style="padding:4px 6px">🌐 Claude Code</td><td style="padding:4px 6px;color:var(--w-ink2)">acceso directo</td></tr>
+          <tr><td style="padding:4px 6px">🌐 Carpeta de Drive</td><td style="padding:4px 6px;color:var(--w-ink2)">acceso directo (si la dio)</td></tr>
+        </table></div></div>
+  </div>
+  <details class="bajo"><summary>Por debajo</summary><div>El instalador baja <code>github.com/&lt;org&gt;/&lt;app&gt;/archive/refs/heads/main.zip</code> (el repositorio es público: sin credenciales ni git) y lo deja en <code>repo\</code>. Es un espejo de solo lectura, como dice <code>CLAUDE.md</code>: <code>Actualizar copia.cmd</code> lo sustituye entero por la última versión, y el <code>LEEME.txt</code> avisa de que lo que se edite ahí se pierde. Los cambios de verdad se hacen desde el móvil. Para trabajar sobre un clon con git está <code>tools/aterrizar.ps1</code>.</div></details>
+</section>
+
+<!-- ================================================== Claude y Drive -->
+<section class="marco" data-t="Claude y Drive" data-g="Móvil">
+  <div class="cab"><span class="n">16 / 20</span><span class="donde">Móvil · Claude</span><h2>Claude comprueba que llega a su Drive</h2></div>
+  <p class="hace">Copia la petición del paso 8, la pega en Claude (Code, en el repositorio de su app) y pulsa <b>Hecho, ya se lo he pedido</b>. En un par de minutos, el paso se marca solo.</p>
+  <div class="dos">
+    <div class="tel"><div class="st"><span>18:37</span><span>●●● ▲ ▮</span></div>
+      <div class="app"><span class="b">Peripatéticos</span><span class="pill">Paso 8 de 8</span></div>
+      <div class="pant">
+        <div class="paso ac"><div class="h"><span class="num">8</span><b>Claude y tu carpeta de Drive</b><span class="bd ac">ahora</span></div>
+          <div class="cu"><p class="pide">Último paso: que Claude compruebe que llega a tu carpeta de Drive. Abre Claude, entra en <b>Code</b>, elige <code>apps-de-maria/recetas-de-la</code> y pégale esto:</p>
+<pre class="pr">Comprueba que tienes acceso a mi carpeta de Google Drive, como explica CLAUDE.md en «Comprobación de Drive», y dime el resultado.</pre>
+            <a class="btn chico">Hecho, ya se lo he pedido</a>
+            <div class="verif ok"><span class="ic">✓</span><div><b>Claude llega a tu carpeta de Drive</b>Ha dejado «Ficha de recetas-de-la.md» en ella. A partir de ahora, cada sesión guardará allí su resumen.</div></div>
+          </div></div>
+      </div>
+    </div>
+    <div class="tel"><div class="st"><span>18:36</span><span>●●● ▲ ▮</span></div>
+      <div class="app"><span class="b">Claude</span><span class="pill">Code · recetas-de-la</span></div>
+      <div class="pant">
+        <p style="background:var(--acc2);border-radius:10px;padding:.5rem .6rem;margin-left:2rem">Comprueba que tienes acceso a mi carpeta de Google Drive, como explica CLAUDE.md en «Comprobación de Drive», y dime el resultado.</p>
+        <p style="background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:.5rem .6rem;margin-right:1rem">Llego a tu carpeta <b>recetas-de-la</b>. He dejado en ella <b>Ficha de recetas-de-la.md</b> con los enlaces de tu app, y lo he apuntado en <code>docs/drive.json</code>. Publicado y comprobado: a partir de ahora, cada sesión dejará ahí su resumen.</p>
+      </div>
+    </div>
+  </div>
+  <details class="bajo"><summary>Por debajo</summary><div>Solo una sesión de Claude con el conector de Google Drive llega a la carpeta. Sigue la sección <b>Comprobación de Drive</b> de <code>CLAUDE.md</code>: lista la carpeta, sube la ficha y escribe <code>docs/drive.json</code> (<code>verificado</code>, <code>fecha</code>, <code>fichero</code>; sin el id ni datos personales). Si no llega, lo escribe con <code>verificado: false</code> y el motivo, y la página dice qué hacer: conectar Google Drive en <b>Ajustes → Conectores</b>. La página lee ese fichero desde la web cada 10 s. De paso queda probado que Claude escribe en el repositorio.</div></details>
+</section>
+
+<!-- ================================================== 14 -->
+<section class="marco" data-t="Meta" data-g="Móvil">
+  <div class="cab"><span class="n">17 / 20</span><span class="donde">Móvil</span><h2>La meta</h2></div>
+  <p class="hace">De vuelta al móvil, el paso 7 ya está marcado: la página vio la web y el servidor por su cuenta. Con el 8 comprobado por Claude, enseña la meta.</p>
+  <div class="tel"><div class="st"><span>18:35</span><span>●●● ▲ ▮</span></div>
+    <div class="app"><span class="b">Peripatéticos</span><span class="pill">Meta</span></div>
+    <div class="pant">
+      <div class="prog"><i style="width:100%"></i></div>
+      <div class="paso ok"><div class="h"><span class="num">✓</span><b>Tu cuenta en Fly.io</b><span class="bd ok">verificado</span></div></div>
+      <div class="paso ok"><div class="h"><span class="num">✓</span><b>Claude en tu móvil</b><span class="bd ok">verificado</span></div></div>
+      <div class="paso ok"><div class="h"><span class="num">✓</span><b>Tu carpeta en Drive</b><span class="bd an">anotado</span></div></div>
+      <div class="paso ok"><div class="h"><span class="num">✓</span><b>El PC, una sola vez</b><span class="bd ok">verificado</span></div></div>
+      <div class="paso ok"><div class="h"><span class="num">✓</span><b>Claude y tu carpeta de Drive</b><span class="bd ok">verificado</span></div>
+        <div class="cu"><div class="verif ok"><span class="ic">✓</span><div><b>Claude llega a tu carpeta de Drive</b>Ha dejado «Ficha de recetas-de-la.md» en ella.</div></div></div></div>
+      <div class="meta"><p class="kick" style="color:inherit;opacity:.85">Meta</p><h2>Tu app recetas-de-la ha nacido</h2><p>Tiene web, tiene servidor y responde. Todo con tu nombre y en tus cuentas.</p><a class="btn">Ver su ficha y saludarla</a></div>
+    </div>
+  </div>
+  <details class="bajo"><summary>Por debajo</summary><div>Fly.io y Claude pasan de «anotado» a «verificado» porque el instalador dejó constancia de ambas comprobaciones en un fichero público del repositorio (<code>docs/nacimiento.json</code>) que la página lee. Drive lo comprueba Claude en el paso 8 y lo deja en <code>docs/drive.json</code>. Son las huellas que cierran el círculo.</div></details>
+</section>
+
+<!-- ================================================== 15 -->
+<section class="marco" data-t="Ficha" data-g="Móvil">
+  <div class="cab"><span class="n">18 / 20</span><span class="donde">Móvil</span><h2>La ficha y el saludo</h2></div>
+  <p class="hace">Pulsa <b>Saluda</b>. El móvil llama al servidor de verdad y enseña lo que responde, con la hora de ahora. Es la prueba que puede enseñar a cualquiera.</p>
+  <div class="tel"><div class="st"><span>18:36</span><span>●●● ▲ ▮</span></div>
+    <div class="app"><span class="b">Peripatéticos</span><span class="pill">Ficha</span></div>
+    <div class="pant">
+      <div class="ficha"><div class="nom">recetas-de-la</div><p class="lede" style="margin:0">Nacida el 25 de septiembre de 2026 · vive en apps-de-maria</p>
+        <dl><dt>Web</dt><dd><a>apps-de-maria.github.io/recetas-de-la/</a></dd><dt>Servidor</dt><dd><a>recetas-de-la-apps-de-maria.fly.dev/</a></dd><dt>Bitácora</dt><dd><a>qué se pidió y qué cambió</a></dd><dt>Dónde vive</dt><dd><a>github.com/apps-de-maria/recetas-de-la</a></dd><dt>Claude</dt><dd>tiene permiso en apps-de-maria</dd></dl>
+        <a class="btn pri">Saluda otra vez</a>
+        <div class="resp"><p class="g">Hola, soy recetas-de-la y respondo desde Fly.io.</p>
+          <dl><dt>Fecha y hora</dt><dd>25 de septiembre de 2026, 18:36:12</dd><dt>Servidor</dt><dd>París (cdg) · máquina <code>1781e6f0c2d4</code></dd><dt>Versión</dt><dd><code>5e1f2a9</code></dd><dt>Despierta</dt><dd>desde hace 3 s (la has despertado tú)</dd></dl></div>
+      </div>
+      <a class="btn pri">Pídele lo primero desde el móvil</a>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================== 16 -->
+<section class="marco" data-t="Pedir" data-g="Móvil">
+  <div class="cab"><span class="n">19 / 20</span><span class="donde">Móvil</span><h2>La primera petición, con las tres cosas</h2></div>
+  <p class="hace">Rellena qué quiere, qué no debe pasar y cuándo está terminado. Copia y pega en Claude. A partir de aquí, todo es esto: pedir, mirar, decir «vale».</p>
+  <div class="tel"><div class="st"><span>18:38</span><span>●●● ▲ ▮</span></div>
+    <div class="app"><span class="b">Peripatéticos</span><span class="pill">Primera petición</span></div>
+    <div class="pant">
+      <div class="chips"><span class="chip">Lista de la compra</span><span class="chip sel">Diario de paseos</span><span class="chip">Reservas</span></div>
+      <label class="lab">Qué quieres</label><div class="txt tarea">Un diario de paseos: cada día apunto por dónde fui y cuántos minutos</div>
+      <label class="lab">Qué no debe pasar</label><div class="txt tarea">Sin mapas ni GPS, solo texto; y que no se vea sin mi enlace</div>
+      <label class="lab">Cuándo está terminado</label><div class="txt tarea">Cuando pueda apuntar el paseo de hoy y ver los de la semana</div>
+<pre class="pr">Trabaja en mi app «recetas-de-la».
+
+Quiero: Un diario de paseos: cada día apunto por dónde fui y cuántos minutos
+No debe pasar: Sin mapas ni GPS, solo texto; y que no se vea sin mi enlace
+Está terminado cuando: Cuando pueda apuntar el paseo de hoy y ver los de la semana
+
+Cuando esté publicado dime el enlace para verlo en el móvil, y apunta esta sesión en la bitácora.</pre>
+      <a class="btn pri">Abrir Claude Code y pegarlo ↗</a>
+    </div>
+  </div>
+  <details class="bajo"><summary>Por debajo</summary><div>La sesión de Claude carga <code>CLAUDE.md</code> del repositorio, que ya sabe las reglas: mocks en <code>docs/</code>, verificación por workflow antes de avisar, entrada en la bitácora al cerrar. El usuario no necesita saber nada de eso; solo las tres cosas.</div></details>
+</section>
+
+<!-- ================================================== Otra app -->
+<section class="marco" data-t="Otra app" data-g="Móvil">
+  <div class="cab"><span class="n">20 / 20</span><span class="donde">Móvil</span><h2>La segunda app: solo el nombre, Drive y el PC</h2></div>
+  <p class="hace">Días después vuelve a la página: arriba ve «Tus apps» y pulsa <b>Montar otra app</b>. Sus cuentas están guardadas: escribe el nombre, pega la carpeta de Drive y abre el archivo en el PC, que ya no pide iniciar sesión.</p>
+  <div class="tel"><div class="st"><span>10:12</span><span>●●● ▲ ▮</span></div>
+    <div class="app"><span class="b">Peripatéticos</span><span class="pill">Paso 1 de 8</span></div>
+    <div class="pant">
+      <div class="prog"><i style="width:0"></i></div>
+      <div class="paso ac"><div class="h"><span class="num">1</span><b>¿Cómo se va a llamar tu app?</b><span class="bd ac">ahora</span></div>
+        <div class="cu"><input class="txt" value="tienda" readonly>
+          <div class="verif ok"><span class="ic">✓</span><div><b>«tienda» está libre en apps-de-maria</b>Aquí vivirá tu app.</div></div></div></div>
+      <div class="paso ok"><div class="h"><span class="num">✓</span><b>Tu cuenta de GitHub</b><span class="bd ok">guardado</span></div></div>
+      <div class="paso ok"><div class="h"><span class="num">✓</span><b>Tu espacio en GitHub</b><span class="bd ok">guardado</span></div></div>
+      <div class="paso ok"><div class="h"><span class="num">✓</span><b>Tu cuenta en Fly.io</b><span class="bd ok">guardado</span></div></div>
+      <div class="paso ok"><div class="h"><span class="num">✓</span><b>Claude en tu móvil</b><span class="bd ok">guardado</span></div></div>
+      <div class="paso bl"><div class="h"><span class="num">6</span><b>Tu carpeta en Google Drive</b></div></div>
+      <div class="paso bl"><div class="h"><span class="num">7</span><b>El PC</b></div></div>
+    </div>
+  </div>
+  <details class="bajo"><summary>Por debajo</summary><div>La página guarda en el navegador el usuario, la organización y qué quedó verificado de Fly.io y Claude; nunca llaves. Al montar otra app vuelve a mirar usuario y organización en la API de GitHub y, como la organización ya se conoce, comprueba en el paso 1 que el nombre está libre en ella. La llave de Fly y <code>FLY_ORG</code> ya están en la organización, así que la app nueva las hereda. En el PC, los ayudantes y las sesiones de GitHub y Fly siguen: el instalador no abre el navegador. Si Claude tiene permiso solo en «los repositorios elegidos», el instalador le añade el nuevo o dice dónde hacerlo. Hay un enlace con las cuentas para usarlas en otro navegador, y «Olvidar mis datos».</div></details>
+</section>
+
+</main>
+
+<footer>Build <code>DM-B3-20260926-003</code> · veinte pantallas dibujadas a partir del instalador real · <a href="./">el instalador</a> · <a href="pc.html?app=recetas-de-la&amp;org=apps-de-maria">la página del PC</a> · <a href="bitacora.html">bitácora</a></footer>
+
+<div class="nav"><div class="fila">
+  <button type="button" id="ant">← Anterior</button>
+  <div class="pos"><span id="pos-t">Portada</span><b id="pos-n">1 / 16</b></div>
+  <button type="button" class="sig" id="sig">Siguiente →</button>
+</div></div>
+
+<script>
+(function(){
+  var marcos = [].slice.call(document.querySelectorAll('.marco')), i = 0, menu = document.getElementById('menu');
+  try { i = Math.min(marcos.length-1, Math.max(0, (parseInt(location.hash.slice(1),10)||1)-1)) } catch(e){}
+  // menú: un botón por pantalla, con el grupo (Móvil / PC) como etiqueta cuando cambia
+  var grupoAnt = '';
+  marcos.forEach(function(m, k){
+    var g = m.dataset.g;
+    if (g !== grupoAnt) { var s = document.createElement('span'); s.className='grp'; s.textContent = g; menu.appendChild(s); grupoAnt = g }
+    var b = document.createElement('button'); b.type='button'; b.textContent = k+1; b.title = m.dataset.t; if (g==='PC') b.className='pc';
+    b.addEventListener('click', function(){ ir(k) }); menu.appendChild(b);
+  });
+  var botones = [].slice.call(menu.querySelectorAll('button'));
+  function ir(k, atras){
+    if (k<0 || k>=marcos.length) return;
+    atras = (k < i); i = k;
+    marcos.forEach(function(m, j){ m.classList.toggle('act', j===i); m.classList.toggle('atras', j===i && atras) });
+    botones.forEach(function(b, j){ b.setAttribute('aria-current', j===i ? 'true' : 'false') });
+    document.getElementById('pos-t').textContent = marcos[i].dataset.t + ' · ' + marcos[i].dataset.g;
+    document.getElementById('pos-n').textContent = (i+1)+' / '+marcos.length;
+    document.getElementById('ant').disabled = (i===0); document.getElementById('sig').disabled = (i===marcos.length-1);
+    if (botones[i].scrollIntoView) botones[i].scrollIntoView({block:'nearest', inline:'center', behavior:'smooth'});
+    try { history.replaceState(null, '', '#'+(i+1)) } catch(e){}
+    if (!document.body.classList.contains('todas')) window.scrollTo(0,0);
+  }
+  // el botón "atrás" del navegador y los enlaces #n de fuera también mueven el recorrido
+  window.addEventListener('hashchange', function(){ var k = (parseInt(location.hash.slice(1),10)||1)-1; if (k!==i) ir(k) });
+  document.getElementById('ant').addEventListener('click', function(){ ir(i-1) });
+  document.getElementById('sig').addEventListener('click', function(){ ir(i+1) });
+  document.addEventListener('keydown', function(e){ if (e.key==='ArrowRight') ir(i+1); if (e.key==='ArrowLeft') ir(i-1) });
+  // deslizar con el dedo
+  var x0 = null, y0 = null;
+  document.addEventListener('touchstart', function(e){ x0 = e.touches[0].clientX; y0 = e.touches[0].clientY }, {passive:true});
+  document.addEventListener('touchend', function(e){
+    if (x0===null || document.body.classList.contains('todas')) return;
+    var dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0; x0 = null;
+    if (Math.abs(dx) > 70 && Math.abs(dx) > Math.abs(dy)*1.5) ir(dx < 0 ? i+1 : i-1);
+  }, {passive:true});
+  // todas seguidas
+  var tog = document.getElementById('todas');
+  tog.addEventListener('click', function(){
+    var on = !document.body.classList.contains('todas');
+    document.body.classList.toggle('todas', on); tog.setAttribute('aria-pressed', on ? 'true' : 'false');
+    if (!on) ir(i);
+  });
+  ir(i);
+})();
+</script>
+</body>
+</html>

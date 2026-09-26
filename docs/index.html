@@ -1,0 +1,1056 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="build" content="DM-B3-20260926-002">
+<meta name="description" content="Peripatéticos: monta tu app una vez en el PC y desarróllala para siempre desde el móvil, hablando.">
+<!-- La app de Fly de esta misma plantilla: la usa la demo de la portada. -->
+<meta name="fly-app" content="desdemovil-npiobject-labs">
+<title>Peripatéticos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#F6F2EA; --bg2:#FFFFFF; --ink:#1E2528; --ink2:#4E585C; --mute:#7C868A; --line:#DED7C9;
+  --acc:#9A4A2C; --acc2:#9A4A2C14; --acc-ink:#FFFFFF;
+  --ok:#2E7D4F; --ok2:#2E7D4F16; --warn:#8F6400; --warn2:#8F640016; --err:#B3261E; --err2:#B3261E14;
+  --code:#EFEBE2; --shadow:0 1px 2px rgba(30,37,40,.05),0 8px 24px -14px rgba(30,37,40,.3);
+  --serif:"Fraunces",Georgia,"Times New Roman",serif;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#15191B; --bg2:#1E2427; --ink:#E9E6DE; --ink2:#B4BBBE; --mute:#838C90; --line:#2E3639;
+    --acc:#E0906D; --acc2:#E0906D1F; --acc-ink:#1A1210;
+    --ok:#6CC493; --ok2:#6CC4931F; --warn:#E2B94A; --warn2:#E2B94A1F; --err:#F28B82; --err2:#F28B821F;
+    --code:#101416; --shadow:none;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#15191B; --bg2:#1E2427; --ink:#E9E6DE; --ink2:#B4BBBE; --mute:#838C90; --line:#2E3639;
+  --acc:#E0906D; --acc2:#E0906D1F; --acc-ink:#1A1210;
+  --ok:#6CC493; --ok2:#6CC4931F; --warn:#E2B94A; --warn2:#E2B94A1F; --err:#F28B82; --err2:#F28B821F;
+  --code:#101416; --shadow:none;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 var(--sans);overflow-x:hidden}
+[hidden]{display:none!important}
+a{color:var(--acc);text-underline-offset:2px}
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+h1,h2,h3{font-family:var(--serif);font-weight:700;line-height:1.12;margin:0;text-wrap:balance}
+h1{font-size:clamp(2.1rem,8vw,3rem);letter-spacing:-.01em}
+h2{font-size:1.45rem;margin:2.2rem 0 .6rem}
+h3{font-size:1.12rem}
+p{margin:.55rem 0}
+code{font-family:var(--mono);font-size:.88em;background:var(--code);padding:.08em .35em;border-radius:4px;word-break:break-word}
+pre{font:.82rem/1.5 var(--mono);background:var(--code);border:1px solid var(--line);border-radius:8px;padding:.8rem .9rem;margin:0;white-space:pre-wrap;word-break:break-word}
+.wrap{max-width:32rem;margin:0 auto;padding:0 16px 5rem}
+.mute{color:var(--mute)}.ink2{color:var(--ink2)}.small{font-size:.88rem}
+
+.top{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+.top .in{max-width:32rem;margin:0 auto;padding:.55rem 16px;display:flex;align-items:center;gap:.6rem}
+.brand{font-family:var(--serif);font-weight:700;font-size:1.15rem;color:var(--ink);text-decoration:none;flex:1;white-space:nowrap}
+.pill{font-size:.76rem;font-weight:600;padding:.22rem .6rem;border-radius:99px;background:var(--acc2);color:var(--acc);white-space:nowrap}
+.ibtn{display:inline-flex;align-items:center;justify-content:center;width:2.3rem;height:2.3rem;border:1px solid var(--line);border-radius:8px;background:var(--bg2);color:var(--ink);cursor:pointer;padding:0}
+.ibtn svg{width:1.1rem;height:1.1rem;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.45rem;font:600 .98rem var(--sans);padding:.72rem 1.1rem;border-radius:10px;border:1px solid var(--line);background:var(--bg2);color:var(--ink);text-decoration:none;cursor:pointer;min-height:2.9rem;text-align:center}
+.btn.primario{background:var(--acc);border-color:var(--acc);color:var(--acc-ink)}
+.btn.fantasma{background:transparent}
+.btn.ancho{width:100%}
+.btn.grande{font-size:1.06rem;padding:.9rem 1.3rem}
+.btn:disabled{opacity:.55;cursor:default}
+.btn.ext::after{content:"↗";font-weight:400;opacity:.8}
+.acciones{display:flex;flex-direction:column;gap:.6rem;margin:1rem 0}
+
+.hero{padding:2.4rem 0 1.4rem}
+.kicker{font:600 .78rem var(--sans);letter-spacing:.09em;text-transform:uppercase;color:var(--acc);margin:0 0 .8rem}
+.lede{font-size:1.1rem;color:var(--ink2);max-width:30rem}
+.huellas{display:block;width:100%;height:auto;margin:.6rem 0 0;color:var(--acc);opacity:.7}
+.tarjetas{list-style:none;padding:0;margin:0;display:grid;gap:.7rem}
+.tarjetas li{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:.95rem 1rem;box-shadow:var(--shadow)}
+.tarjetas b{display:block;font-family:var(--serif);font-size:1.08rem;margin-bottom:.2rem}
+.tarjetas .num{display:inline-grid;place-items:center;width:1.6rem;height:1.6rem;border-radius:50%;background:var(--acc);color:var(--acc-ink);font:700 .85rem var(--sans);margin-right:.45rem;vertical-align:-.25rem}
+.tres{display:grid;gap:.55rem}
+.tres div{border-left:3px solid var(--acc);padding:.35rem .8rem;background:var(--acc2);border-radius:0 8px 8px 0}
+.tres b{display:block;font-family:var(--serif);font-size:1.02rem}
+.demo{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:1rem;box-shadow:var(--shadow)}
+.tus-apps{margin:0 0 1.2rem;border-color:var(--acc)}
+.tus-apps h3{margin:0 0 .5rem}
+.tus-apps ul{list-style:none;padding:0;margin:.3rem 0 .6rem}
+.tus-apps li{display:flex;justify-content:space-between;gap:.6rem;padding:.45rem 0;border-top:1px dashed var(--line);font-size:.95rem}
+.tus-apps li:first-child{border-top:0}
+.tus-apps li span{color:var(--mute);font-size:.82rem;white-space:nowrap}
+.enlaces-sec{display:flex;flex-wrap:wrap;gap:.3rem .9rem;margin:.6rem 0 0;font-size:.85rem}
+.enlaces-sec button{font:inherit;color:var(--acc);background:none;border:0;padding:0;cursor:pointer;text-decoration:underline}
+table{width:100%;border-collapse:collapse;font-size:.92rem;margin:.6rem 0}
+td,th{text-align:left;padding:.5rem .3rem;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;color:var(--ink2);font-size:.8rem;text-transform:uppercase;letter-spacing:.05em}
+.lista{padding-left:1.2rem;margin:.4rem 0}.lista li{margin:.3rem 0}
+
+.progreso{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin:.9rem 0 1.4rem}
+.progreso i{display:block;height:100%;width:0;background:var(--acc);transition:width .4s}
+.paso{background:var(--bg2);border:1px solid var(--line);border-radius:14px;margin:.7rem 0;box-shadow:var(--shadow);overflow:hidden}
+.paso > header{display:flex;align-items:center;gap:.7rem;padding:.85rem 1rem}
+.paso .n{display:grid;place-items:center;width:1.9rem;height:1.9rem;border-radius:50%;border:2px solid var(--line);font:700 .9rem var(--sans);color:var(--mute);flex:none}
+.paso h3{flex:1;font-size:1.08rem}
+.paso .badge{font-size:.74rem;font-weight:600;padding:.18rem .55rem;border-radius:99px;white-space:nowrap}
+.paso .cuerpo{padding:0 1rem 1rem;border-top:1px solid var(--line)}
+.paso[data-estado="bloqueado"]{opacity:.55}
+.paso[data-estado="bloqueado"] .cuerpo{display:none}
+.paso[data-estado="hecho"] .n{background:var(--ok);border-color:var(--ok);color:#fff}
+.paso[data-estado="hecho"] .cuerpo{display:none}
+.paso[data-estado="hecho"] > header{cursor:pointer}
+.paso[data-estado="hecho"].abierto .cuerpo{display:block}
+.paso[data-estado="activo"] .n{border-color:var(--acc);color:var(--acc)}
+.paso[data-estado="activo"]{border-color:var(--acc)}
+.badge.ok{background:var(--ok2);color:var(--ok)}.badge.anotado{background:var(--warn2);color:var(--warn)}.badge.activo{background:var(--acc2);color:var(--acc)}
+.pide{font-size:1.04rem;margin:.9rem 0 .6rem}
+details.por{margin:.6rem 0;border:1px dashed var(--line);border-radius:10px;background:var(--bg)}
+details.por summary{cursor:pointer;padding:.6rem .85rem;font-weight:600;font-size:.92rem;color:var(--ink2);list-style:none;display:flex;gap:.5rem;align-items:center}
+details.por summary::-webkit-details-marker{display:none}
+details.por summary::before{content:"+";display:inline-grid;place-items:center;width:1.2rem;height:1.2rem;border-radius:50%;background:var(--acc2);color:var(--acc);font-weight:700;flex:none}
+details.por[open] summary::before{content:"–"}
+details.por > div{padding:0 .9rem .8rem;font-size:.93rem;color:var(--ink2);overflow-wrap:anywhere}
+details.por > div p{margin:.4rem 0}
+label.campo{display:block;margin:.8rem 0 .4rem;font-weight:600;font-size:.92rem}
+input.txt,textarea.txt{width:100%;font:1rem var(--sans);padding:.7rem .8rem;border:1px solid var(--line);border-radius:10px;background:var(--bg2);color:var(--ink)}
+textarea.txt{min-height:4.6rem;resize:vertical;line-height:1.45}
+.previa{font-size:.86rem;color:var(--ink2);margin:.4rem 0 0;line-height:1.5}
+.previa code{font-size:.82rem}
+.verif{margin:.8rem 0 0;padding:.7rem .85rem;border-radius:10px;font-size:.94rem;display:flex;gap:.6rem;align-items:flex-start}
+.verif .ic{flex:none;width:1.3rem;height:1.3rem;border-radius:50%;display:grid;place-items:center;font-size:.8rem;font-weight:700}
+.verif.espera{background:var(--code);color:var(--ink2)}.verif.espera .ic{border:2px solid var(--mute);border-top-color:transparent;animation:gira .8s linear infinite}
+.verif.ok{background:var(--ok2);color:var(--ok)}.verif.ok .ic{background:var(--ok);color:#fff}
+.verif.anotado{background:var(--warn2);color:var(--warn)}.verif.anotado .ic{background:var(--warn);color:#fff}
+.verif.err{background:var(--err2);color:var(--err)}.verif.err .ic{background:var(--err);color:#fff}
+.verif b{display:block}
+.verif p{margin:.2rem 0 0;color:inherit}
+@keyframes gira{to{transform:rotate(360deg)}}
+.hecho-fila{display:flex;gap:.6rem;margin-top:.9rem;flex-wrap:wrap}
+.hecho-fila .btn{flex:1}
+.enlace{display:flex;gap:.4rem;align-items:center;margin:.5rem 0;padding:.45rem .5rem .45rem .7rem;border:1px solid var(--line);border-radius:10px;background:var(--bg)}
+.enlace code{flex:1;background:none;padding:0;font-size:.78rem;color:var(--ink2);word-break:break-all}
+.enlace button{font:600 .78rem var(--sans);color:var(--acc);background:var(--bg2);border:1px solid var(--line);border-radius:6px;padding:.3rem .6rem;cursor:pointer;flex:none}
+.linea{list-style:none;padding:0;margin:.9rem 0 0}
+.linea li{display:flex;gap:.7rem;align-items:flex-start;padding:.45rem 0;border-top:1px dashed var(--line);font-size:.95rem;color:var(--mute)}
+.linea li:first-child{border-top:0}
+.linea .p{flex:none;width:1.3rem;height:1.3rem;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-size:.75rem;font-weight:700;margin-top:.1rem}
+.linea li.act{color:var(--ink)}.linea li.act .p{border-color:var(--acc);border-top-color:transparent;animation:gira .8s linear infinite}
+.linea li.ok{color:var(--ink)}.linea li.ok .p{background:var(--ok);border-color:var(--ok);color:#fff}
+.linea small{display:block;color:var(--mute);word-break:break-word}
+.term{font:.76rem/1.5 var(--mono);background:#0C0C0C;color:#CCCCCC;border-radius:10px;padding:.8rem .9rem;margin:.5rem 0;white-space:pre-wrap;word-break:break-word}
+.term .c{color:#3B9EFF}.term .g{color:#16C60C}.term .y{color:#F9F1A5}.term .d{color:#8a9397}.term .w{color:#fff;font-weight:600}
+.term .cod{color:#000;background:#F9F1A5;padding:0 .6em}
+.aviso{margin:.6rem 0;padding:.6rem .85rem;border-left:3px solid var(--warn);background:var(--warn2);border-radius:0 8px 8px 0;font-size:.9rem}
+.meta-card{margin:1.2rem 0;padding:1.2rem 1rem;border-radius:14px;background:var(--acc);color:var(--acc-ink);text-align:center}
+.meta-card h2{margin:.2rem 0 .3rem;color:inherit}
+.meta-card .btn{background:var(--bg2);color:var(--ink);border-color:transparent;margin-top:.8rem}
+
+.ficha{background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:1.2rem 1rem;box-shadow:var(--shadow);margin:1rem 0}
+.ficha .nombre{font-family:var(--serif);font-size:2rem;font-weight:700;line-height:1.1;word-break:break-word}
+.ficha dl{margin:.9rem 0 0;display:grid;grid-template-columns:auto 1fr;gap:.45rem .8rem;font-size:.92rem}
+.ficha dt{color:var(--mute);font-weight:500}
+.ficha dd{margin:0;word-break:break-word}
+.respuesta{margin-top:.9rem;padding:.9rem 1rem;border-radius:12px;background:var(--ok2);border:1px solid var(--ok);color:var(--ink)}
+.respuesta.err{background:var(--err2);border-color:var(--err)}
+.respuesta .grande{font-family:var(--serif);font-size:1.25rem;font-weight:700;color:var(--ok);margin:0 0 .4rem;line-height:1.25}
+.respuesta.err .grande{color:var(--err);font-size:1.02rem}
+.respuesta dl{display:grid;grid-template-columns:auto 1fr;gap:.25rem .7rem;margin:.4rem 0 0;font-size:.9rem}
+.respuesta dt{color:var(--ink2)}.respuesta dd{margin:0;word-break:break-word}
+
+.chips{display:flex;gap:.45rem;flex-wrap:wrap;margin:.6rem 0}
+.chip{font:500 .82rem var(--sans);padding:.35rem .7rem;border-radius:99px;border:1px solid var(--line);background:var(--bg2);color:var(--ink2);cursor:pointer}
+.chip:hover{border-color:var(--acc);color:var(--acc)}
+.block{position:relative;margin:.6rem 0}
+.block .copy{position:absolute;top:.5rem;right:.5rem;font:600 .76rem var(--sans);color:var(--acc);background:var(--bg2);border:1px solid var(--line);border-radius:6px;padding:.28rem .55rem;cursor:pointer}
+.block pre{padding-right:5rem;min-height:5.5rem}
+
+.faq{border-top:1px solid var(--line)}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{padding:.75rem 0;cursor:pointer;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:.6rem}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";color:var(--acc);font-weight:700}
+.faq details[open] summary::after{content:"–"}
+.faq details > div{padding:0 0 .9rem;color:var(--ink2);font-size:.94rem}
+
+footer{margin-top:3rem;padding-top:1rem;border-top:1px solid var(--line);font-size:.8rem;color:var(--mute)}
+footer button{font:inherit;color:var(--acc);background:none;border:0;padding:0;cursor:pointer;text-decoration:underline}
+.pantalla{animation:entra .25s ease-out}
+@keyframes entra{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<div class="top"><div class="in">
+  <a class="brand" href="#portada">Peripatéticos</a>
+  <span class="pill" id="pill-paso" hidden>Paso 1 de 8</span>
+  <button class="ibtn" id="tema" type="button" aria-label="Cambiar tema" title="Tema">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" stroke="none"/></svg>
+  </button>
+</div></div>
+
+<main class="wrap">
+
+<!-- ============================================================ PORTADA -->
+<section class="pantalla" id="p-portada">
+  <div class="hero">
+    <p class="kicker">Para gente que no programa</p>
+    <h1>Tu app nace mientras paseas.</h1>
+    <p class="lede">Enciende el PC una vez, media hora. Después, tu app se desarrolla desde el móvil: le cuentas lo que quieres, lo ves en pantalla y dices «vale» o «cámbialo».</p>
+    <div class="acciones">
+      <a class="btn primario grande" href="#instalar" id="empezar">Empezar · unos 30 minutos</a>
+      <a class="btn fantasma" href="#como">¿Cómo funciona?</a>
+    </div>
+    <svg class="huellas" viewBox="0 0 480 60" aria-hidden="true" fill="currentColor">
+      <ellipse cx="30" cy="40" rx="9" ry="13" transform="rotate(-18 30 40)"/><circle cx="24" cy="24" r="3"/><circle cx="31" cy="21" r="2.6"/><circle cx="38" cy="22" r="2.2"/>
+      <ellipse cx="95" cy="22" rx="9" ry="13" transform="rotate(18 95 22)" opacity=".85"/><circle cx="101" cy="6" r="3" opacity=".85"/><circle cx="94" cy="4" r="2.6" opacity=".85"/><circle cx="87" cy="6" r="2.2" opacity=".85"/>
+      <ellipse cx="165" cy="40" rx="9" ry="13" transform="rotate(-18 165 40)" opacity=".7"/><circle cx="159" cy="24" r="3" opacity=".7"/><circle cx="166" cy="21" r="2.6" opacity=".7"/><circle cx="173" cy="22" r="2.2" opacity=".7"/>
+      <ellipse cx="230" cy="22" rx="9" ry="13" transform="rotate(18 230 22)" opacity=".55"/><circle cx="236" cy="6" r="3" opacity=".55"/><circle cx="229" cy="4" r="2.6" opacity=".55"/><circle cx="222" cy="6" r="2.2" opacity=".55"/>
+      <ellipse cx="300" cy="40" rx="9" ry="13" transform="rotate(-18 300 40)" opacity=".4"/><circle cx="294" cy="24" r="3" opacity=".4"/><circle cx="301" cy="21" r="2.6" opacity=".4"/><circle cx="308" cy="22" r="2.2" opacity=".4"/>
+      <ellipse cx="365" cy="22" rx="9" ry="13" transform="rotate(18 365 22)" opacity=".25"/><circle cx="371" cy="6" r="3" opacity=".25"/><circle cx="364" cy="4" r="2.6" opacity=".25"/><circle cx="357" cy="6" r="2.2" opacity=".25"/>
+      <ellipse cx="435" cy="40" rx="9" ry="13" transform="rotate(-18 435 40)" opacity=".12"/><circle cx="429" cy="24" r="3" opacity=".12"/><circle cx="436" cy="21" r="2.6" opacity=".12"/><circle cx="443" cy="22" r="2.2" opacity=".12"/>
+    </svg>
+  </div>
+
+  <div class="demo tus-apps" id="tus-apps" hidden>
+    <h3>Tus apps</h3>
+    <ul id="lista-apps"></ul>
+    <button class="btn primario ancho" type="button" id="otra-app">Montar otra app</button>
+    <p class="small ink2" style="margin:.6rem 0 0">Tus cuentas de GitHub, Fly.io y Claude están guardadas en este navegador: para la siguiente app solo eliges el nombre y su carpeta de Drive, y abres el archivo en el PC, sin volver a iniciar sesión.</p>
+    <p class="enlaces-sec"><button type="button" id="mi-enlace">Copiar enlace con mis cuentas</button><button type="button" id="olvidar">Olvidar mis datos</button></p>
+  </div>
+
+  <h2 id="como">Tres pasos. Solo el segundo necesita el PC.</h2>
+  <ol class="tarjetas">
+    <li><b><span class="num">1</span>Tus cuentas</b>GitHub, Fly.io y Claude, y si quieres una carpeta en tu Google Drive. Las creas tú porque llevan tu nombre. Te llevo a cada una, te digo qué escribir y compruebo que existen. Solo la primera vez: para la siguiente app quedan guardadas.</li>
+    <li><b><span class="num">2</span>El PC, una sola vez</b>Descargas un archivo, lo abres e inicias sesión dos veces en tu navegador. El PC coloca las llaves, monta tu app y te deja una copia de seguridad en tus Documentos. Luego lo puedes apagar. Para cada app nueva, otro archivo y a esperar: ya no pide iniciar sesión.</li>
+    <li><b><span class="num">3</span>Tu móvil, siempre</b>Le pides cosas a tu app hablando. Cada cambio se publica solo, queda anotado en una bitácora y deja su resumen en tu carpeta de Drive.</li>
+  </ol>
+
+  <h2>Dónde queda todo</h2>
+  <p class="ink2">Todo en tus cuentas y a tu nombre. Nada queda en manos de terceros ni de esta página.</p>
+  <table>
+    <tr><th>Dónde</th><th>Qué guarda</th></tr>
+    <tr><td><b>GitHub</b></td><td>Tu app entera y su historia: cada cambio, quién lo pidió y cuándo. Es el original.</td></tr>
+    <tr><td><b>Fly.io</b></td><td>El servidor que responde por tu app, aunque tu móvil y tu PC estén apagados.</td></tr>
+    <tr><td><b>Google Drive</b></td><td>Opcional. Una carpeta tuya donde Claude deja, al terminar cada sesión, un resumen de lo que se hizo y la documentación de la app.</td></tr>
+    <tr><td><b>Tu PC</b></td><td>Una copia de seguridad en Documentos, con la ficha de tu app y accesos directos. Se pone al día con doble clic en «Actualizar copia».</td></tr>
+    <tr><td><b>Tu móvil</b></td><td>Nada que guardar: desde aquí la cambias, hablando con Claude.</td></tr>
+  </table>
+
+  <h2>Una app de verdad, ahora mismo</h2>
+  <div class="demo">
+    <p style="margin-top:0">Esta página tiene detrás una app montada exactamente así. Pulsa y te contesta su servidor, desde donde esté:</p>
+    <button class="btn primario ancho" id="demo" type="button">Saluda a la app de ejemplo</button>
+    <div class="respuesta" id="demo-resp" hidden></div>
+    <p class="small" style="margin-bottom:0"><a href="semilla/">Así será la portada de tu app el primer día</a> · <a href="recorrido.html">Las pantallas que vas a ver, una a una</a></p>
+  </div>
+
+  <h2>Por qué «peripatéticos»</h2>
+  <p>Aristóteles enseñaba andando por los jardines del Liceo; a sus discípulos los llamaron <i>peripatéticos</i>, «los que pasean». Las buenas ideas siguen llegando lejos del escritorio: en un paseo, en el tren, esperando a alguien.</p>
+  <p>Aquí no hace falta volver al escritorio para hacerlas realidad. La idea que se te ocurre andando la dictas al móvil, y cuando llegas a casa ya está en tu app, publicada y funcionando.</p>
+
+  <h2>Solo tienes que decir tres cosas</h2>
+  <p class="ink2">A un asistente de este nivel no hay que explicarle cómo se hacen las cosas. Basta con:</p>
+  <div class="tres">
+    <div><b>Qué quieres</b>«Una lista de la compra que se comparte con mi pareja.»</div>
+    <div><b>Qué no debe pasar</b>«Nada de registro con contraseña; con un enlace secreto vale.»</div>
+    <div><b>Cuándo está terminado</b>«Cuando los dos podamos añadir y tachar cosas desde el móvil.»</div>
+  </div>
+
+  <h2>Qué necesitas</h2>
+  <ul class="lista">
+    <li>Un móvil con la app de <b>Claude</b> instalada.</li>
+    <li>Un PC con <b>Windows 10 u 11</b>, durante media hora, una sola vez.</li>
+    <li>Un correo electrónico para crear las cuentas.</li>
+    <li>Si quieres las copias en Drive, tu cuenta de Google (la del correo de Gmail vale). Es opcional.</li>
+    <li>Un nombre para tu app. Lo demás lo pongo yo.</li>
+  </ul>
+
+  <h2>Qué cuesta</h2>
+  <table>
+    <tr><th>Qué</th><th>Cuánto</th></tr>
+    <tr><td>GitHub (donde vive tu app)</td><td>Gratis</td></tr>
+    <tr><td>Google Drive (copias, opcional)</td><td>Gratis: usa el espacio de tu cuenta de Google, y los resúmenes ocupan muy poco.</td></tr>
+    <tr><td>Fly.io (el servidor)</td><td>Gratis para empezar. Puede pedirte una tarjeta al darte de alta y, si tu app crece, un ingreso de 25 $. Te avisa antes.</td></tr>
+    <tr><td>Claude (tu asistente)</td><td>Suscripción mensual. Es el único coste fijo.</td></tr>
+  </table>
+
+  <div class="acciones"><a class="btn primario grande" href="#instalar">Empezar</a></div>
+</section>
+
+<!-- ============================================================ INSTALAR -->
+<section class="pantalla" id="p-instalar" hidden>
+  <h2 style="margin-top:1.4rem">Vamos a montar tu app</h2>
+  <p class="ink2">Un paso cada vez. En cada uno te digo qué hacer, puedes abrir el «por qué» si te apetece, y cuando pulses <b>Hecho</b> lo compruebo de verdad.</p>
+  <div class="progreso"><i id="barra"></i></div>
+
+  <!-- 1 · nombre -->
+  <article class="paso" data-id="nombre">
+    <header><span class="n">1</span><h3>¿Cómo se va a llamar tu app?</h3><span class="badge"></span></header>
+    <div class="cuerpo">
+      <p class="pide">Escribe un nombre corto. Minúsculas, sin espacios: lo arreglo yo si hace falta.</p>
+      <label class="campo" for="in-nombre">Nombre</label>
+      <input class="txt" id="in-nombre" placeholder="recetas" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="40">
+      <p class="previa" id="previa-nombre"></p>
+      <details class="por"><summary>¿Qué es esto y por qué te lo pido?</summary><div>
+        <p>El nombre va a aparecer en la dirección de tu web y de tu servidor, y en todos los textos de tu app. Por eso lo pido antes que nada: con él puedo rellenar todo lo demás.</p>
+        <p>Es lo único que decides tú y que yo no puedo decidir. Puedes cambiarlo más adelante, pero cuesta más que elegirlo bien ahora.</p>
+      </div></details>
+      <div class="hecho-fila"><button class="btn primario hecho" type="button">Hecho</button></div>
+      <div class="verif" hidden></div>
+    </div>
+  </article>
+
+  <!-- 2 · github -->
+  <article class="paso" data-id="github">
+    <header><span class="n">2</span><h3>Tu cuenta de GitHub</h3><span class="badge"></span></header>
+    <div class="cuerpo">
+      <p class="pide">Crea una cuenta en GitHub (o entra en la que ya tengas) y escribe aquí tu nombre de usuario.</p>
+      <div class="acciones"><a class="btn ext" href="https://github.com/signup" target="_blank" rel="noopener">Abrir GitHub para crear la cuenta</a></div>
+      <details class="por"><summary>¿Qué es esto y por qué te lo pido?</summary><div>
+        <p>GitHub es donde va a vivir tu app: todo lo que sea, todo lo que cambie, queda guardado ahí con tu nombre. Es gratis y lo usan millones de personas.</p>
+        <p>No puedo crear la cuenta por ti porque lleva tu correo y tu contraseña. Es tuya. Sí puedo hacer todo lo que viene después.</p>
+        <p>Tu nombre de usuario aparece arriba a la derecha cuando entras en GitHub, sin la arroba.</p>
+      </div></details>
+      <label class="campo" for="in-usuario">Tu nombre de usuario en GitHub</label>
+      <input class="txt" id="in-usuario" placeholder="maria-garcia" autocomplete="off" autocapitalize="off" spellcheck="false">
+      <div class="hecho-fila"><button class="btn primario hecho" type="button">Hecho</button></div>
+      <div class="verif" hidden></div>
+    </div>
+  </article>
+
+  <!-- 3 · organización -->
+  <article class="paso" data-id="org">
+    <header><span class="n">3</span><h3>Tu espacio en GitHub</h3><span class="badge"></span></header>
+    <div class="cuerpo">
+      <p class="pide">Crea una «organización» en GitHub con el nombre que quieras darle a tus apps. Elige el plan <b>Free</b>. Escribe aquí ese nombre.</p>
+      <div class="acciones"><a class="btn ext" href="https://github.com/organizations/plan" target="_blank" rel="noopener">Abrir GitHub para crear la organización</a></div>
+      <details class="por"><summary>¿Qué es esto y por qué te lo pido?</summary><div>
+        <p>Una organización es una carpeta con nombre propio dentro de GitHub, separada de tu cuenta personal. Ahí irán tu app <code class="A">recetas</code> y las que vengan después.</p>
+        <p>La pido por dos razones: para que la llave del servidor se guarde una sola vez y sirva para todas tus apps, y para que puedas dar acceso a otra persona algún día sin darle tu cuenta.</p>
+        <p>GitHub no me deja crear organizaciones por ti; es la única pantalla «rara» de todo el recorrido. Te preguntará el nombre, tu correo y si es para ti o para una empresa: elige «My personal account».</p>
+      </div></details>
+      <label class="campo" for="in-org">Nombre de tu organización</label>
+      <input class="txt" id="in-org" placeholder="apps-de-maria" autocomplete="off" autocapitalize="off" spellcheck="false">
+      <p class="previa" id="previa-org"></p>
+      <div class="hecho-fila"><button class="btn primario hecho" type="button">Hecho</button></div>
+      <div class="verif" hidden></div>
+    </div>
+  </article>
+
+  <!-- 4 · fly -->
+  <article class="paso" data-id="fly">
+    <header><span class="n">4</span><h3>Tu cuenta en Fly.io</h3><span class="badge"></span></header>
+    <div class="cuerpo">
+      <p class="pide">Crea una cuenta en Fly.io con tu correo. Nada más: no hay que configurar nada dentro.</p>
+      <div class="acciones"><a class="btn ext" href="https://fly.io/app/sign-up" target="_blank" rel="noopener">Abrir Fly.io para crear la cuenta</a></div>
+      <details class="por"><summary>¿Qué es esto y por qué te lo pido?</summary><div>
+        <p>Fly.io es el servidor: el ordenador que está encendido por ti, en internet, para que tu app responda aunque tu móvil y tu PC estén apagados.</p>
+        <p>Es gratis para empezar. Puede pedirte una tarjeta al darte de alta —es su forma de saber que eres una persona— y, si algún día tu app crece mucho, un ingreso de 25 $. Te avisa antes de cobrar nada.</p>
+        <p>No puedo comprobar desde aquí que la cuenta existe, porque haría falta entrar en ella. Lo comprobará el PC, cuando inicies sesión allí.</p>
+      </div></details>
+      <div class="hecho-fila"><button class="btn primario hecho" type="button">Hecho, ya tengo cuenta</button></div>
+      <div class="verif" hidden></div>
+    </div>
+  </article>
+
+  <!-- 5 · claude -->
+  <article class="paso" data-id="claude">
+    <header><span class="n">5</span><h3>Claude en tu móvil, conectado a GitHub</h3><span class="badge"></span></header>
+    <div class="cuerpo">
+      <p class="pide">Abre la app de Claude, entra en <b>Code</b> y conecta GitHub. Cuando GitHub te pregunte dónde puede trabajar Claude, elige tu organización <code class="O">tuorganizacion</code> y pulsa «Install» o «Autorizar».</p>
+      <div class="acciones">
+        <a class="btn ext" href="https://claude.ai/code" target="_blank" rel="noopener">Abrir Claude Code</a>
+        <a class="btn fantasma ext" href="https://github.com/apps/claude/installations/new" target="_blank" rel="noopener">Dar permiso a Claude en GitHub</a>
+      </div>
+      <details class="por"><summary>¿Qué es esto y por qué te lo pido?</summary><div>
+        <p>Claude es quien va a construir tu app cuando se lo pidas desde el móvil. Para poder hacerlo tiene que entrar en tu espacio de GitHub, y ese permiso solo puedes darlo tú.</p>
+        <p>Verás una o dos pantallas de GitHub: una para decir «sí, es mi cuenta» y otra para elegir dónde puede trabajar Claude. Elige la organización, no tu cuenta personal.</p>
+        <p>Esto es lo único que el PC no puede hacer por ti. Sí puede comprobarlo: el PC mirará si Claude tiene permiso en tu organización y te avisará si falta.</p>
+      </div></details>
+      <div class="hecho-fila"><button class="btn primario hecho" type="button">Hecho, está conectado</button></div>
+      <div class="verif" hidden></div>
+    </div>
+  </article>
+
+  <!-- 6 · drive -->
+  <article class="paso" data-id="drive">
+    <header><span class="n">6</span><h3>Tu carpeta en Google Drive</h3><span class="badge"></span></header>
+    <div class="cuerpo">
+      <p class="pide">En Google Drive, crea una carpeta llamada <b class="A">recetas</b> dentro de «Mi unidad» y pega aquí su enlace.</p>
+      <div class="acciones"><a class="btn ext" href="https://drive.google.com/drive/my-drive" target="_blank" rel="noopener">Abrir Google Drive</a></div>
+      <details class="por"><summary>¿Qué es esto y por qué te lo pido?</summary><div>
+        <p>Al terminar cada sesión, Claude dejará en esa carpeta un resumen de lo que se hizo y la documentación de tu app. Así la tienes en tu Drive, a mano, aunque no entres nunca en GitHub.</p>
+        <p>No puedo crear la carpeta por ti: está en tu cuenta de Google. Es un minuto: <b>Nuevo → Carpeta</b>, escribe el nombre y ábrela. El enlace es la dirección que sale arriba en el navegador, o <b>⋮ → Compartir → Copiar enlace</b>.</p>
+        <p>Tiene que ser una carpeta normal de «Mi unidad», no un «Proyecto» de Drive: en esos Claude no puede escribir.</p>
+        <p>Para que Claude pueda escribir en ella, conecta Google Drive en la app de Claude: <b>Ajustes → Conectores → Google Drive</b>.</p>
+        <p>Es opcional. Si prefieres no usar Drive, pulsa «Sin Drive»: la app funciona igual y puedes añadirlo cuando quieras.</p>
+      </div></details>
+      <label class="campo" for="in-drive">Enlace de la carpeta</label>
+      <input class="txt" id="in-drive" placeholder="https://drive.google.com/drive/folders/…" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="url">
+      <div class="hecho-fila"><button class="btn primario hecho" type="button">Hecho</button><button class="btn fantasma" type="button" id="sin-drive">Sin Drive</button></div>
+      <div class="verif" hidden></div>
+    </div>
+  </article>
+
+  <!-- 7 · PC -->
+  <article class="paso" data-id="pc">
+    <header><span class="n">7</span><h3>El PC, una sola vez</h3><span class="badge"></span></header>
+    <div class="cuerpo">
+      <p class="pide">Enciende el PC y ábrete allí este enlace. En esa página descargas un archivo y lo abres con doble clic. Te pedirá entrar en GitHub y en Fly.io desde el navegador. Nada más.</p>
+      <p class="small ink2" style="margin-top:0">Cuando lo hayas abierto en el PC, pulsa el botón de abajo: desde aquí iré viendo cómo nace tu app, y este paso se marcará solo.</p>
+      <div class="acciones"><button class="btn primario" type="button" id="compartir-pc">Enviarme el enlace al PC</button></div>
+      <div class="enlace"><code id="enlace-pc">…</code><button type="button" id="copiar-pc">Copiar</button></div>
+      <p class="small ink2" style="margin:.2rem 0 .6rem">Mándatelo por correo o por WhatsApp, o copia el enlace y ábrelo en el navegador del PC.</p>
+      <p class="aviso"><b>Windows te avisará</b> de que es un archivo bajado de internet. Si sale una ventana gris («No se pudo comprobar el editor»), pulsa <i>Ejecutar</i>. Si sale una azul («Windows protegió tu PC»), pulsa <i>Más información</i> y después <i>Ejecutar de todas formas</i>. Es normal: lo hace con cualquier programa que no sea de una gran empresa.</p>
+      <details class="por"><summary>¿Qué va a hacer el PC exactamente?</summary><div>
+        <ol class="lista">
+          <li>Descarga dos ayudantes pequeños (el de GitHub y el de Fly.io) en tu carpeta de usuario. No instala nada en Windows ni pide permisos de administrador.</li>
+          <li>Abre tu navegador para que entres en GitHub con un código de ocho letras, y después en Fly.io. Tú solo pulsas «Authorize» en cada uno.</li>
+          <li>Crea tu app <code class="A">recetas</code> en tu organización <code class="O">tuorganizacion</code> a partir de un molde ya probado, y le pone tu nombre a todo.</li>
+          <li>Guarda la llave del servidor en tu organización de GitHub. No te la enseña ni te pide que copies nada.</li>
+          <li>Si le diste tu carpeta de Drive, la deja anotada en tu app para que Claude guarde ahí los resúmenes.</li>
+          <li>Enciende tu web y tu servidor, y espera a que respondan de verdad.</li>
+          <li>Deja en <b>Documentos\Peripateticos\<span class="A">recetas</span></b> una copia de seguridad de tu app, con su ficha, accesos directos y un archivo para ponerla al día cuando quieras. Y un acceso a esa carpeta en el escritorio.</li>
+          <li>Te enseña un resumen y termina. Puedes apagar el PC: no vuelve a hacer falta.</li>
+        </ol>
+        <p>Si algo falla a mitad, te dice qué pasa y puedes volver a abrir el mismo archivo: continúa donde lo dejó.</p>
+      </div></details>
+      <details class="por"><summary>Lo que verás en la pantalla del PC</summary><div>
+<div class="term"><span class="c">== 2/7 Entrar en GitHub</span>
+   Se va a abrir tu navegador en GitHub.
+   Cuando te pida un codigo, escribe el que sale aqui abajo
+
+            <span class="cod">7F3A-K2QP</span>
+
+   <span class="g">OK</span>  Hola, <span class="U">maria-garcia</span>
+<span class="c">== 3/7 Entrar en Fly.io</span>
+   <span class="g">OK</span>  Cuenta de Fly.io: tu correo
+<span class="c">== 4/7 Llaves</span>
+   <span class="g">OK</span>  Guardada en <span class="O">tuorganizacion</span> como secreto (no se muestra)
+   <span class="w">Ya no te voy a pedir nada mas. Puedes ir a por un cafe.</span>
+<span class="c">== 5/7 Tu app</span>
+   <span class="g">OK</span>  <span class="O">tuorganizacion</span>/<span class="A">recetas</span> creada a partir del molde
+   <span class="d">..</span>  Construyendo el servidor. La primera vez tarda
+       entre 2 y 5 minutos; no es un fallo.
+<span class="c">== 6/7 Comprobacion</span>
+   <span class="g">OK</span>  "Hola, soy <span class="A">recetas</span> y respondo desde Fly.io"
+<span class="c">== 7/7 Copia en tu PC</span>
+   <span class="g">OK</span>  Copia del repositorio en ...\Documentos\Peripateticos\<span class="A">recetas</span>\repo
+
+<span class="g">================ <span class="A">recetas</span> lista en 8.6 min ================</span>
+   <span class="w">Ya puedes apagar el PC. Vuelve al movil: el paso 7 se marca
+   solo en cuanto tu app responde.</span></div>
+        <p>Las pantallas completas, una a una: <a href="recorrido.html">el recorrido</a>.</p>
+      </div></details>
+      <div class="hecho-fila"><button class="btn primario hecho" type="button">Ya lo he abierto en el PC</button></div>
+      <div class="verif" hidden></div>
+      <ol class="linea" id="linea" hidden>
+        <li data-l="repo"><span class="p"></span><span>Buscando tu app en GitHub<small></small></span></li>
+        <li data-l="init"><span class="p"></span><span>Poniéndole tu nombre a todo<small></small></span></li>
+        <li data-l="web"><span class="p"></span><span>Esperando a tu web<small></small></span></li>
+        <li data-l="srv"><span class="p"></span><span>Esperando a tu servidor<small>La primera vez tarda entre 2 y 5 minutos. No es un fallo.</small></span></li>
+        <li data-l="viva"><span class="p"></span><span>Preguntándole si está viva<small></small></span></li>
+      </ol>
+    </div>
+  </article>
+
+  <!-- 8 · Claude comprueba Drive -->
+  <article class="paso" data-id="verdrive">
+    <header><span class="n">8</span><h3>Claude y tu carpeta de Drive</h3><span class="badge"></span></header>
+    <div class="cuerpo">
+      <p class="pide">Último paso: que Claude compruebe que llega a tu carpeta de Drive. Abre Claude, entra en <b>Code</b>, elige <code><span class="O">tuorganizacion</span>/<span class="A">recetas</span></code> y pégale esto:</p>
+      <div class="block"><pre id="prompt-drive"></pre><button class="copy" type="button" id="copiar-drive">Copiar</button></div>
+      <div class="acciones"><a class="btn ext" href="https://claude.ai/code" target="_blank" rel="noopener">Abrir Claude Code</a></div>
+      <details class="por"><summary>¿Qué es esto y por qué te lo pido?</summary><div>
+        <p>Tu carpeta de Drive solo la puede abrir quien tenga permiso de tu cuenta de Google. Ni esta página ni el PC lo tienen: solo Claude, si conectaste Google Drive en sus ajustes. Por eso la comprobación la hace él.</p>
+        <p>Claude dejará en tu carpeta una ficha de tu app y apuntará en tu app que lo ha hecho. Aquí lo verás en cuanto se publique, en un par de minutos.</p>
+        <p>De paso queda comprobado que Claude puede trabajar en tu app: para apuntarlo tiene que escribir en ella.</p>
+        <p>Si Claude dice que no llega a tu Drive: en la app de Claude, <b>Ajustes → Conectores → Google Drive → Conectar</b>, y vuelve a pegarle lo mismo.</p>
+      </div></details>
+      <div class="hecho-fila"><button class="btn primario hecho" type="button">Hecho, ya se lo he pedido</button></div>
+      <div class="verif" hidden></div>
+    </div>
+  </article>
+
+  <div class="meta-card" id="meta" hidden>
+    <p class="kicker" style="color:inherit;opacity:.85">Meta</p>
+    <h2>Tu app <span class="A">recetas</span> ha nacido</h2>
+    <p>Tiene web, tiene servidor y responde. Todo con tu nombre y en tus cuentas.</p>
+    <a class="btn grande" href="#ficha">Ver su ficha y saludarla</a>
+    <p style="margin:.7rem 0 0"><button class="btn fantasma" type="button" id="otra-app-meta" style="color:inherit;border-color:currentColor">Montar otra app</button></p>
+  </div>
+</section>
+
+<!-- ============================================================ FICHA -->
+<section class="pantalla" id="p-ficha" hidden>
+  <p class="kicker" style="margin-top:1.6rem">Ficha de la app</p>
+  <div class="ficha">
+    <div class="nombre A">recetas</div>
+    <p class="ink2" style="margin:.2rem 0 0" id="f-nacida">Vive en <span class="O">tuorganizacion</span></p>
+    <dl>
+      <dt>Web</dt><dd><a class="L-web" href="#" target="_blank" rel="noopener"></a></dd>
+      <dt>Servidor</dt><dd><a class="L-srv" href="#" target="_blank" rel="noopener"></a></dd>
+      <dt>Bitácora</dt><dd><a class="L-bit" href="#" target="_blank" rel="noopener">qué se pidió y qué cambió</a></dd>
+      <dt>Dónde vive</dt><dd><a class="L-repo" href="#" target="_blank" rel="noopener"></a></dd>
+      <dt>Claude</dt><dd id="f-claude">—</dd>
+      <dt>Copias</dt><dd id="f-drive"><span class="mute">Google Drive, sin configurar</span> · <a href="#ayuda" class="small">cómo activarlo</a></dd>
+    </dl>
+    <div style="margin-top:1rem">
+      <button class="btn primario ancho grande" id="saluda" type="button">Saluda</button>
+      <p class="small mute" style="text-align:center;margin:.5rem 0 0">Llama a tu servidor de verdad y te enseña lo que responde.</p>
+      <div class="respuesta" id="respuesta" hidden></div>
+    </div>
+  </div>
+  <div class="acciones">
+    <a class="btn primario" href="#pedir">Pídele lo primero desde el móvil</a>
+    <button class="btn" type="button" id="compartir">Copiar el enlace de tu app</button>
+  </div>
+</section>
+
+<!-- ============================================================ PEDIR -->
+<section class="pantalla" id="p-pedir" hidden>
+  <h2 style="margin-top:1.4rem">Tu primera petición</h2>
+  <p class="ink2">Abre Claude, entra en <b>Code</b>, elige <code><span class="O">tuorganizacion</span>/<span class="A">recetas</span></code> y pega lo que salga aquí abajo. Solo tienes que rellenar tres cosas.</p>
+  <div class="chips" id="chips">
+    <button class="chip" type="button" data-q="Una lista de la compra que se comparte con mi pareja" data-g="Nada de registro con contraseña; con un enlace secreto vale" data-m="Cuando los dos podamos añadir y tachar cosas desde el móvil">Lista de la compra</button>
+    <button class="chip" type="button" data-q="Un diario de paseos: cada día apunto por dónde fui y cuántos minutos" data-g="Sin mapas ni GPS, solo texto; y que no se vea sin mi enlace" data-m="Cuando pueda apuntar el paseo de hoy y ver los de la semana">Diario de paseos</button>
+    <button class="chip" type="button" data-q="Una página para que mis clientes reserven hora conmigo" data-g="No cobrar nada por ahora; y que no se puedan reservar dos personas a la misma hora" data-m="Cuando yo reciba un aviso con cada reserva nueva">Reservas</button>
+  </div>
+  <label class="campo" for="q">Qué quieres</label>
+  <textarea class="txt" id="q" placeholder="Cuéntalo como se lo contarías a un amigo."></textarea>
+  <label class="campo" for="g">Qué no debe pasar</label>
+  <textarea class="txt" id="g" placeholder="Lo que no quieres ver, aunque parezca obvio."></textarea>
+  <label class="campo" for="m">Cuándo está terminado</label>
+  <textarea class="txt" id="m" placeholder="Cómo sabrás que ya está: qué tienes que poder hacer."></textarea>
+  <div class="block"><pre id="prompt"></pre><button class="copy" type="button" id="copiar">Copiar</button></div>
+  <div class="acciones">
+    <a class="btn primario ext" href="https://claude.ai/code" target="_blank" rel="noopener">Abrir Claude Code y pegarlo</a>
+  </div>
+  <h3 style="margin-top:1.6rem">Y después</h3>
+  <ul class="lista">
+    <li>Claude te dirá cuándo puedes verlo y te dará el enlace. Míralo en el móvil.</li>
+    <li>Contesta «vale» o dile qué cambiar. Así, hasta que sea lo que querías.</li>
+    <li>Cada sesión queda anotada en la bitácora de tu app: qué pediste y qué cambió.</li>
+  </ul>
+</section>
+
+<!-- ============================================================ AYUDA -->
+<section class="pantalla" id="p-ayuda" hidden>
+  <h2 style="margin-top:1.4rem">Si algo se atasca</h2>
+  <div class="faq">
+    <details><summary>No encuentra mi usuario de GitHub</summary><div>Entra en GitHub desde el móvil y mira arriba a la derecha: el nombre que aparece ahí, sin arroba, es el que hay que escribir. Las mayúsculas dan igual; los espacios no valen.</div></details>
+    <details><summary>Al crear la organización me pide un plan y tarjeta</summary><div>Elige <b>Free</b>. No pide tarjeta en ese plan. Si te la pide, has entrado en «Team»: vuelve atrás y elige el gratuito.</div></details>
+    <details><summary>Fly.io me pide una tarjeta</summary><div>Es normal en muchos países: la usa para comprobar que eres una persona. No cobra nada mientras tu app sea pequeña, y te avisa antes de hacerlo. Si te la pide mientras el PC trabaja, el PC te abre la página, esperas a ponerla y pulsas Intro en la ventana.</div></details>
+    <details><summary>Windows dice que «protegió tu PC» o que «no se pudo comprobar el editor»</summary><div>Es el aviso que sale con cualquier programa que no venga de una gran empresa. En la ventana gris («Advertencia de seguridad», «Publicador desconocido») pulsa <i>Ejecutar</i>. En la azul pulsa <i>Más información</i> (es un texto pequeño, azul) y después <i>Ejecutar de todas formas</i>. Si tu PC no te deja, en la página del PC tienes otra forma: pegar una línea en PowerShell.</div></details>
+    <details><summary>El PC se quedó a mitad</summary><div>Vuelve a abrir el mismo archivo: sabe por dónde iba y continúa. Si vuelve a fallar, te enseña un mensaje con lo que pasó; hazle una foto y pégala en Claude.</div></details>
+    <details><summary>Dice que el nombre está cogido en Fly.io</summary><div>Los nombres de servidor en Fly.io son únicos en todo el mundo. Vuelve al paso 1, cambia el nombre (añadirle algo basta) y descarga el archivo otra vez.</div></details>
+    <details><summary>«Esperando a tu servidor» lleva mucho rato</summary><div>La primera vez tarda entre 2 y 5 minutos porque el servidor se construye desde cero. A partir de los 15 minutos, sí es un fallo: mira lo que dice la ventana del PC.</div></details>
+    <details><summary>Quiero copias en Google Drive</summary><div>Si no la pusiste al montar la app: crea una carpeta normal en «Mi unidad», conecta Google Drive en Claude (Ajustes → Conectores) y pídele: «pon esta carpeta de Drive en los Parámetros de CLAUDE.md», pegando el enlace. A partir de ahí, cada sesión deja allí su resumen y la documentación.</div></details>
+    <details><summary>Quiero borrarlo todo</summary><div>Pídele a Claude: «elimina esta app por completo». Te guiará para borrar el servidor en Fly.io y el repositorio en GitHub. Tus cuentas son tuyas y se quedan.</div></details>
+  </div>
+  <h3 style="margin-top:1.6rem">Lo que nunca te voy a pedir</h3>
+  <ul class="lista">
+    <li>Copiar o pegar una clave, un token o una contraseña.</li>
+    <li>Escribir órdenes en una ventana negra.</li>
+    <li>Instalar nada en el móvil que no sea la app de Claude.</li>
+  </ul>
+</section>
+
+<footer>
+  Build <code>DM-B3-20260926-002</code> · <a href="#ayuda">Ayuda</a> · <a href="recorrido.html">Recorrido</a> · <a href="bitacora.html">Bitácora</a> · <a href="mocks/">Versiones anteriores</a> · <button type="button" id="reiniciar">Empezar de nuevo</button>
+</footer>
+</main>
+
+<script>
+(function(){
+  var KEY = 'peripateticos-v1', st = cargar();
+  function cargar(){ try{ return JSON.parse(localStorage.getItem(KEY)||'{}') }catch(e){ return {} } }
+  function guardar(){ try{ localStorage.setItem(KEY, JSON.stringify(st)) }catch(e){} }
+  st.hechos = st.hechos || {}; st.datos = st.datos || {}; st.reales = st.reales || {}; st.verif = st.verif || {};
+
+  // ---------------------------------------------------------------- nombres
+  // Minúsculas, guiones, 15 caracteres; si hay que cortar, no se parte una palabra.
+  // Las mismas reglas que Slug en instalador/peripateticos.ps1.
+  function slug(v){
+    var s = String(v||'').trim().toLowerCase().replace(/[\s_.]+/g,'-').replace(/[^a-z0-9-]/g,'').replace(/-{2,}/g,'-').replace(/^-+|-+$/g,'');
+    if (s.length > 15) { s = s.slice(0,15); if (s.indexOf('-') > 0) s = s.replace(/-[^-]*$/,'') }
+    return s.replace(/-+$/,'');
+  }
+  // Como deploy.yml: minúsculas, [a-z0-9-], 30 caracteres, sin guion final.
+  function nombreFly(v){ return String(v||'').toLowerCase().replace(/[^a-z0-9-]/g,'-').slice(0,30).replace(/-+$/,'') }
+  function limpiaCuenta(v){ return String(v||'').trim().replace(/^@/,'').replace(/[^A-Za-z0-9-]/g,'') }
+  // Id de una carpeta de Drive a partir de su enlace (o del id pelado). Mismas reglas que el instalador.
+  function idDrive(v){
+    v = String(v||'').trim(); var m = v.match(/\/folders\/([A-Za-z0-9_-]+)/) || v.match(/[?&]id=([A-Za-z0-9_-]+)/);
+    if (m) v = m[1];
+    return /^[A-Za-z0-9_-]{25,}$/.test(v) ? v : '';   // los ids de carpeta miden unos 33
+  }
+  function D(){
+    var a = slug(st.datos.nombre), o = st.reales.org || limpiaCuenta(st.datos.org), u = st.reales.usuario || limpiaCuenta(st.datos.usuario);
+    var fa = nombreFly((a||'recetas') + '-' + (o||'tuorganizacion'));
+    return { app: a, org: o, usuario: u, flyApp: fa, drive: st.hechos.drive === 'omitido' ? '' : idDrive(st.datos.drive),
+      web: 'https://' + (o||'tuorganizacion').toLowerCase() + '.github.io/' + (a||'recetas') + '/',
+      servidor: 'https://' + fa + '.fly.dev/',
+      repo: 'https://github.com/' + (o||'tuorganizacion') + '/' + (a||'recetas') };
+  }
+  function esc(t){ return String(t==null?'':t).replace(/[&<>"]/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c] }) }
+  function aplica(){
+    var d = D(), a = d.app || 'recetas', o = d.org || 'tuorganizacion', u = d.usuario || 'maria-garcia';
+    [].forEach.call(document.querySelectorAll('.A'), function(e){ e.textContent = a });
+    [].forEach.call(document.querySelectorAll('.O'), function(e){ e.textContent = o });
+    [].forEach.call(document.querySelectorAll('.U'), function(e){ e.textContent = u });
+    document.getElementById('previa-nombre').innerHTML = d.app
+      ? 'Se llamará <code>'+esc(a)+'</code>. Tendrá una web en <code>'+esc(o.toLowerCase())+'.github.io/'+esc(a)+'</code> y un servidor en <code>'+esc(d.flyApp)+'.fly.dev</code>.'
+      : 'Por ejemplo: «recetas», «mi-tienda», «paseos».';
+    document.getElementById('previa-org').innerHTML = d.org ? 'Tu app vivirá en <code>github.com/'+esc(o)+'/'+esc(a)+'</code>.' : '';
+    function pon(sel, href, txt){ [].forEach.call(document.querySelectorAll(sel), function(e){ e.href = href; if (txt !== null) e.textContent = txt }) }
+    pon('.L-web', d.web, d.web.replace('https://',''));
+    pon('.L-srv', d.servidor, d.servidor.replace('https://',''));
+    pon('.L-bit', d.web + 'bitacora.html', null);
+    pon('.L-repo', d.repo, d.repo.replace('https://',''));
+    document.getElementById('enlace-pc').textContent = enlacePC();
+    document.getElementById('prompt-drive').textContent = promptDrive();
+  }
+  function promptDrive(){
+    return 'Comprueba que tienes acceso a mi carpeta de Google Drive, como explica CLAUDE.md en «Comprobación de Drive», y dime el resultado.';
+  }
+  function enlacePC(){
+    var d = D(), u = new URL('pc.html', location.href);
+    u.search = '?app=' + encodeURIComponent(d.app||'') + '&org=' + encodeURIComponent(d.org||'') + (d.usuario ? '&u=' + encodeURIComponent(d.usuario) : '') + (d.drive ? '&drive=' + encodeURIComponent(d.drive) : '');
+    return u.href;
+  }
+
+  // ---------------------------------------------------------------- red
+  function pide(url, opciones){
+    var ctl = ('AbortController' in window) ? new AbortController() : null, t = setTimeout(function(){ if (ctl) ctl.abort() }, (opciones&&opciones.ms)||20000);
+    return fetch(url, {cache:'no-store', signal: ctl ? ctl.signal : undefined}).then(function(r){ clearTimeout(t); return r }, function(e){ clearTimeout(t); throw e });
+  }
+  // API pública de GitHub, sin credenciales: 60 consultas por hora y por red.
+  function gh(ruta){
+    return pide('https://api.github.com/' + ruta).then(function(r){
+      var limite = (r.status === 403 || r.status === 429) && r.headers.get('x-ratelimit-remaining') === '0';
+      return r.json().catch(function(){ return null }).then(function(j){ return { status: r.status, json: j, limite: limite || r.status === 429 } });
+    });
+  }
+
+  // ---------------------------------------------------------------- pantallas
+  var pantallas = ['portada','instalar','ficha','pedir','ayuda'];
+  function ruta(){
+    var h = (location.hash||'#portada').slice(1);
+    if (pantallas.indexOf(h) < 0) {
+      var el = document.getElementById(h); if (el) { mostrar('portada'); el.scrollIntoView(); return }
+      h = 'portada';
+    }
+    mostrar(h); window.scrollTo(0,0);
+  }
+  function mostrar(h){
+    pantallas.forEach(function(p){ document.getElementById('p-'+p).hidden = (p!==h) });
+    document.getElementById('pill-paso').hidden = (h!=='instalar');
+    if (h==='ficha') pintaFicha();
+  }
+  window.addEventListener('hashchange', ruta);
+
+  // ---------------------------------------------------------------- pasos
+  var pasos = [].slice.call(document.querySelectorAll('.paso'));
+  function paso(id){ return document.querySelector('.paso[data-id="'+id+'"]') }
+  function primerPendiente(){ for (var i=0;i<pasos.length;i++) if (!st.hechos[pasos[i].dataset.id]) return i; return pasos.length }
+  function pinta(){
+    // Sin carpeta de Drive no hay nada que comprobar en el paso 8.
+    if (st.hechos.drive === 'omitido') st.hechos.verdrive = 'omitido';
+    else if (st.hechos.verdrive === 'omitido') delete st.hechos.verdrive;
+    var act = primerPendiente();
+    pasos.forEach(function(p,i){
+      var id = p.dataset.id, b = p.querySelector('.badge');
+      var e = st.hechos[id] ? 'hecho' : (i===act ? 'activo' : 'bloqueado');
+      p.dataset.estado = e;
+      if (e==='hecho') {
+        var an = st.hechos[id]==='anotado' && !st.verif[id];
+        b.className = 'badge ' + (an ? 'anotado' : 'ok');
+        b.textContent = an ? 'anotado' : 'verificado';
+        if (id === 'claude' && st.verif.claude === false) { b.className = 'badge anotado'; b.textContent = 'falta permiso' }
+        if (st.hechos[id] === 'omitido') { b.className = 'badge'; b.textContent = 'sin Drive' }
+        if (st.hechos[id] === 'guardado') { b.className = 'badge ok'; b.textContent = 'guardado' }
+      }
+      else if (e==='activo') { b.className='badge activo'; b.textContent='ahora' }
+      else { b.className='badge'; b.textContent='' }
+    });
+    document.getElementById('barra').style.width = (act/pasos.length*100)+'%';
+    document.getElementById('pill-paso').textContent = act>=pasos.length ? 'Meta' : 'Paso '+(act+1)+' de '+pasos.length;
+    document.getElementById('meta').hidden = act < pasos.length;
+    if (act >= pasos.length) registrarApp();
+    pintaTusApps();
+    aplica();
+  }
+  pasos.forEach(function(p){
+    p.querySelector('header').addEventListener('click', function(){ if (p.dataset.estado==='hecho') p.classList.toggle('abierto') });
+    p.querySelector('.hecho').addEventListener('click', function(){ comprobar(p) });
+  });
+
+  function verif(p, clase, titulo, texto){
+    var v = p.querySelector('.verif'); v.hidden = false; v.className = 'verif '+clase;
+    var ic = {espera:'', ok:'✓', anotado:'…', err:'!'}[clase];
+    v.innerHTML = '<span class="ic">'+ic+'</span><div><b>'+titulo+'</b>'+(texto?'<p>'+texto+'</p>':'')+'</div>';
+  }
+  function comprobar(p){
+    var id = p.dataset.id, btn = p.querySelector('.hecho');
+    if (id==='nombre') st.datos.nombre = document.getElementById('in-nombre').value;
+    if (id==='github') { st.datos.usuario = document.getElementById('in-usuario').value; delete st.reales.usuario }
+    if (id==='org') { st.datos.org = document.getElementById('in-org').value; delete st.reales.org }
+    if (id==='drive') st.datos.drive = document.getElementById('in-drive').value;
+    guardar(); aplica();
+    if (id==='pc') { vigilar(); return }
+    if (id==='verdrive') { vigilarDrive(); return }
+    btn.disabled = true; verif(p, 'espera', 'Comprobando…', '');
+    COMPRUEBA[id]().catch(function(e){
+      return { estado:'anotado', titulo:'No he podido comprobarlo ahora', texto:'No llego a GitHub desde este móvil ('+esc(e.message||e)+'). Lo anoto y lo comprobará el PC.' };
+    }).then(function(r){
+      btn.disabled = false;
+      verif(p, r.estado, r.titulo, r.texto);
+      if (r.estado !== 'err') {
+        st.hechos[id] = r.estado === 'anotado' ? 'anotado' : true; guardar();
+        setTimeout(function(){ pinta(); var s = pasos[primerPendiente()]; if (s) s.scrollIntoView({behavior:'smooth',block:'start'}) }, 900);
+      }
+    });
+  }
+  var LIMITE = { estado:'anotado', titulo:'Anotado', texto:'GitHub no me deja preguntar más desde esta red durante un rato (límite de consultas). Lo comprobará el PC.' };
+  var COMPRUEBA = {
+    nombre: function(){
+      var s = slug(st.datos.nombre);
+      if (!s) return Promise.resolve({estado:'err', titulo:'Necesito un nombre', texto:'Cualquiera vale: «recetas», «mi-tienda», «paseos».'});
+      if (s.length < 2) return Promise.resolve({estado:'err', titulo:'Un poco más largo', texto:'Con dos letras o más.'});
+      if (!(st.hechos.org && st.reales.org)) return Promise.resolve({estado:'ok', titulo:'«'+esc(s)+'» vale como nombre', texto:'Compruebo que está libre en cuanto sepa cuál es tu organización (paso 3).'});
+      // Segunda app: la organización ya se conoce, así que se mira aquí mismo.
+      var o = st.reales.org;
+      return gh('repos/' + encodeURIComponent(o) + '/' + encodeURIComponent(s)).then(function(r){
+        if (r.limite) return {estado:'anotado', titulo:'«'+esc(s)+'» vale como nombre', texto:'GitHub no me deja preguntar ahora si está libre (límite de consultas). Lo comprobará el PC.'};
+        if (r.status === 200) return {estado:'anotado', titulo:'Ya tienes una app «'+esc(s)+'» en '+esc(o), texto:'Si es de un intento anterior, el PC seguirá donde lo dejó; si no, cambia el nombre.'};
+        return {estado:'ok', titulo:'«'+esc(s)+'» está libre en '+esc(o), texto:'Aquí vivirá tu app.'};
+      });
+    },
+    github: function(){
+      var u = limpiaCuenta(st.datos.usuario);
+      if (!u || /\s/.test(String(st.datos.usuario).trim())) return Promise.resolve({estado:'err', titulo:'Así no lo encuentro', texto:'Escríbelo tal como aparece arriba a la derecha en GitHub, sin arroba y sin espacios. <a href="#ayuda">Ayuda</a>.'});
+      return gh('users/' + encodeURIComponent(u)).then(function(r){
+        if (r.limite) return LIMITE;
+        if (r.status === 404) return {estado:'err', titulo:'No encuentro a nadie llamado «'+esc(u)+'» en GitHub', texto:'Revisa cómo se escribe, o crea la cuenta con el botón de arriba.'};
+        if (r.status !== 200 || !r.json) return {estado:'anotado', titulo:'Anotado', texto:'GitHub no ha contestado bien ('+r.status+'). Lo comprobará el PC.'};
+        if (r.json.type === 'Organization') return {estado:'err', titulo:'«'+esc(r.json.login)+'» es una organización', texto:'Aquí va tu usuario personal, el que usas para entrar. La organización va en el paso siguiente.'};
+        st.reales.usuario = r.json.login; guardar();
+        return {estado:'ok', titulo:'Cuenta encontrada: '+esc(r.json.login)+(r.json.name ? ' · '+esc(r.json.name) : ''), texto:'Todo en orden.'};
+      });
+    },
+    org: function(){
+      var o = limpiaCuenta(st.datos.org), a = slug(st.datos.nombre);
+      if (!o) return Promise.resolve({estado:'err', titulo:'Necesito el nombre de la organización', texto:'Es el que escribiste en la pantalla «Set up your organization».'});
+      return gh('orgs/' + encodeURIComponent(o)).then(function(r){
+        if (r.limite) return LIMITE;
+        if (r.status === 404) {
+          return gh('users/' + encodeURIComponent(o)).then(function(u){
+            if (u.status === 200 && u.json && u.json.type === 'User') return {estado:'err', titulo:'«'+esc(u.json.login)+'» es una cuenta personal', texto:'Hace falta una organización. Créala con el botón de arriba (plan Free) y escribe aquí su nombre.'};
+            return {estado:'err', titulo:'No encuentro la organización «'+esc(o)+'»', texto:'Créala con el botón de arriba (plan Free). Si ya la creaste, revisa cómo se escribe.'};
+          });
+        }
+        if (r.status !== 200 || !r.json) return {estado:'anotado', titulo:'Anotado', texto:'GitHub no ha contestado bien ('+r.status+'). Lo comprobará el PC.'};
+        st.reales.org = r.json.login; guardar(); aplica();
+        return gh('repos/' + encodeURIComponent(r.json.login) + '/' + encodeURIComponent(a)).then(function(x){
+          var base = 'Organización encontrada: '+esc(r.json.login);
+          if (x.status === 200) return {estado:'ok', titulo:base, texto:'Ya existe <code>'+esc(r.json.login)+'/'+esc(a)+'</code>. Si es de un intento anterior, el PC seguirá donde lo dejó; si no, vuelve al paso 1 y cambia el nombre.'};
+          return {estado:'ok', titulo:base, texto:'Y el nombre «'+esc(a)+'» está libre en ella. Aquí vivirá tu app.'};
+        });
+      });
+    },
+    fly: function(){ return Promise.resolve({estado:'anotado', titulo:'Anotado', texto:'No puedo mirar dentro de tu cuenta de Fly.io desde aquí. Lo comprobará el PC cuando entres allí.'}) },
+    drive: function(){
+      var v = String(st.datos.drive||'').trim();
+      if (!v) return Promise.resolve({estado:'err', titulo:'Falta el enlace de la carpeta', texto:'Pégalo aquí, o pulsa «Sin Drive» si prefieres no usarlo.'});
+      if (/\/file\/d\/|docs\.google\.com/.test(v)) return Promise.resolve({estado:'err', titulo:'Eso es un archivo, no una carpeta', texto:'Abre la carpeta que has creado y copia la dirección que sale arriba.'});
+      var id = idDrive(v);
+      if (!id) return Promise.resolve({estado:'err', titulo:'Así no reconozco la carpeta', texto:'El enlace de una carpeta es como <code>drive.google.com/drive/folders/…</code>. Cópialo entero.'});
+      return Promise.resolve({estado:'anotado', titulo:'Carpeta anotada', texto:'No puedo mirar dentro de tu Drive desde aquí. El PC la dejará apuntada en tu app, y la primera sesión de Claude subirá ahí su resumen: lo verás aparecer.'});
+    },
+    claude: function(){ return Promise.resolve({estado:'anotado', titulo:'Anotado', texto:'El PC mirará si Claude tiene permiso en tu organización y te lo dirá.'}) }
+  };
+
+  // ---------------------------------------------------------------- paso 7: vigilar
+  // Lo mismo que comprueba el PC, por otro camino: la API pública de GitHub,
+  // la web en github.io y el servidor en fly.dev. Ninguno necesita llaves.
+  var vig = null;
+  function vigilar(){
+    if (vig) return;
+    st.vig = st.vig || { inicio: Date.now() }; guardar();
+    var p = paso('pc'), lin = document.getElementById('linea'); lin.hidden = false;
+    p.querySelector('.verif').hidden = true;
+    var li = {}; [].forEach.call(lin.children, function(x){ li[x.dataset.l] = x });
+    var hecho = {}, tSrv = null, sinApi = false;
+    function marca(k, ok, texto){
+      var x = li[k]; if (ok) { hecho[k] = true; x.className = 'ok'; x.querySelector('.p').textContent = '✓' }
+      if (texto != null) x.querySelector('small').innerHTML = texto;
+    }
+    function activa(){ var orden = ['repo','init','web','srv','viva']; for (var i=0;i<orden.length;i++) if (!hecho[orden[i]]) { li[orden[i]].className = 'act'; return } }
+    function vuelta(){
+      var d = D(), trabajos = [];
+      if (!sinApi && (!hecho.repo || !hecho.init)) {
+        trabajos.push(gh('repos/'+d.org+'/'+d.app).then(function(r){
+          if (r.limite) { sinApi = true; return }
+          if (r.status === 200) marca('repo', true, 'Encontrada: github.com/'+esc(d.org)+'/'+esc(d.app));
+        }).then(function(){
+          if (!hecho.repo || sinApi) return;
+          return gh('repos/'+d.org+'/'+d.app+'/contents/.plantilla-pendiente').then(function(r){
+            if (r.limite) { sinApi = true; return }
+            if (r.status === 404) marca('init', true, 'Todo lleva el nombre «'+esc(d.app)+'»');
+          });
+        }).catch(function(){}));
+      }
+      trabajos.push(pide(d.web + '?t=' + Date.now()).then(function(r){ return r.ok ? r.text() : '' }).then(function(t){
+        if (t && t.toLowerCase().indexOf(d.app.toLowerCase()) >= 0) {
+          marca('web', true, 'Responde: '+esc(d.web.replace('https://','')));
+          // Con la web en marcha, lo anterior está hecho aunque GitHub no nos dejara preguntar.
+          if (!hecho.repo) marca('repo', true, 'github.com/'+esc(d.org)+'/'+esc(d.app));
+          if (!hecho.init) marca('init', true, 'Todo lleva el nombre «'+esc(d.app)+'»');
+        }
+      }).catch(function(){}));
+      trabajos.push(pide(d.servidor + 'hola', {ms: 30000}).then(function(r){ return r.ok ? r.json() : null }).then(function(j){
+        if (!j) return;
+        marca('srv', true, 'Responde: '+esc(d.servidor.replace('https://','')));
+        if (String(j.app).toLowerCase() === d.app.toLowerCase() && /Fly\.io/.test(j.mensaje||'')) marca('viva', true, '«'+esc(j.mensaje)+'»');
+        else marca('viva', false, 'Contesta, pero dice «'+esc(j.mensaje||'')+'». Si el PC sigue trabajando, espera.');
+      }).catch(function(){}));
+      trabajos.push(pide(d.web + 'nacimiento.json?t=' + Date.now()).then(function(r){ return r.ok ? r.json() : null }).then(leeNacimiento).catch(function(){}));
+      return Promise.all(trabajos).then(function(){
+        if (!hecho.srv) {
+          if (!tSrv && hecho.init) tSrv = Date.now();
+          var s = Math.round((Date.now() - (tSrv || st.vig.inicio)) / 1000);
+          li.srv.querySelector('small').textContent = (s >= 60 ? Math.floor(s/60)+' min '+(s%60)+' s' : s+' s') + ' · la primera vez tarda entre 2 y 5 minutos. No es un fallo.';
+        }
+        activa();
+        if (hecho.repo && hecho.init && hecho.web && hecho.srv && hecho.viva) {
+          vig = null; st.hechos.pc = true; delete st.vig; guardar();
+          verif(p, 'ok', 'Tu app está viva', 'Web y servidor responden. Puedes apagar el PC.');
+          setTimeout(function(){ pinta(); var s = pasos[primerPendiente()]; (s || document.getElementById('meta')).scrollIntoView({behavior:'smooth', block:'start'}) }, 700);
+          return;
+        }
+        if (Date.now() - st.vig.inicio > 45*60*1000) {
+          vig = null; verif(p, 'anotado', 'Esto está tardando más de lo normal', 'Mira lo que dice la ventana del PC. Cuando termine, vuelve a pulsar el botón.'); delete st.vig; guardar();
+          return;
+        }
+        vig = setTimeout(vuelta, 10000);
+      });
+    }
+    activa(); vig = true; vuelta();
+  }
+  // ---------------------------------------------------------------- paso 8: vigilar docs/drive.json
+  // Solo Claude llega a la carpeta de Drive del usuario (con su conector). Al
+  // comprobarla deja docs/drive.json en la app; esta página lo lee de la web.
+  var vigD = null;
+  function vigilarDrive(){
+    if (vigD) return;
+    var p = paso('verdrive'), btn = p.querySelector('.hecho');
+    st.vigDrive = st.vigDrive || { inicio: Date.now() }; guardar();
+    btn.disabled = true; vigD = true;
+    function vuelta(){
+      var d = D(), s = Math.round((Date.now() - st.vigDrive.inicio) / 1000);
+      verif(p, 'espera', 'Esperando a que Claude lo compruebe…', 'Llevo ' + (s >= 60 ? Math.floor(s/60) + ' min ' + (s%60) + ' s' : s + ' s') + '. Cuando Claude termine y se publique, aparece aquí solo (un par de minutos).');
+      pide(d.web + 'drive.json?t=' + Date.now()).then(function(r){ return r.ok ? r.json() : null }).catch(function(){ return null }).then(function(j){
+        if (j && j.verificado === true) {
+          vigD = null; btn.disabled = false; st.hechos.verdrive = true; st.verif.claude = true; st.verif.drive = true; st.driveOk = j; delete st.vigDrive; guardar();
+          verif(p, 'ok', 'Claude llega a tu carpeta de Drive', 'Ha dejado «' + esc(j.fichero || 'la ficha de tu app') + '» en ella. A partir de ahora, cada sesión guardará allí su resumen.');
+          setTimeout(function(){ pinta(); document.getElementById('meta').scrollIntoView({behavior:'smooth'}) }, 900);
+          return;
+        }
+        if (j && j.verificado === false) {
+          verif(p, 'err', 'Claude no llega a tu carpeta de Drive', (j.motivo ? esc(j.motivo) + '. ' : '') + 'En la app de Claude: Ajustes → Conectores → Google Drive → Conectar. Luego pégale otra vez la petición; sigo mirando.');
+        }
+        if (Date.now() - st.vigDrive.inicio > 30*60*1000) {
+          vigD = null; btn.disabled = false; delete st.vigDrive; guardar();
+          verif(p, 'anotado', 'Todavía no lo veo', '¿Le has pegado la petición a Claude en el repositorio de tu app? Cuando te diga que ha terminado, vuelve a pulsar el botón.');
+          return;
+        }
+        vigD = setTimeout(vuelta, 10000);
+      });
+    }
+    vuelta();
+  }
+  document.getElementById('copiar-drive').addEventListener('click', function(){ copia(promptDrive(), this, 'Copiar') });
+
+  function leeNacimiento(n){
+    if (!n || !n.verificado) return n;
+    var cambia = false;
+    if (n.verificado.fly && !st.verif.fly) { st.verif.fly = true; cambia = true }
+    if (typeof n.verificado.claude === 'boolean' && st.verif.claude !== n.verificado.claude) { st.verif.claude = n.verificado.claude; cambia = true }
+    if (n.creado) st.creado = n.creado;
+    if (cambia) { guardar(); pinta() }
+    return n;
+  }
+
+  // ---------------------------------------------------------------- enviar al PC
+  function copia(t, b, etiqueta){
+    function ok(){ b.textContent = 'Copiado'; setTimeout(function(){ b.textContent = etiqueta }, 1500) }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(ok, ok); else ok();
+  }
+  document.getElementById('copiar-pc').addEventListener('click', function(){ copia(enlacePC(), this, 'Copiar') });
+  document.getElementById('compartir-pc').addEventListener('click', function(){
+    var d = D(), url = enlacePC(), b = this;
+    if (navigator.share) navigator.share({ title: 'Montar ' + d.app + ' en mi PC', text: 'Ábrelo en el PC con Windows:', url: url }).catch(function(){});
+    else location.href = 'mailto:?subject=' + encodeURIComponent('Montar ' + d.app + ' en mi PC') + '&body=' + encodeURIComponent('Ábrelo en el PC con Windows:\n' + url);
+  });
+
+  // ---------------------------------------------------------------- saludar
+  var CIUDADES = {cdg:'París',ams:'Ámsterdam',lhr:'Londres',fra:'Fráncfort',mad:'Madrid',arn:'Estocolmo',waw:'Varsovia',otp:'Bucarest',iad:'Virginia',ewr:'Nueva Jersey',ord:'Chicago',dfw:'Dallas',lax:'Los Ángeles',sjc:'San José',sea:'Seattle',yyz:'Toronto',gru:'São Paulo',scl:'Santiago de Chile',bog:'Bogotá',qro:'Querétaro',nrt:'Tokio',sin:'Singapur',syd:'Sídney',hkg:'Hong Kong',bom:'Bombay',jnb:'Johannesburgo'};
+  function duracion(s){ s = Math.max(0, Math.round(Number(s)||0)); if (s < 90) return s + ' s'; var m = Math.round(s/60); if (m < 90) return m + ' min'; return Math.floor(m/60) + ' h ' + (m%60) + ' min' }
+  function saludar(url, boton, caja, etiqueta){
+    boton.disabled = true; boton.textContent = 'Despertando al servidor…'; caja.hidden = true;
+    pide(url, {ms: 30000}).then(function(r){ if (!r.ok) throw new Error('HTTP '+r.status); return r.json() })
+      .then(function(j){
+        var ciudad = j.region ? (CIUDADES[j.region] || j.region) + ' (' + j.region + ')' : j.servidor;
+        caja.className = 'respuesta';
+        caja.innerHTML = '<p class="grande">' + esc(j.mensaje) + '.</p><dl>'
+          + '<dt>Fecha y hora</dt><dd>' + esc(new Date(j.fecha).toLocaleString('es-ES',{dateStyle:'long',timeStyle:'medium'})) + '</dd>'
+          + '<dt>Servidor</dt><dd>' + esc(ciudad) + (j.maquina ? ' · máquina <code>' + esc(j.maquina) + '</code>' : '') + '</dd>'
+          + '<dt>Versión</dt><dd><code>' + esc(String(j.version).slice(0,7)) + '</code></dd>'
+          + '<dt>Despierta</dt><dd>desde hace ' + esc(duracion(j.despierta_desde_hace_s)) + (j.despierta_desde_hace_s < 10 ? ' (la has despertado tú)' : '') + '</dd></dl>';
+      })
+      .catch(function(e){
+        caja.className = 'respuesta err';
+        caja.innerHTML = '<p class="grande">No he podido hablar con el servidor.</p><p>' + esc(e.name==='AbortError' ? 'Tardó más de 30 segundos: puede estar despertando. Vuelve a pulsar.' : e.message) + '</p>';
+      })
+      .then(function(){ caja.hidden = false; boton.disabled = false; boton.textContent = etiqueta });
+  }
+  document.getElementById('demo').addEventListener('click', function(){
+    var app = nombreFly(document.querySelector('meta[name="fly-app"]').content);
+    saludar('https://' + app + '.fly.dev/hola', this, document.getElementById('demo-resp'), 'Saludar otra vez');
+  });
+  document.getElementById('saluda').addEventListener('click', function(){
+    saludar(D().servidor + 'hola', this, document.getElementById('respuesta'), 'Saluda otra vez');
+  });
+
+  // ---------------------------------------------------------------- ficha
+  function fechaLarga(iso){ return new Date(iso).toLocaleDateString('es-ES',{day:'numeric',month:'long',year:'numeric'}) }
+  function pintaFicha(){
+    var d = D();
+    function pintaClaude(){
+      var c = document.getElementById('f-claude');
+      if (st.verif.claude === true) c.textContent = 'tiene permiso en ' + d.org;
+      else if (st.verif.claude === false) c.innerHTML = 'falta darle permiso · <a href="https://github.com/apps/claude/installations/new" target="_blank" rel="noopener">darlo ahora</a>';
+      else c.textContent = 'sin comprobar todavía';
+    }
+    document.getElementById('f-nacida').textContent = (st.creado ? 'Nacida el ' + fechaLarga(st.creado) + ' · ' : '') + 'vive en ' + (d.org || 'tu organización');
+    if (d.drive) document.getElementById('f-drive').innerHTML = '<a href="https://drive.google.com/drive/folders/' + esc(d.drive) + '" target="_blank" rel="noopener">tu carpeta de Google Drive</a> · ' + (st.driveOk ? 'Claude llega a ella' : 'sin comprobar todavía');
+    pintaClaude();
+    pide(d.web + 'nacimiento.json?t=' + Date.now()).then(function(r){ return r.ok ? r.json() : null }).then(function(n){
+      leeNacimiento(n); if (n && n.creado) document.getElementById('f-nacida').textContent = 'Nacida el ' + fechaLarga(n.creado) + ' · vive en ' + (n.org || d.org);
+      pintaClaude();
+    }).catch(function(){});
+  }
+  document.getElementById('compartir').addEventListener('click', function(){ copia(D().web, this, 'Copiar el enlace de tu app') });
+
+  // ---------------------------------------------------------------- pedir
+  var q=document.getElementById('q'), g=document.getElementById('g'), m=document.getElementById('m'), out=document.getElementById('prompt');
+  function prompt(){
+    var a = D().app || 'recetas';
+    out.textContent = 'Trabaja en mi app «'+a+'».\n\nQuiero: '+(q.value.trim()||'…')+'\nNo debe pasar: '+(g.value.trim()||'…')+'\nEstá terminado cuando: '+(m.value.trim()||'…')+'\n\nCuando esté publicado dime el enlace para verlo en el móvil, y apunta esta sesión en la bitácora.';
+  }
+  [q,g,m].forEach(function(t){ t.addEventListener('input', prompt) });
+  [].forEach.call(document.querySelectorAll('.chip'), function(c){ c.addEventListener('click', function(){ q.value=c.dataset.q; g.value=c.dataset.g; m.value=c.dataset.m; prompt() }) });
+  document.getElementById('copiar').addEventListener('click', function(){ copia(out.textContent, this, 'Copiar') });
+
+  // ---------------------------------------------------------------- varias apps
+  // Los pasos 2 a 5 (cuenta de GitHub, organización, Fly.io y Claude) son los
+  // mismos para todas las apps: se guardan en este navegador. Solo datos
+  // públicos (usuario y organización) y qué quedó verificado; nunca llaves.
+  function registrarApp(){
+    var d = D(); if (!d.app || !d.org) return;
+    st.perfil = { usuario: d.usuario, org: d.org, verif: { fly: !!st.verif.fly, claude: st.verif.claude === true } };
+    st.apps = st.apps || [];
+    var ya = st.apps.some(function(x){ return x.app === d.app && x.org === d.org });
+    if (!ya) { st.apps.push({ app: d.app, org: d.org, web: d.web, servidor: d.servidor, drive: !!d.drive, fecha: st.creado || new Date().toISOString() }); }
+    guardar();
+  }
+  function pintaTusApps(){
+    var caja = document.getElementById('tus-apps'), apps = st.apps || [];
+    caja.hidden = !apps.length && !(st.perfil && st.perfil.org);
+    document.getElementById('lista-apps').innerHTML = apps.map(function(x){
+      return '<li><a href="' + esc(x.web) + '" target="_blank" rel="noopener">' + esc(x.app) + '</a><span>' + esc(x.org) + ' · ' + esc(new Date(x.fecha).toLocaleDateString('es-ES')) + '</span></li>';
+    }).join('') || '<li><span>Tus cuentas están guardadas; todavía no has montado ninguna app desde este navegador.</span></li>';
+    document.getElementById('empezar').textContent = (st.perfil && st.perfil.org) ? 'Montar otra app · unos 10 minutos' : 'Empezar · unos 30 minutos';
+  }
+  // Empieza una app nueva con las cuentas guardadas. GitHub y la organización
+  // se vuelven a mirar en la API por si han cambiado; Fly y Claude se dan por
+  // buenos si la app anterior los dejó verificados.
+  function nuevaApp(){
+    var pf = st.perfil; if (!pf || !pf.org) { location.hash = '#instalar'; return }
+    st = { tema: st.tema, perfil: pf, apps: st.apps || [], datos: { usuario: pf.usuario, org: pf.org }, reales: { usuario: pf.usuario, org: pf.org }, hechos: { github: 'guardado', org: 'guardado' }, verif: {} };
+    if (pf.verif && pf.verif.fly) st.hechos.fly = 'guardado';
+    if (pf.verif && pf.verif.claude) st.hechos.claude = 'guardado';
+    guardar();
+    ['in-nombre','in-drive'].forEach(function(id){ document.getElementById(id).value = '' });
+    document.getElementById('in-usuario').value = pf.usuario || ''; document.getElementById('in-org').value = pf.org || '';
+    pasos.forEach(function(p){ p.classList.remove('abierto'); p.querySelector('.verif').hidden = true });
+    document.getElementById('linea').hidden = true;
+    pinta(); location.hash = '#instalar'; window.scrollTo(0,0);
+    revalida();
+  }
+  function revalida(){
+    var pf = st.perfil;
+    gh('users/' + encodeURIComponent(pf.usuario)).then(function(r){
+      if (r.status === 404) { delete st.hechos.github; guardar(); pinta(); verif(paso('github'), 'err', 'Ya no encuentro tu usuario «' + esc(pf.usuario) + '»', '¿Lo has cambiado? Escríbelo otra vez.') }
+    }).catch(function(){});
+    gh('orgs/' + encodeURIComponent(pf.org)).then(function(r){
+      if (r.status === 404) { delete st.hechos.org; delete st.reales.org; guardar(); pinta(); verif(paso('org'), 'err', 'Ya no encuentro la organización «' + esc(pf.org) + '»', 'Créala otra vez o escribe otra.') }
+    }).catch(function(){});
+  }
+  function enlaceCuentas(){
+    var pf = st.perfil || {}, u = new URL(location.href);
+    u.hash = ''; u.search = '?u=' + encodeURIComponent(pf.usuario || '') + '&org=' + encodeURIComponent(pf.org || '');
+    return u.href;
+  }
+  document.getElementById('otra-app').addEventListener('click', nuevaApp);
+  document.getElementById('otra-app-meta').addEventListener('click', nuevaApp);
+  document.getElementById('mi-enlace').addEventListener('click', function(){ copia(enlaceCuentas(), this, 'Copiar enlace con mis cuentas') });
+  document.getElementById('olvidar').addEventListener('click', function(){
+    if (!confirm('¿Olvidar tus cuentas y la lista de tus apps en este navegador? Tus apps no se tocan: siguen en GitHub, Fly.io y Drive.')) return;
+    delete st.perfil; delete st.apps; guardar(); pintaTusApps();
+  });
+  // Enlace con cuentas (?u=…&org=…): guarda el perfil. Si no hay un montaje a
+  // medias, prepara directamente una app nueva con ellas.
+  (function(){
+    var q = new URLSearchParams(location.search), u = limpiaCuenta(q.get('u')), o = limpiaCuenta(q.get('org'));
+    if (!u || !o) return;
+    var aMedias = Object.keys(st.hechos).length && primerPendiente() < pasos.length;
+    st.perfil = { usuario: u, org: o, verif: (st.perfil && st.perfil.org === o) ? st.perfil.verif : {} }; guardar();
+    try { history.replaceState(null, '', location.pathname + (aMedias ? location.hash : '#instalar')) } catch(e){}
+    if (!aMedias) setTimeout(nuevaApp, 0);
+  })();
+
+  // ---------------------------------------------------------------- entradas, tema, reinicio
+  document.getElementById('sin-drive').addEventListener('click', function(){
+    var p = paso('drive'); st.hechos.drive = 'omitido'; guardar();
+    verif(p, 'anotado', 'Sin Drive, de momento', 'La app funciona igual. Puedes añadir la carpeta cuando quieras: está en la Ayuda.');
+    setTimeout(function(){ pinta(); var s = pasos[primerPendiente()]; if (s) s.scrollIntoView({behavior:'smooth',block:'start'}) }, 900);
+  });
+  [['nombre','in-nombre'],['usuario','in-usuario'],['org','in-org'],['drive','in-drive']].forEach(function(k){
+    var el = document.getElementById(k[1]);
+    el.value = st.datos[k[0]]||'';
+    el.addEventListener('input', function(){ st.datos[k[0]] = el.value; if (k[0]!=='nombre') delete st.reales[k[0]]; guardar(); aplica() });
+  });
+  var root=document.documentElement;
+  function setT(t){ st.tema=t; guardar(); if (t) root.setAttribute('data-theme',t); else root.removeAttribute('data-theme') }
+  setT(st.tema||'');
+  document.getElementById('tema').addEventListener('click', function(){ var o=['','light','dark']; setT(o[(o.indexOf(st.tema||'')+1)%3]) });
+  document.getElementById('reiniciar').addEventListener('click', function(){
+    if (!confirm('¿Empezar de nuevo? Se borra lo que has escrito en esta página (tu app y tus cuentas no se tocan).')) return;
+    st = {tema: st.tema, perfil: st.perfil, apps: st.apps, hechos:{}, datos:{}, reales:{}, verif:{}}; guardar(); location.hash = '#instalar'; location.reload();
+  });
+
+  prompt(); pinta(); ruta();
+  if (st.vig && !st.hechos.pc) vigilar();   // se cerró la página a mitad de la espera: sigue vigilando
+  if (st.vigDrive && !st.hechos.verdrive) vigilarDrive();
+})();
+</script>
+</body>
+</html>
