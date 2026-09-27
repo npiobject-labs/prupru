@@ -1,15 +1,23 @@
 {
   "fecha": "2026-09-27T08:59:00+02:00",
-  "titulo": "Análisis: vídeo MP4 de pantalla del móvil con narración y anotaciones",
-  "objetivo": "Analizar, sin desarrollar, qué herramientas y módulos hacen falta para grabar un MP4 con lo que se ve en el móvil, la voz del micro y anotaciones a dedo (líneas, círculos, cruces, imágenes) con paleta de colores, y proponer una planificación.",
+  "titulo": "Análisis: botón «Anotar» para que el cliente marque y comente los entregables",
+  "objetivo": "Analizar, sin desarrollar, cómo permitir que el cliente, desde cualquier dispositivo y solo con un enlace, anote sobre las pantallas de la app (mock y entregables siguientes), grabe voz o recorrido y lo envíe al desarrollador.",
   "prompts": [
     {
       "texto": "Cómo puedo hacer un vídeo con extensión .mp4 que tenga el sonido del micrófono del móvil y la imagen de lo que se está viendo en pantalla en ese momento. Sobre eso que se ve en pantalla se tienen que poder hacer anotaciones con el dedo: una línea, rodearlo con un círculo, una cruz, poner imágenes encima, mientras se narra por el micrófono. Quiero un análisis, no desarrollo: sobre todo de herramientas, sistemas o módulos que habría que tener, imagino que con un lienzo y una paleta de colores. Hazme una pequeña planificación de cómo lo harías.",
       "nota": "Transcripción aproximada de un dictado por voz."
+    },
+    {
+      "texto": "Lo que se pretende es, en el proceso de desarrollo, generar un mock y que el cliente haga anotaciones sobre él, y no solo sobre el mock sino sobre cualquier entregable de las fases siguientes. El cliente tiene que poder poner notas en las pantallas de la aplicación y enviarlas al desarrollador. Busca la mejor opción. No sabemos si el cliente tiene iOS, Android, Windows o Mac: solo tiene un enlace que le lleva a la aplicación, que podría llevar un botón «mándame anotaciones» con un lienzo para anotar y grabar.",
+      "nota": "Transcripción aproximada de un dictado por voz."
+    },
+    {
+      "texto": "Mándame una notificación con vibración cuando termines."
     }
   ],
   "cambios": [
-    "docs/planificacion/analisis-grabacion-pantalla-anotada.md: análisis con tres caminos (grabador existente, app nativa Android, web en prupru), módulos de cada uno, planificación por fases y decisiones pendientes.",
+    "docs/planificacion/analisis-grabacion-pantalla-anotada.md: primer análisis (captura de pantalla del sistema), marcado como superado.",
+    "docs/planificacion/analisis-anotaciones-cliente.md: opciones (SaaS, propio con backend, propio sin backend), módulos, planificación por fases, riesgos y fuentes.",
     "docs/planificacion/sesiones/20260927-0859.md: resumen de la sesión."
   ],
   "sha": null,
@@ -20,9 +28,14 @@
   "pagina": null,
   "fly": null,
   "pendiente": [
-    "Decidir si se anota cualquier app del móvil (Android nativo) o solo prupru (web).",
-    "Decidir si iOS entra en el alcance."
+    "Aprobar el plan y arrancar la fase 1: botón «Anotar» con captura y lienzo en docs/anotar.js.",
+    "Verificar en un iPhone real si getDisplayMedia funciona en iOS 27."
   ],
-  "enlaces": [],
+  "enlaces": [
+    {
+      "texto": "PR en borrador",
+      "url": "https://github.com/npiobject-labs/prupru/pull/1"
+    }
+  ],
   "notas": "Sesión de análisis en rama de trabajo, sin despliegue. Sin subida a Drive."
 }

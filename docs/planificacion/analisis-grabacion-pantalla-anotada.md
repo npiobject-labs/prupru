@@ -1,5 +1,7 @@
 # Análisis: vídeo MP4 de la pantalla del móvil con narración y anotaciones a mano
 
+> **Superado** el mismo día por [`analisis-anotaciones-cliente.md`](analisis-anotaciones-cliente.md): el objetivo real es que el cliente anote la propia web desde cualquier dispositivo, no capturar la pantalla del sistema. Se conserva como referencia de la variante nativa.
+
 **Fecha:** 2026-09-27 · **Estado:** análisis, sin desarrollo.
 
 ## Qué se quiere
