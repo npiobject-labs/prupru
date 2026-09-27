@@ -6,6 +6,12 @@ primary_region = "cdg"
 [build]
   dockerfile = "Dockerfile"
 
+# Volumen para las anotaciones del cliente (app/src/anotaciones.rs). deploy.yml lo
+# crea si no existe. Una app con volumen corre en una sola maquina (--ha=false).
+[mounts]
+  source = "datos"
+  destination = "/datos"
+
 [http_service]
   internal_port = 8080
   force_https = true

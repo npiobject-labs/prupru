@@ -97,6 +97,27 @@ jobs:
           FLY_APP: ${{ steps.app.outputs.app }}
         run: flyctl secrets set "BUILD_ID=${GITHUB_SHA}" --app "${FLY_APP}" --stage
 
+      # Las anotaciones del cliente viven en el volumen "datos" (app/fly.toml, [mounts]).
+      # Se crea una vez; una maquina anterior sin volumen se retira para que el
+      # despliegue cree la nueva ya con el volumen montado.
+      - name: Preparar el volumen de datos
+        if: steps.fly.outputs.configurado == 'true'
+        env:
+          FLY_APP: ${{ steps.app.outputs.app }}
+        run: |
+          region="$(sed -n 's/^primary_region *= *"\(.*\)"/\1/p' app/fly.toml)"
+          if flyctl volumes list --app "${FLY_APP}" --json | grep -q '"name": *"datos"'; then
+            echo "Volumen datos ya existe"
+          else
+            flyctl volumes create datos --app "${FLY_APP}" --region "${region}" --size 1 --yes
+          fi
+          sin_volumen="$(flyctl machines list --app "${FLY_APP}" --json \
+            | python3 -c 'import json,sys; print(" ".join(m["id"] for m in json.load(sys.stdin) if not (m.get("config") or {}).get("mounts")))')"
+          for m in ${sin_volumen}; do
+            echo "Retirando la maquina ${m} (sin volumen)"
+            flyctl machine destroy "${m}" --app "${FLY_APP}" --force
+          done
+
       - name: Desplegar en Fly.io
         if: steps.fly.outputs.configurado == 'true'
         env:
@@ -173,6 +194,24 @@ jobs:
           print('OK: ' + d['mensaje'] + ' (' + d['region'] + ', ' + d['fecha'] + ')')
           PY
 
+      # Las anotaciones del cliente (docs/anotar/): se acepta un envio de prueba,
+      # la lectura sin clave se rechaza y el preflight CORS responde.
+      - name: Verificar /anotaciones
+        if: steps.fly.outputs.configurado == 'true'
+        env:
+          FLY_APP: ${{ steps.app.outputs.app }}
+        run: |
+          url="https://${FLY_APP}.fly.dev/anotaciones"
+          datos='{"formato":"anotacion-prupru/2","tipo":"captura","meta":{"proyecto":"verificacion","pagina":"deploy.yml","titulo":"Prueba del despliegue","build":"'"${GITHUB_SHA}"'"},"nota":"Envio de prueba de deploy.yml; se puede borrar.","formas":[]}'
+          codigo="$(curl -sS --max-time 30 -o /tmp/anot.json -w '%{http_code}' -F "datos=${datos};type=application/json" "${url}")"
+          echo "POST: ${codigo} $(cat /tmp/anot.json)"
+          [ "${codigo}" = "201" ] || { echo "::error::POST /anotaciones devolvio ${codigo}"; exit 1; }
+          codigo="$(curl -sS --max-time 20 -o /dev/null -w '%{http_code}' "${url}")"
+          [ "${codigo}" = "401" ] || { echo "::error::GET /anotaciones sin clave devolvio ${codigo}, se esperaba 401"; exit 1; }
+          cabeceras="$(curl -sS --max-time 20 -X OPTIONS -D - -o /dev/null "${url}")"
+          printf '%s' "${cabeceras}" | grep -qi '^access-control-allow-origin: \*' || { echo "::error::OPTIONS /anotaciones sin CORS"; exit 1; }
+          echo "OK: /anotaciones acepta envios, protege la lectura y responde al preflight"
+
       - name: Resumen del despliegue
         if: success() && steps.fly.outputs.configurado == 'true'
         env:
@@ -187,6 +226,7 @@ jobs:
             echo "- Salud: https://${FLY_APP}.fly.dev/salud"
             echo "- Hola mundo: https://${FLY_APP}.fly.dev/holamundo"
             echo "- Saludo: https://${FLY_APP}.fly.dev/hola"
+            echo "- Anotaciones del cliente: https://${FLY_APP}.fly.dev/anotaciones (panel: https://${GITHUB_REPOSITORY%%/*}.github.io/${GITHUB_REPOSITORY#*/}/anotar/panel.html)"
             echo "- Comprobacion desde Pages: https://${GITHUB_REPOSITORY%%/*}.github.io/${GITHUB_REPOSITORY#*/}/holamundo.html"
             echo "- Build (SHA): \`${GITHUB_SHA}\`"
           } >> "$GITHUB_STEP_SUMMARY"
