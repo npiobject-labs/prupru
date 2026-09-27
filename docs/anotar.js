@@ -93,9 +93,10 @@
   function fijarFijos() {
     // Los elementos fixed/sticky se capturan donde están ahora, no donde caerían en la página entera.
     var tocados = [], todos = document.body.querySelectorAll('*'), sx = window.scrollX, sy = window.scrollY;
-    // El cuerpo debe llegar al menos hasta el final de la ventana para que la captura incluya los elementos pegados abajo.
-    tocados.push([document.body, document.body.getAttribute('style'), null]);
-    document.body.style.cssText += ';min-height:' + (sy + window.innerHeight) + 'px!important';
+    // El cuerpo debe llegar al menos hasta el final de la ventana para que la captura incluya los elementos
+    // pegados abajo. snapdom mide el contenido (ignora min-height), así que se añade un espaciador real.
+    var falta = sy + window.innerHeight - document.body.getBoundingClientRect().height;
+    if (falta > 0) { var relleno = document.createElement('div'); relleno.style.cssText = 'height:' + Math.ceil(falta) + 'px;flex:none'; document.body.appendChild(relleno); tocados.push([relleno, null, relleno]); }
     for (var i = 0; i < todos.length; i++) {
       var e = todos[i];
       if (e.closest && e.closest('.an-ui')) continue;
