@@ -1,0 +1,48 @@
+{
+  "fecha": "2026-09-27T10:27:38+02:00",
+  "titulo": "Recorrido narrado, envío al servidor y panel: la pieza «Anotar» portable a cualquier app",
+  "objetivo": "Completar el plan (fases 3, 4 y 5): grabar recorridos con voz, enviar las anotaciones al backend de Fly con almacenamiento e issues, y dar al desarrollador un panel; todo como pieza incrustable en cualquier proyecto.",
+  "prompts": [
+    {
+      "texto": "Compartir ya abre WhatsApp a la primera. Sigue con la fase 3; desarrolla hasta el final, tienes mi OK a todo. Dame el enlace final para probar cómo ha quedado."
+    },
+    {
+      "texto": "Es importante que esta parte se pueda incrustar en cualquier proyecto que hagamos, no solo en este mock: tiene que poder migrar a cualquiera de las aplicaciones. Ya me irás diciendo cómo.",
+      "nota": "Dictado por voz, transcripción aproximada."
+    }
+  ],
+  "cambios": [
+    "docs/anotar/anotar.js: menú con dos modos; recorrido grabado con rrweb + micrófono, reproductor con voz sincronizada, informe HTML autocontenido con el reproductor dentro; hoja de envío con «Enviar al desarrollador» (POST al backend), Compartir y Descargar; carga de dependencias bajo demanda; configuración por data-servidor, data-proyecto y data-build; botón arrastrable y pastilla de grabación arriba para no tapar la app.",
+    "docs/anotar/vendor/: snapdom, rrweb, rrweb-player y su CSS (MIT), copias locales.",
+    "docs/anotar/panel.html: panel del desarrollador con clave, lista, captura, recorrido con voz y enlaces.",
+    "docs/anotar/README.md: guía para incrustar la pieza (web y servidor) en cualquier proyecto.",
+    "app/src/anotaciones.rs: módulo autocontenido con POST/GET /anotaciones, volumen, clave del panel e issue opcional; app/src/main.rs lo monta; Cargo.toml con multipart, reqwest y getrandom.",
+    "app/fly.toml: volumen datos en /datos; .github/workflows/deploy.yml: crea el volumen, retira la máquina sin volumen y verifica /anotaciones.",
+    "docs/index.html: build PR-B1-20260927-003 y enlace al panel; docs/mocks/003-partes-de-obra-002.html: mock anterior archivado.",
+    "CLAUDE.md: documentada la pieza de anotaciones; .gitignore: datos locales del backend.",
+    "docs/planificacion/sesiones/20260927-1027.md: resumen de la sesión."
+  ],
+  "sha": "00554fa",
+  "sha_completo": "00554fa79b6bb5d5dcc1dc4b8201d9bb038a5ed6",
+  "run": null,
+  "mock": "mocks/003-partes-de-obra-002.html",
+  "build": "PR-B1-20260927-003",
+  "pagina": "index.html",
+  "fly": "https://prupru-npiobject-labs.fly.dev/salud",
+  "pendiente": [
+    "Probar el recorrido y el envío directo en el móvil real.",
+    "Definir GITHUB_TOKEN y GITHUB_REPO como secretos de Fly si se quieren issues por anotación.",
+    "Llevar docs/anotar/ y anotaciones.rs a la plantilla DesdeMovil para que cada proyecto nazca con el botón."
+  ],
+  "enlaces": [
+    {
+      "texto": "Panel de anotaciones",
+      "url": "https://npiobject-labs.github.io/prupru/anotar/panel.html"
+    },
+    {
+      "texto": "Guía de incrustación",
+      "url": "https://github.com/npiobject-labs/prupru/blob/main/docs/anotar/README.md"
+    }
+  ],
+  "notas": "Probado con Playwright en Chromium (móvil simulado, micrófono simulado) contra el backend compilado en local: grabación, reproducción, envío, panel, informe autocontenido y clave incorrecta. El despliegue en Fly con volumen se verifica en deploy.yml tras fusionar."
+}

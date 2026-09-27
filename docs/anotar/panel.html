@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="fly-app" content="prupru-npiobject-labs">
+<title>Anotaciones recibidas · prupru</title>
+<link rel="stylesheet" href="vendor/rrweb-player.css">
+<style>
+:root{
+  --bg:#F6F2EA; --bg2:#FFFFFF; --ink:#1E2528; --ink2:#4E585C; --mute:#7C868A; --line:#DED7C9;
+  --acc:#9A4A2C; --acc2:#9A4A2C14; --acc-ink:#FFFFFF; --ok:#2E7D4F; --ok2:#2E7D4F16; --err:#B3261E; --err2:#B3261E14; --code:#EFEBE2;
+  --serif:"Fraunces",Georgia,serif; --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; --mono:ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --bg:#15191B; --bg2:#1E2427; --ink:#E9E6DE; --ink2:#B4BBBE; --mute:#838C90; --line:#2E3639; --acc:#E0906D; --acc2:#E0906D1F; --acc-ink:#1A1210; --ok:#6CC493; --ok2:#6CC4931F; --err:#F28B82; --err2:#F28B821F; --code:#101416; }
+}
+:root[data-theme="dark"]{ --bg:#15191B; --bg2:#1E2427; --ink:#E9E6DE; --ink2:#B4BBBE; --mute:#838C90; --line:#2E3639; --acc:#E0906D; --acc2:#E0906D1F; --acc-ink:#1A1210; --ok:#6CC493; --ok2:#6CC4931F; --err:#F28B82; --err2:#F28B821F; --code:#101416; }
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 var(--sans);overflow-x:hidden}
+[hidden]{display:none!important}
+a{color:var(--acc)}
+h1{font-family:var(--serif);font-size:1.5rem;margin:0}
+h2{font-family:var(--serif);font-size:1.15rem;margin:1.2rem 0 .5rem}
+code{font-family:var(--mono);font-size:.86em;background:var(--code);padding:.08em .35em;border-radius:4px}
+.wrap{max-width:60rem;margin:0 auto;padding:0 16px 4rem}
+.top{display:flex;align-items:center;gap:.6rem;padding:.7rem 0;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.top b{font-family:var(--serif);font-size:1.15rem;flex:1}
+.top small{color:var(--mute)}
+.btn{font:600 .95rem var(--sans);padding:.55rem .9rem;border-radius:10px;border:1px solid var(--line);background:var(--bg2);color:var(--ink);cursor:pointer}
+.btn.pri{background:var(--acc);border-color:var(--acc);color:var(--acc-ink)}
+input[type=password],input[type=text]{font:16px var(--sans);padding:.55rem .7rem;border:1px solid var(--line);border-radius:10px;background:var(--bg2);color:var(--ink);min-width:14rem}
+.clave{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin:1.2rem 0}
+.aviso{padding:.7rem .9rem;border-radius:12px;background:var(--acc2);border-left:3px solid var(--acc);font-size:.92rem;margin:1rem 0}
+.aviso.err{background:var(--err2);border-color:var(--err)}
+.lista{display:grid;gap:.6rem;margin-top:1rem}
+.tarjeta{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:.8rem 1rem;display:grid;grid-template-columns:auto 1fr;gap:.2rem .8rem;align-items:start;cursor:pointer;text-align:left;color:inherit;font:inherit;width:100%}
+.tarjeta:hover{border-color:var(--acc)}
+.tarjeta .ico{width:2.4rem;height:2.4rem;border-radius:10px;background:var(--acc2);color:var(--acc);display:flex;align-items:center;justify-content:center;grid-row:span 3}
+.tarjeta .ico svg{width:1.3rem;height:1.3rem;fill:none;stroke:currentColor;stroke-width:1.8}
+.tarjeta b{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.3}
+.tarjeta small{color:var(--mute);grid-column:2}
+.tarjeta .chip{font:600 .72rem var(--sans);padding:.2rem .5rem;border-radius:999px;background:var(--ok2);color:var(--ok);white-space:nowrap;grid-column:2;justify-self:start}
+.detalle{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:1rem;margin-top:1rem}
+.detalle img{width:100%;height:auto;border-radius:10px;border:1px solid var(--line)}
+.detalle audio{width:100%;margin:.5rem 0}
+.detalle dl{display:grid;grid-template-columns:auto 1fr;gap:.25rem .8rem;font-size:.9rem;margin:.6rem 0}
+.detalle dt{color:var(--mute)}.detalle dd{margin:0;word-break:break-word}
+.nota{white-space:pre-wrap;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:.8rem;margin:.6rem 0}
+#player{margin:.6rem 0;border-radius:10px;overflow:hidden;background:#1B2023;max-width:100%}
+details{font-size:.85rem}pre{white-space:pre-wrap;word-break:break-all;background:var(--code);padding:.6rem;border-radius:8px;max-height:40vh;overflow:auto}
+.enlaces{display:flex;gap:.5rem;flex-wrap:wrap;margin:.6rem 0}
+footer{margin-top:2rem;padding-top:.8rem;border-top:1px solid var(--line);font-size:.78rem;color:var(--mute)}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="top"><b>Anotaciones recibidas</b><small id="servidor">…</small><a class="btn" href="../">Volver a la app</a></div>
+
+  <div class="clave" id="acceso">
+    <input type="password" id="clave" placeholder="Clave del panel" autocomplete="current-password" aria-label="Clave del panel">
+    <button class="btn pri" id="entrar" type="button">Entrar</button>
+    <button class="btn" id="salir" type="button" hidden>Olvidar la clave</button>
+  </div>
+  <p class="aviso" id="ayuda">La clave la imprime el servidor en su registro la primera vez que arranca («Clave del panel de anotaciones»), o es el secreto <code>ANOTACIONES_CLAVE</code> de Fly. Queda guardada en este navegador.</p>
+  <p class="aviso err" id="error" hidden></p>
+
+  <section id="lista-zona" hidden>
+    <h2 id="titulo-lista">Recibidas</h2>
+    <div class="lista" id="lista"></div>
+  </section>
+
+  <section class="detalle" id="detalle" hidden></section>
+
+  <footer>Las anotaciones las envía el botón «Anotar» de la app y las guarda el servidor de Fly. Este panel solo las lee; no hay nada personal en esta página hasta que introduces la clave.</footer>
+</main>
+<script src="vendor/rrweb-player.min.js"></script>
+<script>
+(function(){
+  function nombreFly(v){ return String(v||'').toLowerCase().replace(/[^a-z0-9-]/g,'-').slice(0,30).replace(/-+$/,'') }
+  var parametros = new URLSearchParams(location.search), app = nombreFly(parametros.get('app') || document.querySelector('meta[name="fly-app"]').content);
+  var enLocal = ['localhost','127.0.0.1'].indexOf(location.hostname) >= 0;
+  // ?servidor=https://otra-app.fly.dev fija otro backend y se recuerda (el panel es la misma pieza en todos los proyectos).
+  var servidor = parametros.get('servidor'); try { if (servidor) localStorage.setItem('anotaciones.servidor', servidor); else servidor = localStorage.getItem('anotaciones.servidor') || '' } catch(e){}
+  var base = servidor ? servidor.replace(/\/+$/,'') : enLocal ? location.protocol+'//'+location.hostname+':'+(parametros.get('api')||'8080') : 'https://'+app+'.fly.dev';
+  document.getElementById('servidor').textContent = base.replace(/^https?:\/\//,'');
+  function esc(t){ return String(t==null?'':t).replace(/[&<>"]/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c] }) }
+  function fecha(iso){ try{ return new Date(iso).toLocaleString('es-ES',{dateStyle:'medium',timeStyle:'short'}) }catch(e){ return iso } }
+  var clave = ''; try { clave = localStorage.getItem('anotaciones.clave') || '' } catch(e){}
+  var $ = function(id){ return document.getElementById(id) };
+  var lista = [], player = null;
+
+  function error(t){ $('error').hidden = !t; $('error').textContent = t || '' }
+  function url(id, fichero){ return base + '/anotaciones/' + encodeURIComponent(id) + '/' + fichero + '?clave=' + encodeURIComponent(clave) }
+  function pide(ruta){ return fetch(base + ruta, {headers:{'X-Clave': clave}, cache:'no-store'}).then(function(r){ if (r.status === 401) throw new Error('clave'); if (!r.ok) throw new Error('HTTP '+r.status); return r }) }
+
+  function cargar(){
+    if (!clave) return;
+    error('');
+    pide('/anotaciones').then(function(r){ return r.json() }).then(function(j){
+      lista = j.anotaciones || [];
+      $('acceso').hidden = true; $('ayuda').hidden = true; $('salir').hidden = false; $('lista-zona').hidden = false;
+      $('titulo-lista').textContent = lista.length ? 'Recibidas (' + lista.length + ')' : 'Todavía no hay anotaciones';
+      $('lista').innerHTML = lista.map(function(a){
+        var rec = a.tipo === 'recorrido';
+        return '<button class="tarjeta" type="button" data-id="' + esc(a.id) + '">'
+          + '<span class="ico">' + (rec ? '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5" fill="currentColor" stroke="none"/></svg>' : '<svg viewBox="0 0 24 24"><path d="M4 20l4-1 10-10-3-3L5 16z"/><path d="M13 7l3 3"/></svg>') + '</span>'
+          + '<b>' + esc(a.nota || (rec ? 'Recorrido narrado' : 'Captura anotada')) + '</b>'
+          + '<span class="chip">' + esc(a.build || '') + '</span>'
+          + '<small>' + esc(fecha(a.recibido)) + ' · ' + esc(a.titulo || a.pagina) + ' · ' + (rec ? 'recorrido de ' + (a.recorrido_s||0) + ' s' + (a.voz_s ? ' con voz' : '') : (a.marcas + ' marcas' + (a.voz_s ? ', voz de ' + a.voz_s + ' s' : ''))) + (a.issue ? ' · con tarea' : '') + '</small>'
+          + '</button>';
+      }).join('');
+      var id = location.hash.replace('#',''); if (id) abre(id);
+    }).catch(function(e){
+      if (e.message === 'clave') { error('Clave incorrecta.'); try{ localStorage.removeItem('anotaciones.clave') }catch(x){} $('acceso').hidden = false; $('ayuda').hidden = false; }
+      else error('No se pudo hablar con el servidor (' + e.message + '). Si estaba dormido, vuelve a intentarlo en unos segundos.');
+    });
+  }
+
+  function abre(id){
+    var a = lista.filter(function(x){ return x.id === id })[0]; if (!a) return;
+    try{ history.replaceState(null,'','#'+id) }catch(e){}
+    var d = $('detalle'); d.hidden = false; if (player) { try{ player.pause() }catch(e){} player = null }
+    var rec = a.tipo === 'recorrido', tiene = function(n){ return (a.ficheros||[]).indexOf(n) >= 0 };
+    var audio = (a.ficheros||[]).filter(function(f){ return /^audio\./.test(f) })[0];
+    d.innerHTML = '<h2 style="margin-top:0">' + (rec ? 'Recorrido narrado' : 'Captura anotada') + ' <code>' + esc(a.id) + '</code></h2>'
+      + '<dl><dt>Recibida</dt><dd>' + esc(fecha(a.recibido)) + '</dd><dt>Página</dt><dd><a href="' + esc(a.pagina) + '" target="_blank" rel="noopener">' + esc(a.pagina) + '</a></dd><dt>Build</dt><dd><code>' + esc(a.build||'—') + '</code></dd><dt>Fecha del cliente</dt><dd>' + esc(a.fecha||'') + '</dd>' + (a.issue ? '<dt>Tarea</dt><dd><a href="' + esc(a.issue) + '" target="_blank" rel="noopener">' + esc(a.issue) + '</a></dd>' : '') + '</dl>'
+      + (a.nota ? '<div class="nota">' + esc(a.nota) + '</div>' : '<p style="color:var(--mute)">Sin comentario escrito.</p>')
+      + (rec ? '<div id="player"></div>' : (tiene('imagen.png') ? '<img src="' + url(id,'imagen.png') + '" alt="Captura anotada">' : ''))
+      + (audio ? '<p><b>' + (rec ? 'Voz del recorrido' : 'Nota de voz') + '</b>' + (rec ? ' (sincronizada con el reproductor)' : '') + '</p><audio id="voz" controls src="' + url(id, audio) + '"></audio>' : '')
+      + '<div class="enlaces">' + (tiene('informe.html') ? '<a class="btn" href="' + url(id,'informe.html') + '" target="_blank" rel="noopener">Abrir informe completo</a>' : '') + '<a class="btn" href="' + url(id,'datos.json') + '" target="_blank" rel="noopener">datos.json</a>' + (tiene('eventos.json') ? '<a class="btn" href="' + url(id,'eventos.json') + '" target="_blank" rel="noopener">eventos.json</a>' : '') + '<button class="btn" type="button" id="cerrar-detalle">Cerrar</button></div>';
+    $('cerrar-detalle').addEventListener('click', function(){ d.hidden = true; if (player) { try{ player.pause() }catch(e){} player = null } try{ history.replaceState(null,'',location.pathname) }catch(e){} });
+    d.scrollIntoView({behavior:'smooth', block:'start'});
+    if (rec && tiene('eventos.json')) {
+      pide('/anotaciones/' + encodeURIComponent(id) + '/eventos.json').then(function(r){ return r.json() }).then(function(ev){
+        return pide('/anotaciones/' + encodeURIComponent(id) + '/datos.json').then(function(r){ return r.json() }).then(function(datos){
+          var t = $('player'), w = Math.min(900, t.clientWidth || 900), v = (datos.meta && datos.meta.ventana) || {ancho: 390, alto: 700}, h = Math.round(w * v.alto / v.ancho);
+          var P = window.rrwebPlayer; if (P && typeof P !== 'function') P = P.default || P.Player;
+          if (typeof P !== 'function') { t.textContent = 'Falta vendor/rrweb-player.min.js'; return }
+          var a = $('voz'), desfase = ((datos.recorrido && datos.recorrido.desfase_ms) || 0) / 1000;
+          player = new P({ target: t, props: { events: ev, width: w, height: Math.min(h, 700), autoPlay: false, showController: true, skipInactive: false, speedOption: [1, 2], insertStyleRules: ['.an-ui{display:none!important}'] } });
+          if (a) {
+            player.addEventListener('ui-update-player-state', function(e){ if (e && e.payload === 'playing') a.play().catch(function(){}); else a.pause() });
+            player.addEventListener('ui-update-current-time', function(e){ var s = ((e && e.payload) || 0) / 1000 - desfase; if (s < 0) s = 0; if (Math.abs(a.currentTime - s) > 0.7) a.currentTime = s });
+          }
+        });
+      }).catch(function(e){ $('player').textContent = 'No se pudo cargar el recorrido: ' + e.message });
+    }
+  }
+
+  $('lista').addEventListener('click', function(ev){ var b = ev.target.closest('[data-id]'); if (b) abre(b.dataset.id) });
+  $('entrar').addEventListener('click', function(){ clave = $('clave').value.trim(); if (!clave) return; try{ localStorage.setItem('anotaciones.clave', clave) }catch(e){} cargar() });
+  $('clave').addEventListener('keydown', function(e){ if (e.key === 'Enter') $('entrar').click() });
+  $('salir').addEventListener('click', function(){ clave = ''; try{ localStorage.removeItem('anotaciones.clave') }catch(e){} location.hash = ''; location.reload() });
+  if (clave) cargar();
+})();
+</script>
+</body>
+</html>
