@@ -1,0 +1,54 @@
+{
+  "fecha": "2026-09-27T08:59:00+02:00",
+  "titulo": "Mock de prueba con el botón «Anotar» para las anotaciones del cliente",
+  "objetivo": "Analizar cómo puede el cliente anotar y comentar los entregables desde cualquier dispositivo y construir la primera versión: mock de prueba con botón Anotar (captura, lienzo, voz, compartir).",
+  "prompts": [
+    {
+      "texto": "Cómo puedo hacer un vídeo con extensión .mp4 que tenga el sonido del micrófono del móvil y la imagen de lo que se está viendo en pantalla en ese momento. Sobre eso que se ve en pantalla se tienen que poder hacer anotaciones con el dedo: una línea, rodearlo con un círculo, una cruz, poner imágenes encima, mientras se narra por el micrófono. Quiero un análisis, no desarrollo: sobre todo de herramientas, sistemas o módulos que habría que tener, imagino que con un lienzo y una paleta de colores. Hazme una pequeña planificación de cómo lo harías.",
+      "nota": "Transcripción aproximada de un dictado por voz."
+    },
+    {
+      "texto": "Lo que se pretende es, en el proceso de desarrollo, generar un mock y que el cliente haga anotaciones sobre él, y no solo sobre el mock sino sobre cualquier entregable de las fases siguientes. El cliente tiene que poder poner notas en las pantallas de la aplicación y enviarlas al desarrollador. Busca la mejor opción. No sabemos si el cliente tiene iOS, Android, Windows o Mac: solo tiene un enlace que le lleva a la aplicación, que podría llevar un botón «mándame anotaciones» con un lienzo para anotar y grabar.",
+      "nota": "Transcripción aproximada de un dictado por voz."
+    },
+    {
+      "texto": "Mándame una notificación con vibración cuando termines."
+    },
+    {
+      "texto": "Genera un mock de prueba y ponle ese botón de grabación, y vamos a ver cómo funciona. Desarrolla hasta que se puedan hacer anotaciones sobre el mock que has generado; no pares hasta tener todo el proceso.",
+      "nota": "Transcripción aproximada de un dictado por voz."
+    },
+    {
+      "texto": "Parece que este proyecto no tiene enlace a la carpeta prupru de Drive, que sí tengo creada y que le indiqué al crear el proyecto. ¿Es cierto y por qué no se creó el enlace?"
+    }
+  ],
+  "cambios": [
+    "docs/planificacion/analisis-grabacion-pantalla-anotada.md: primer análisis (captura de pantalla del sistema), marcado como superado.",
+    "docs/planificacion/analisis-anotaciones-cliente.md: opciones, módulos, planificación por fases, riesgos y fuentes.",
+    "docs/index.html: mock de prueba «Partes de obra» (inicio, partes, nuevo parte) con el botón Anotar. Build PR-B1-20260927-001.",
+    "docs/anotar.js: widget de anotación (captura, lienzo, herramientas, paleta, texto, imagen, deshacer, nota, voz, compartir, informe HTML, PNG).",
+    "docs/vendor/snapdom.min.js: librería de captura del DOM (MIT), copia local.",
+    "docs/mocks/001-portada.html: portada anterior archivada.",
+    "docs/drive.json: comprobación de la carpeta de Drive (verificado).",
+    "docs/planificacion/sesiones/20260927-0859.md: resumen de la sesión."
+  ],
+  "sha": "6c52527",
+  "sha_completo": "6c525277304103ad768c6013ed6e0e5900d69958",
+  "run": null,
+  "mock": "mocks/001-portada.html",
+  "build": "PR-B1-20260927-001",
+  "pagina": "index.html",
+  "fly": null,
+  "pendiente": [
+    "Probar en iPhone y Android reales: compartir por WhatsApp, permiso del micrófono, fidelidad de la captura.",
+    "Fase 3: recorrido narrado con rrweb.",
+    "Fase 4: envío al backend de Fly e issues en GitHub."
+  ],
+  "enlaces": [
+    {
+      "texto": "PR en borrador",
+      "url": "https://github.com/npiobject-labs/prupru/pull/1"
+    }
+  ],
+  "notas": "Prompts dictados por voz, transcritos de forma aproximada. Probado en Chromium (móvil simulado 390×844 y escritorio) con micrófono simulado; falta la prueba en dispositivos reales."
+}
