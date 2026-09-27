@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="build" content="PR-B1-20260925-001">
+<!-- App de Fly: <repo>-<owner>, como la deriva deploy.yml (el script la pasa a
+     minusculas y la recorta a 30). Si el instalador dejo docs/nacimiento.json,
+     manda el nombre que trae ese fichero. ?app=<nombre> fuerza otro. -->
+<meta name="fly-app" content="prupru-npiobject-labs">
+<title>prupru</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#F6F2EA; --bg2:#FFFFFF; --ink:#1E2528; --ink2:#4E585C; --mute:#7C868A; --line:#DED7C9;
+  --acc:#9A4A2C; --acc2:#9A4A2C14; --acc-ink:#FFFFFF; --ok:#2E7D4F; --ok2:#2E7D4F16; --err:#B3261E; --err2:#B3261E14;
+  --code:#EFEBE2; --shadow:0 1px 2px rgba(30,37,40,.05),0 8px 24px -14px rgba(30,37,40,.3);
+  --serif:"Fraunces",Georgia,serif; --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#15191B; --bg2:#1E2427; --ink:#E9E6DE; --ink2:#B4BBBE; --mute:#838C90; --line:#2E3639;
+    --acc:#E0906D; --acc2:#E0906D1F; --acc-ink:#1A1210; --ok:#6CC493; --ok2:#6CC4931F; --err:#F28B82; --err2:#F28B821F; --code:#101416; --shadow:none;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#15191B; --bg2:#1E2427; --ink:#E9E6DE; --ink2:#B4BBBE; --mute:#838C90; --line:#2E3639;
+  --acc:#E0906D; --acc2:#E0906D1F; --acc-ink:#1A1210; --ok:#6CC493; --ok2:#6CC4931F; --err:#F28B82; --err2:#F28B821F; --code:#101416; --shadow:none;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 var(--sans);overflow-x:hidden}
+[hidden]{display:none!important}
+a{color:var(--acc);text-underline-offset:2px}
+a:focus-visible,button:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+h1,h2{font-family:var(--serif);font-weight:700;line-height:1.1;margin:0;text-wrap:balance}
+h1{font-size:clamp(2.2rem,9vw,3.2rem);letter-spacing:-.01em;word-break:break-word}
+h2{font-size:1.35rem;margin:2.2rem 0 .6rem}
+code{font-family:var(--mono);font-size:.86em;background:var(--code);padding:.08em .35em;border-radius:4px;word-break:break-all}
+.wrap{max-width:32rem;margin:0 auto;padding:0 16px 4rem}
+.top{display:flex;align-items:center;gap:.6rem;padding:.7rem 0;border-bottom:1px solid var(--line)}
+.top b{font-family:var(--serif);font-size:1.1rem;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ibtn{display:inline-flex;align-items:center;justify-content:center;width:2.3rem;height:2.3rem;border:1px solid var(--line);border-radius:8px;background:var(--bg2);color:var(--ink);cursor:pointer;padding:0}
+.ibtn svg{width:1.1rem;height:1.1rem;fill:none;stroke:currentColor;stroke-width:1.8}
+.hero{padding:2.2rem 0 .5rem}
+.kicker{font:600 .76rem var(--sans);letter-spacing:.09em;text-transform:uppercase;color:var(--acc);margin:0 0 .7rem}
+.lede{font-size:1.06rem;color:var(--ink2)}
+.nacida{color:var(--mute);font-size:.92rem;margin:.6rem 0 0}
+.btn{display:flex;align-items:center;justify-content:center;gap:.45rem;width:100%;font:600 1.05rem var(--sans);padding:.85rem 1.1rem;border-radius:12px;border:1px solid var(--acc);background:var(--acc);color:var(--acc-ink);cursor:pointer;min-height:3rem;text-decoration:none;margin-top:1.2rem}
+.btn.sec{background:var(--bg2);color:var(--ink);border-color:var(--line)}
+.btn:disabled{opacity:.6;cursor:default}
+.resp{margin-top:1rem;padding:1rem;border-radius:14px;background:var(--ok2);border:1px solid var(--ok)}
+.resp.err{background:var(--err2);border-color:var(--err)}
+.resp .grande{font-family:var(--serif);font-size:1.3rem;font-weight:700;color:var(--ok);margin:0 0 .5rem;line-height:1.25}
+.resp.err .grande{color:var(--err);font-size:1.05rem}
+dl{display:grid;grid-template-columns:auto 1fr;gap:.35rem .8rem;margin:0;font-size:.93rem}
+dt{color:var(--mute)}dd{margin:0;word-break:break-word}
+.lista{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:1rem;box-shadow:var(--shadow)}
+.tres{display:grid;gap:.55rem}
+.tres div{border-left:3px solid var(--acc);padding:.35rem .8rem;background:var(--acc2);border-radius:0 8px 8px 0}
+.tres b{display:block;font-family:var(--serif)}
+footer{margin-top:2.6rem;padding-top:1rem;border-top:1px solid var(--line);font-size:.8rem;color:var(--mute)}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="top"><b>prupru</b>
+    <button class="ibtn" id="tema" type="button" aria-label="Cambiar tema" title="Tema"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" stroke="none"/></svg></button>
+  </div>
+
+  <section class="hero">
+    <p class="kicker">Tu app</p>
+    <h1>Hola, soy prupru</h1>
+    <p class="nacida" id="nacida">Tengo web y tengo servidor.</p>
+    <p class="lede">Esta es mi portada de momento. Pídele a Claude desde el móvil que me convierta en lo que quieras: esta página cambiará con cada petición.</p>
+    <button class="btn" id="saluda" type="button">Saluda</button>
+    <div class="resp" id="resp" hidden></div>
+  </section>
+
+  <h2>Dónde vivo</h2>
+  <div class="lista"><dl>
+    <dt>Web</dt><dd><a id="l-web" href="./">esta página</a></dd>
+    <dt>Servidor</dt><dd><a id="l-servidor" href="#">…</a></dd>
+    <dt>Bitácora</dt><dd><a id="l-bitacora" href="bitacora.html">qué se pidió y qué cambió</a></dd>
+    <dt>Código</dt><dd><a id="l-codigo" href="#">en GitHub</a></dd>
+    <dt>Copias</dt><dd id="copias">en Google Drive, si le das una carpeta a Claude</dd>
+  </dl></div>
+
+  <h2>Cómo pedirme cosas</h2>
+  <p>Abre Claude en el móvil, entra en <b>Code</b>, elige mi repositorio y dile tres cosas:</p>
+  <div class="tres">
+    <div><b>Qué quieres</b>«Que esta portada sea una lista de la compra compartida.»</div>
+    <div><b>Qué no debe pasar</b>«Nada de contraseñas; con un enlace secreto vale.»</div>
+    <div><b>Cuándo está terminado</b>«Cuando los dos podamos añadir y tachar cosas desde el móvil.»</div>
+  </div>
+  <a class="btn sec" href="https://claude.ai/code" target="_blank" rel="noopener">Abrir Claude Code ↗</a>
+
+  <footer>Build <code>PR-B1-20260925-001</code> · <a id="l-bitacora2" href="bitacora.html">Bitácora</a> · <a id="l-holamundo" href="holamundo.html">Comprobación del backend</a></footer>
+</main>
+<script>
+(function(){
+  // En la plantilla esta pagina se ve en /semilla/; en un proyecto es la portada.
+  var enSemilla = /\/(semilla|mocks)\/?/.test(location.pathname);
+  var raiz = enSemilla ? '../' : '';
+  ['l-bitacora','l-bitacora2','l-holamundo'].forEach(function(id){ var a=document.getElementById(id); a.setAttribute('href', raiz + a.getAttribute('href')) });
+
+  // Mismo nombre que deploy.yml: minusculas, [a-z0-9-], 30 caracteres, sin guion final.
+  function nombreFly(v){ return String(v||'').toLowerCase().replace(/[^a-z0-9-]/g,'-').slice(0,30).replace(/-+$/,'') }
+  var parametros = new URLSearchParams(location.search);
+  var app = nombreFly(parametros.get('app') || document.querySelector('meta[name="fly-app"]').content);
+  var enLocal = ['localhost','127.0.0.1'].indexOf(location.hostname) >= 0;
+  function base(){ return enLocal ? location.protocol+'//'+location.hostname+':'+(parametros.get('api')||'8080') : 'https://'+app+'.fly.dev' }
+
+  // Codigo: owner.github.io/repo -> github.com/owner/repo
+  var host = location.hostname.match(/^([^.]+)\.github\.io$/i), trozo = location.pathname.split('/').filter(Boolean)[0];
+  var codigo = document.getElementById('l-codigo');
+  if (host && trozo) codigo.href = 'https://github.com/' + host[1] + '/' + trozo; else codigo.parentNode.textContent = 'en GitHub (enlace disponible cuando se publique)';
+  function pintaServidor(){ var a=document.getElementById('l-servidor'); a.href = base()+'/'; a.textContent = base().replace(/^https?:\/\//,'') }
+  pintaServidor();
+
+  function fechaLarga(iso){ try{ return new Date(iso).toLocaleDateString('es-ES',{day:'numeric',month:'long',year:'numeric'}) }catch(e){ return iso } }
+  // Si el instalador dejo su registro, manda: trae el nombre exacto de la app de Fly.
+  fetch(raiz + 'nacimiento.json', {cache:'no-store'}).then(function(r){ return r.ok ? r.json() : null }).then(function(n){
+    if (!n) return;
+    if (n.fly_app && !parametros.get('app')) { app = n.fly_app; pintaServidor() }
+    if (n.creado) document.getElementById('nacida').textContent = 'Nací el ' + fechaLarga(n.creado) + (n.org ? ' · vivo en ' + n.org : '') + '.';
+  }).catch(function(){});
+  // docs/drive.json lo escribe la sesion de Claude que comprueba la carpeta de Drive.
+  fetch(raiz + 'drive.json', {cache:'no-store'}).then(function(r){ return r.ok ? r.json() : null }).then(function(j){
+    if (!j) return;
+    document.getElementById('copias').textContent = j.verificado
+      ? 'en tu carpeta de Google Drive: Claude deja ahí el resumen de cada sesión'
+      : 'Claude no llega a tu carpeta de Drive: conéctala en Claude (Ajustes → Conectores)';
+  }).catch(function(){});
+
+  var CIUDADES = {cdg:'París',ams:'Ámsterdam',lhr:'Londres',fra:'Fráncfort',mad:'Madrid',arn:'Estocolmo',waw:'Varsovia',otp:'Bucarest',iad:'Virginia',ewr:'Nueva Jersey',ord:'Chicago',dfw:'Dallas',lax:'Los Ángeles',sjc:'San José',sea:'Seattle',yyz:'Toronto',gru:'São Paulo',scl:'Santiago de Chile',bog:'Bogotá',qro:'Querétaro',nrt:'Tokio',sin:'Singapur',syd:'Sídney',hkg:'Hong Kong',bom:'Bombay',jnb:'Johannesburgo'};
+  function esc(t){ return String(t==null?'':t).replace(/[&<>"]/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c] }) }
+  function duracion(s){ s = Math.max(0, Math.round(Number(s)||0)); if (s < 90) return s + ' s'; var m = Math.round(s/60); if (m < 90) return m + ' min'; return Math.floor(m/60) + ' h ' + (m%60) + ' min' }
+  var b = document.getElementById('saluda'), caja = document.getElementById('resp');
+  b.addEventListener('click', function(){
+    b.disabled = true; b.textContent = 'Despertando al servidor…'; caja.hidden = true;
+    // Sin trafico la maquina se apaga sola: la primera llamada puede tardar.
+    var ctl = ('AbortController' in window) ? new AbortController() : null, t = setTimeout(function(){ if (ctl) ctl.abort() }, 30000);
+    fetch(base()+'/hola', {cache:'no-store', signal: ctl ? ctl.signal : undefined})
+      .then(function(r){ if (!r.ok) throw new Error('HTTP '+r.status); return r.json() })
+      .then(function(j){
+        var ciudad = j.region ? (CIUDADES[j.region] || j.region) + ' (' + j.region + ')' : j.servidor;
+        caja.className = 'resp';
+        caja.innerHTML = '<p class="grande">' + esc(j.mensaje) + '.</p><dl>'
+          + '<dt>Fecha y hora</dt><dd>' + esc(new Date(j.fecha).toLocaleString('es-ES',{dateStyle:'long',timeStyle:'medium'})) + '</dd>'
+          + '<dt>Servidor</dt><dd>' + esc(ciudad) + (j.maquina ? ' · máquina <code>' + esc(j.maquina) + '</code>' : '') + '</dd>'
+          + '<dt>Versión</dt><dd><code>' + esc(String(j.version).slice(0,7)) + '</code></dd>'
+          + '<dt>Despierta</dt><dd>desde hace ' + esc(duracion(j.despierta_desde_hace_s)) + (j.despierta_desde_hace_s < 10 ? ' (me has despertado tú)' : '') + '</dd></dl>';
+      })
+      .catch(function(e){
+        caja.className = 'resp err';
+        caja.innerHTML = '<p class="grande">No he podido hablar con mi servidor.</p><p>' + esc(e.name==='AbortError' ? 'Tardó más de 30 segundos: puede estar despertando. Vuelve a pulsar.' : e.message) + '</p>';
+      })
+      .then(function(){ clearTimeout(t); caja.hidden = false; b.disabled = false; b.textContent = 'Saluda otra vez' });
+  });
+
+  var root = document.documentElement, modo = '';
+  try { modo = localStorage.getItem('tema') || '' } catch(e){}
+  function setT(m){ modo = m; try{ localStorage.setItem('tema', m) }catch(e){} if (m) root.setAttribute('data-theme', m); else root.removeAttribute('data-theme') }
+  setT(modo);
+  document.getElementById('tema').addEventListener('click', function(){ var o=['','light','dark']; setT(o[(o.indexOf(modo)+1)%3]) });
+})();
+</script>
+</body>
+</html>
