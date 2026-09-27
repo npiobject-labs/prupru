@@ -63,6 +63,12 @@
 .an-fila{display:flex;gap:.4rem;align-items:center;flex-wrap:wrap}\
 .an-fila .an-btn{flex:1 1 auto}\
 .an-msg{font-size:13px;color:#9AA5AA;margin:0}\
+.an-envio{background:#151A1D;padding:.7rem .7rem;padding-bottom:calc(.7rem + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:.5rem;flex:none;max-height:60vh;overflow:auto}\
+.an-envio h3{margin:0;font-size:16px;font-weight:600;color:#EEE}\
+.an-envio .an-res{margin:0 0 .2rem;font-size:13px;color:#9AA5AA}\
+.an-envio .an-btn{min-height:48px;font-size:15px;justify-content:flex-start;padding:0 .9rem}\
+.an-envio .an-btn small{font-weight:400;color:#9AA5AA;margin-left:auto;font-size:12px}\
+.an-envio .an-btn.pri small{color:#F3D9CC}\
 .an-msg.err{color:#F28B82}\
 .an-msg.ok{color:#6CC493}\
 .an-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}\
@@ -190,7 +196,7 @@
   function imagenEn(x, y) { for (var i = A.formas.length - 1; i >= 0; i--) { var f = A.formas[i]; if (f.t === 'imagen' && x >= f.x && x <= f.x + f.w && y >= f.y && y <= f.y + f.h) return f; } return null; }
 
   function abajo(e) {
-    if (A.actual || A.arrastre) return;
+    if (A.actual || A.arrastre || A.enviando) return;
     if (e.pointerType === 'mouse' && e.button !== 0) return;
     e.preventDefault();
     try { A.dibujo.setPointerCapture(e.pointerId); } catch (x) { }
@@ -306,7 +312,7 @@
       a.appendChild(q);
     }
   }
-  function mensaje(t, cls) { var m = A.capa && A.capa.querySelector('#an-msg'); if (!m) return; m.textContent = t; m.className = 'an-msg' + (cls ? ' ' + cls : ''); }
+  function mensaje(t, cls, id) { var m = A.capa && A.capa.querySelector('#' + (id || 'an-msg')); if (!m) return; m.textContent = t; m.className = 'an-msg' + (cls ? ' ' + cls : ''); }
 
   /* ---------- exportar ---------- */
   function lienzoFinal() {
@@ -354,30 +360,17 @@
   function descargar(f) { var a = document.createElement('a'); a.href = URL.createObjectURL(f); a.download = f.name; document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 4000); }
   function puedeCompartir(files) { try { return !!(navigator.share && navigator.canShare && navigator.canShare({ files: files })); } catch (e) { return false; } }
 
-  function lanzarShare(s) {
+  // ¿Este navegador comparte ficheros (WhatsApp, correo…)? Se decide con un fichero de prueba.
+  function shareDisponible() { try { return puedeCompartir([new File(['x'], 'x.png', { type: 'image/png' })]); } catch (e) { return false; } }
+  // Comparte los ficheros ya preparados. Debe llamarse dentro del toque del usuario: Safari y Chrome lo exigen.
+  function compartirListo(s) {
     var texto = 'Anotación sobre ' + s.json.meta.titulo + (s.json.nota ? ': ' + s.json.nota : '');
     var listas = [[s.png, s.audio, s.html], [s.png, s.audio], [s.png]].map(function (l) { return l.filter(Boolean); });
     for (var i = 0; i < listas.length; i++) if (puedeCompartir(listas[i])) {
-      return navigator.share({ title: 'Anotación · ' + s.json.meta.titulo, text: texto, files: listas[i] })
-        .then(function () { mensaje('Enviado.', 'ok'); }, function (e) {
-          if (e && e.name === 'AbortError') { mensaje('Envío cancelado.'); return; }
-          if (e && e.name === 'NotAllowedError') {
-            // Safari exige que share() ocurra dentro del toque: se ofrece un botón con los ficheros ya listos.
-            mensaje('Todo listo. '); var m = A.capa.querySelector('#an-msg'), b = el('button', 'an-btn pri', 'Toca para compartir'); b.type = 'button';
-            b.addEventListener('click', function () { b.remove(); lanzarShare(s); }); m.appendChild(b); return;
-          }
-          mensaje('No se pudo compartir: ' + (e && e.message || e), 'err');
-        });
+      return navigator.share({ title: 'Anotación · ' + s.json.meta.titulo, text: texto, files: listas[i] });
     }
-    descargar(s.html); mensaje('Este navegador no comparte ficheros: se ha descargado el informe ' + s.html.name + '. Envíalo por correo o mensajería.', 'ok');
-    return Promise.resolve();
+    return Promise.reject(new Error('sin-share'));
   }
-  function compartir() {
-    mensaje('Preparando…');
-    preparar().then(lanzarShare).catch(function (e) { mensaje('No se pudo preparar el envío: ' + (e && e.message || e), 'err'); });
-  }
-  function bajarInforme() { mensaje('Preparando…'); preparar().then(function (s) { descargar(s.html); mensaje('Descargado ' + s.html.name + ' (imagen, nota y voz en un solo fichero).', 'ok'); }); }
-  function bajarImagen() { mensaje('Preparando…'); preparar().then(function (s) { descargar(s.png); mensaje('Descargada ' + s.png.name + '.', 'ok'); }); }
 
   /* ---------- interfaz ---------- */
   function marcaHerr() {
@@ -415,27 +408,48 @@
     var bor = el('button', 'an-ib', svg('<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>')); bor.type = 'button'; bor.id = 'an-borrar'; bor.title = 'Borrar todo'; bor.setAttribute('aria-label', 'Borrar todo');
     barra.appendChild(zm); barra.appendChild(zl); barra.appendChild(des); barra.appendChild(bor);
     var fich = el('input', 'an-sr'); fich.type = 'file'; fich.accept = 'image/*'; fich.setAttribute('aria-label', 'Elegir imagen'); fich.id = 'an-fichero';
+    // Panel «Nota y voz»: solo el comentario escrito y la nota de voz.
     var panel = el('div', 'an-panel'); panel.hidden = true;
     var ta = el('textarea'); ta.id = 'an-nota'; ta.placeholder = 'Escribe aquí tu comentario (opcional)'; ta.setAttribute('aria-label', 'Nota de texto');
     var fila = el('div', 'an-fila'); var voz = el('button', 'an-btn'); voz.type = 'button'; voz.id = 'an-voz';
+    var bHecho = el('button', 'an-btn', svg('<path d="M5 12l5 5 9-10"/>') + ' Hecho'); bHecho.type = 'button'; bHecho.id = 'an-hecho';
     var audioCaja = el('div', 'an-fila'); audioCaja.id = 'an-audio';
-    fila.appendChild(voz); panel.appendChild(ta); panel.appendChild(fila); panel.appendChild(audioCaja);
-    var fila2 = el('div', 'an-fila');
-    var bComp = el('button', 'an-btn pri', svg('<path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3M7 8l5-5 5 5"/>') + ' Enviar…'); bComp.type = 'button'; bComp.id = 'an-compartir';
-    var bHtml = el('button', 'an-btn', svg('<path d="M12 3v12M7 10l5 5 5-5M4 19h16"/>') + ' Descargar informe'); bHtml.type = 'button'; bHtml.id = 'an-informe';
-    var bPng = el('button', 'an-btn', svg('<rect x="4" y="5" width="16" height="14" rx="1.5"/><path d="M4 17l5-4 3 3 3-2 5 3"/>') + ' Descargar imagen'); bPng.type = 'button'; bPng.id = 'an-png';
-    fila2.appendChild(bComp); fila2.appendChild(bHtml); fila2.appendChild(bPng); panel.appendChild(fila2);
+    fila.appendChild(voz); fila.appendChild(bHecho); panel.appendChild(ta); panel.appendChild(fila); panel.appendChild(audioCaja);
     var msg = el('p', 'an-msg'); msg.id = 'an-msg'; msg.setAttribute('aria-live', 'polite'); panel.appendChild(msg);
+    // Hoja «Enviar»: una sola forma de llegar aquí y tres salidas claras.
+    var envio = el('div', 'an-envio'); envio.hidden = true; envio.id = 'an-envio';
+    envio.appendChild(el('h3', null, '¿Cómo quieres enviar la anotación?'));
+    var resumen = el('p', 'an-res'); resumen.id = 'an-resumen'; envio.appendChild(resumen);
+    var bComp = el('button', 'an-btn pri', svg('<path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3M7 8l5-5 5 5"/>') + ' Compartir <small>WhatsApp, correo…</small>'); bComp.type = 'button'; bComp.id = 'an-compartir';
+    var bHtml = el('button', 'an-btn', svg('<path d="M12 3v12M7 10l5 5 5-5M4 19h16"/>') + ' Descargar informe <small>todo en un fichero</small>'); bHtml.type = 'button'; bHtml.id = 'an-informe';
+    var bPng = el('button', 'an-btn', svg('<rect x="4" y="5" width="16" height="14" rx="1.5"/><path d="M4 17l5-4 3 3 3-2 5 3"/>') + ' Descargar imagen <small>solo la captura</small>'); bPng.type = 'button'; bPng.id = 'an-png';
+    var msg2 = el('p', 'an-msg'); msg2.id = 'an-msg2'; msg2.setAttribute('aria-live', 'polite');
+    var bVolver = el('button', 'an-btn', svg('<path d="M15 6l-6 6 6 6"/>') + ' Volver a la anotación'); bVolver.type = 'button'; bVolver.id = 'an-volver';
+    var bFin = el('button', 'an-btn pri', svg('<path d="M5 12l5 5 9-10"/>') + ' Enviado: cerrar'); bFin.type = 'button'; bFin.id = 'an-fin'; bFin.hidden = true;
+    envio.appendChild(bComp); envio.appendChild(bHtml); envio.appendChild(bPng); envio.appendChild(msg2); envio.appendChild(bFin); envio.appendChild(bVolver);
     var pie = el('div', 'an-pie');
     var bNota = el('button', 'an-btn', svg('<path d="M4 5h16v11H8l-4 4z"/>') + ' Nota y voz'); bNota.type = 'button'; bNota.id = 'an-abre-nota';
     var bEnv = el('button', 'an-btn pri', svg('<path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M12 15V3M7 8l5-5 5 5"/>') + ' Enviar'); bEnv.type = 'button'; bEnv.id = 'an-enviar';
     pie.appendChild(bNota); pie.appendChild(bEnv);
-    capa.appendChild(top); capa.appendChild(zona); capa.appendChild(barra); capa.appendChild(barra2); capa.appendChild(panel); capa.appendChild(pie); capa.appendChild(fich);
+    capa.appendChild(top); capa.appendChild(zona); capa.appendChild(barra); capa.appendChild(barra2); capa.appendChild(panel); capa.appendChild(envio); capa.appendChild(pie); capa.appendChild(fich);
     document.body.appendChild(capa); A.capa = capa;
     var scrollAntes = document.documentElement.style.overflow; document.documentElement.style.overflow = 'hidden';
     A.restaurarScroll = function () { document.documentElement.style.overflow = scrollAntes; };
 
     function abrePanel(mostrar) { panel.hidden = !mostrar; bNota.classList.toggle('on', mostrar); ajustar(); if (mostrar) pintaVoz(); }
+    function abreEnvio() {
+      abrePanel(false); cerrarTexto(); A.sel = null; redibuja();
+      if (A.grabador) { mensaje2('Para la grabación de voz antes de enviar.'); abrePanel(true); return; }
+      A.enviando = true; A.listo = null; barra.hidden = barra2.hidden = pie.hidden = true; envio.hidden = false; bFin.hidden = true;
+      var partes = [A.formas.length ? A.formas.length + (A.formas.length === 1 ? ' marca' : ' marcas') : 'sin marcas', ta.value.trim() ? 'comentario' : null, A.audio ? 'voz de ' + A.audio.dur + ' s' : null].filter(Boolean);
+      resumen.textContent = 'Se envía la captura anotada (' + partes.join(', ') + ') sobre «' + (meta('build') || document.title) + '».';
+      bComp.hidden = !shareDisponible(); [bComp, bHtml, bPng].forEach(function (b) { b.disabled = true; });
+      mensaje2('Preparando los ficheros…'); ajustar();
+      preparar().then(function (s) { if (!A.enviando) return; A.listo = s; [bComp, bHtml, bPng].forEach(function (b) { b.disabled = false; }); mensaje2(bComp.hidden ? 'Listo. Este navegador no comparte ficheros: descarga el informe y envíalo por correo o mensajería.' : 'Listo.'); })
+        .catch(function (e) { mensaje2('No se pudieron preparar los ficheros: ' + (e && e.message || e), 'err'); });
+    }
+    function cierraEnvio() { A.enviando = false; A.listo = null; envio.hidden = true; barra.hidden = barra2.hidden = pie.hidden = false; ajustar(); }
+    function mensaje2(t, cls) { mensaje(t, cls, 'an-msg2'); }
     cerrar.addEventListener('click', function () { if (!A.formas.length && !A.audio && !ta.value.trim() || confirm('¿Cerrar sin enviar? Se perderá la anotación.')) cerrarTodo(); });
     barra2.addEventListener('click', function (ev) { var b = ev.target.closest('button'); if (!b) return; if (b.dataset.color) A.color = b.dataset.color; else if (b.dataset.grosor) A.grosor = +b.dataset.grosor; marcaHerr(); });
     barra.addEventListener('click', function (ev) {
@@ -449,8 +463,21 @@
     });
     fich.addEventListener('change', function () { cargarImagen(fich.files && fich.files[0]); });
     bNota.addEventListener('click', function () { abrePanel(panel.hidden); });
-    bEnv.addEventListener('click', function () { abrePanel(true); compartir(); });
-    bComp.addEventListener('click', compartir); bHtml.addEventListener('click', bajarInforme); bPng.addEventListener('click', bajarImagen);
+    bHecho.addEventListener('click', function () { abrePanel(false); });
+    bEnv.addEventListener('click', abreEnvio);
+    bVolver.addEventListener('click', cierraEnvio);
+    bFin.addEventListener('click', cerrarTodo);
+    bComp.addEventListener('click', function () {
+      if (!A.listo) return;
+      compartirListo(A.listo).then(function () { mensaje2('Enviado.', 'ok'); bFin.hidden = false; }, function (e) {
+        if (e && e.name === 'AbortError') mensaje2('No se ha enviado: has cerrado el menú de compartir. Puedes volver a intentarlo.');
+        else if (e && e.name === 'NotAllowedError') mensaje2('El navegador no dejó abrir el menú de compartir. Toca «Compartir» otra vez.', 'err');
+        else if (e && e.message === 'sin-share') { bComp.hidden = true; mensaje2('Este navegador no comparte ficheros: descarga el informe y envíalo por correo o mensajería.'); }
+        else mensaje2('No se pudo compartir: ' + (e && e.message || e), 'err');
+      });
+    });
+    bHtml.addEventListener('click', function () { if (!A.listo) return; descargar(A.listo.html); mensaje2('Descargado ' + A.listo.html.name + '. Es un solo fichero con la imagen, el comentario y la voz: envíalo por correo o mensajería.', 'ok'); bFin.hidden = false; });
+    bPng.addEventListener('click', function () { if (!A.listo) return; descargar(A.listo.png); mensaje2('Descargada ' + A.listo.png.name + ' (la voz y el comentario no van en la imagen).', 'ok'); bFin.hidden = false; });
     voz.addEventListener('click', grabarVoz);
 
     return capturar().then(function (fondo) {
@@ -462,6 +489,7 @@
       cd.addEventListener('contextmenu', function (e) { e.preventDefault(); });
       cargando.remove(); ajustar(); marcaHerr(); redibuja();
       if (A.sinCaptura) { abrePanel(true); mensaje('No se pudo fotografiar la página en este navegador: anota sobre el fondo plano; la posición de las marcas se conserva.', 'err'); }
+      A.abrePanel = abrePanel;
       window.addEventListener('resize', ajustar);
       return true;
     });
@@ -477,7 +505,7 @@
     if (A.grabador) { try { A.grabador.stop(); } catch (e) { } }
     cerrarTexto(); window.removeEventListener('resize', ajustar);
     if (A.audio && A.audio.url) URL.revokeObjectURL(A.audio.url);
-    A.capa.remove(); A.capa = null; A.dibujo = null; A.ctx = null; A.audio = null; A.grabador = null; A.abierto = false;
+    A.capa.remove(); A.capa = null; A.dibujo = null; A.ctx = null; A.audio = null; A.grabador = null; A.abierto = false; A.enviando = false; A.listo = null;
     if (A.restaurarScroll) A.restaurarScroll();
     var fab = document.querySelector('.an-fab'); if (fab) fab.hidden = false;
   }
