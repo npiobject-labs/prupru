@@ -1,0 +1,28 @@
+{
+  "fecha": "2026-09-27T08:59:00+02:00",
+  "titulo": "Análisis: vídeo MP4 de pantalla del móvil con narración y anotaciones",
+  "objetivo": "Analizar, sin desarrollar, qué herramientas y módulos hacen falta para grabar un MP4 con lo que se ve en el móvil, la voz del micro y anotaciones a dedo (líneas, círculos, cruces, imágenes) con paleta de colores, y proponer una planificación.",
+  "prompts": [
+    {
+      "texto": "Cómo puedo hacer un vídeo con extensión .mp4 que tenga el sonido del micrófono del móvil y la imagen de lo que se está viendo en pantalla en ese momento. Sobre eso que se ve en pantalla se tienen que poder hacer anotaciones con el dedo: una línea, rodearlo con un círculo, una cruz, poner imágenes encima, mientras se narra por el micrófono. Quiero un análisis, no desarrollo: sobre todo de herramientas, sistemas o módulos que habría que tener, imagino que con un lienzo y una paleta de colores. Hazme una pequeña planificación de cómo lo harías.",
+      "nota": "Transcripción aproximada de un dictado por voz."
+    }
+  ],
+  "cambios": [
+    "docs/planificacion/analisis-grabacion-pantalla-anotada.md: análisis con tres caminos (grabador existente, app nativa Android, web en prupru), módulos de cada uno, planificación por fases y decisiones pendientes.",
+    "docs/planificacion/sesiones/20260927-0859.md: resumen de la sesión."
+  ],
+  "sha": null,
+  "sha_completo": null,
+  "run": null,
+  "mock": null,
+  "build": null,
+  "pagina": null,
+  "fly": null,
+  "pendiente": [
+    "Decidir si se anota cualquier app del móvil (Android nativo) o solo prupru (web).",
+    "Decidir si iOS entra en el alcance."
+  ],
+  "enlaces": [],
+  "notas": "Sesión de análisis en rama de trabajo, sin despliegue. Sin subida a Drive."
+}
