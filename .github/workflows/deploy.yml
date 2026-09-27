@@ -202,8 +202,9 @@ jobs:
           FLY_APP: ${{ steps.app.outputs.app }}
         run: |
           url="https://${FLY_APP}.fly.dev/anotaciones"
-          datos='{"formato":"anotacion-prupru/2","tipo":"captura","meta":{"proyecto":"verificacion","pagina":"deploy.yml","titulo":"Prueba del despliegue","build":"'"${GITHUB_SHA}"'"},"nota":"Envio de prueba de deploy.yml; se puede borrar.","formas":[]}'
-          codigo="$(curl -sS --max-time 30 -o /tmp/anot.json -w '%{http_code}' -F "datos=${datos};type=application/json" "${url}")"
+          # El JSON va por fichero: curl -F corta un valor literal en la primera coma.
+          printf '%s' '{"formato":"anotacion-prupru/2","tipo":"captura","meta":{"proyecto":"verificacion","pagina":"deploy.yml","titulo":"Prueba del despliegue","build":"'"${GITHUB_SHA}"'"},"nota":"Envio de prueba de deploy.yml; se puede borrar.","formas":[]}' > /tmp/datos.json
+          codigo="$(curl -sS --max-time 30 -o /tmp/anot.json -w '%{http_code}' -F "datos=</tmp/datos.json;type=application/json" "${url}")"
           echo "POST: ${codigo} $(cat /tmp/anot.json)"
           [ "${codigo}" = "201" ] || { echo "::error::POST /anotaciones devolvio ${codigo}"; exit 1; }
           codigo="$(curl -sS --max-time 20 -o /dev/null -w '%{http_code}' "${url}")"
