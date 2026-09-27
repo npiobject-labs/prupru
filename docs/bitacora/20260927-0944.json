@@ -1,0 +1,36 @@
+{
+  "fecha": "2026-09-27T09:44:21+02:00",
+  "titulo": "Hoja de envío separada del panel de nota y voz en el botón «Anotar»",
+  "objetivo": "Quitar la confusión de los dos «Enviar» que se veían en el móvil: dejar un solo Enviar que abra una hoja con las tres salidas, y que compartir funcione al primer toque.",
+  "prompts": [
+    {
+      "texto": "Es un poco confuso que haya dos «Enviar»: uno parece de la nota de voz y otro del conjunto. Explícalo mejor o plantéalo de otra forma; esa parte del mock no me gusta, lo demás está bien.",
+      "nota": "Dictado por voz, con captura de pantalla del móvil (Android) donde ya aparecía el botón «Toca para compartir»."
+    }
+  ],
+  "cambios": [
+    "docs/anotar.js: panel «Nota y voz» solo con comentario, voz y botón Hecho; hoja «¿Cómo quieres enviar la anotación?» con Compartir, Descargar informe, Descargar imagen, Volver y Enviado: cerrar; ficheros preparados al abrir la hoja para que compartir ocurra dentro del toque; no se dibuja con la hoja abierta.",
+    "docs/index.html: build PR-B1-20260927-002.",
+    "docs/mocks/002-partes-de-obra-001.html: mock anterior archivado con rutas ajustadas.",
+    "docs/planificacion/sesiones/20260927-0944.md: resumen de la sesión."
+  ],
+  "sha": "23d2fab",
+  "sha_completo": "23d2fabf5e9b03dcf999c56162651ec39978772c",
+  "run": null,
+  "mock": "mocks/002-partes-de-obra-001.html",
+  "build": "PR-B1-20260927-002",
+  "pagina": "index.html",
+  "fly": null,
+  "pendiente": [
+    "Confirmar en el móvil que Compartir abre WhatsApp al primer toque.",
+    "Fase 3: recorrido narrado con rrweb.",
+    "Fase 4: envío al backend de Fly e issues en GitHub."
+  ],
+  "enlaces": [
+    {
+      "texto": "Mock archivado (build 001)",
+      "url": "https://npiobject-labs.github.io/prupru/mocks/002-partes-de-obra-001.html"
+    }
+  ],
+  "notas": "Probado con Playwright en Chromium (móvil simulado y micrófono simulado): panel, hoja de envío, descargas, volver, reenviar y cierre. El id del run de Pages solo existe tras fusionar, por eso va vacío."
+}
